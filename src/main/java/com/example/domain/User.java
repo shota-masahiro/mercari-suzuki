@@ -14,6 +14,9 @@ public class User {
 	/** 名前 */
 	private String name;
 	
+	/** メールアドレス */
+	private String mailAddress;
+	
 	/** パスワード */
 	private String password;
 	
@@ -26,10 +29,10 @@ public class User {
 	}
 
 
-	public User(Integer id, String name, String password, Integer authority) {
-		super();
+	public User(Integer id, String name, String mailAddress, String password, Integer authority) {
 		this.id = id;
 		this.name = name;
+		this.mailAddress = mailAddress;
 		this.password = password;
 		this.authority = authority;
 	}
@@ -48,6 +51,16 @@ public class User {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+
+
+	public String getMailAddress() {
+		return mailAddress;
+	}
+
+
+	public void setMailAddress(String mailAddress) {
+		this.mailAddress = mailAddress;
 	}
 
 
