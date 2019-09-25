@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <!-- css -->
+  <link th:href="@{/css/mercari.css}" rel="stylesheet">
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" 
     integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"/>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -42,7 +43,7 @@
 
   <!-- details -->
   <div id="input-main" class="container">
-    <a type="button" class="btn btn-default" href="./detail.html"><i class="fa fa-reply"></i> back</a>
+    <a type="button" class="btn btn-default" th:href="@{/detail(id=${id})}"><i class="fa fa-reply"></i> back</a>
     <h2>Edit</h2>
 
     <!-- edit form -->
