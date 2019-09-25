@@ -93,8 +93,13 @@
     <div class="pages">
       <nav class="page-nav">
         <ul class="pager">
-          <li class="previous"><a href="#">&larr; prev</a></li>
-          <li class="next"><a href="#">next &rarr;</a></li>
+          <li class="previous" th:if="${arrow > 0}">
+          		<a th:href="@{/(arrow=${arrow - 1})}">&larr; prev</a>
+          </li>
+
+          <li class="next">
+          		<a th:href="@{/(arrow=${arrow + 1})}">next &rarr;</a>
+          </li>
         </ul>
       </nav>
     </div>
@@ -112,7 +117,7 @@
           </tr>
         </thead>
         <tbody>
-        
+
           <tr th:each="item:${itemList}">
             <td class="item-name"><a th:href="@{'/detail/?id=' + ${item.id}}"><span th:text="${item.name}"></span></a></td>
             <td class="item-price" th:text="${item.price}">dummy price</td>
@@ -129,21 +134,28 @@
 
     <!-- pagination -->
     <div class="pages">
+      
       <nav class="page-nav">
         <ul class="pager">
-          <li class="previous"><a href="#">&larr; prev</a></li>
-          <li class="next"><a href="#">next &rarr;</a></li>
+          <li class="previous" th:if="${arrow > 0}">
+          		<a th:href="@{/(arrow=${arrow - 1})}">&larr; prev</a>
+          </li>
+
+          <li class="next">
+          		<a th:href="@{/(arrow=${arrow + 1})}">next &rarr;</a>
+          </li>
         </ul>
       </nav>
+      
       <!-- ページ番号を指定して表示するフォーム -->
       <div id="select-page">
-        <form class="form-inline">
+        <form class="form-inline" th:action="@{/}">
           <div class="form-group">
             <div class="input-group col-xs-6">
               <label></label>
-              <input type="text" class="form-control"/>
+              <input type="text" class="form-control" name="arrow"/>
               <!-- 総ページ数 -->
-              <div class="input-group-addon">/ 20</div>
+              <div class="input-group-addon" th:text="${' / ' + totalPages}">/ 20</div>
             </div>
             <div class="input-group col-xs-1">
               <button type="submit" class="btn btn-default">Go</button>
