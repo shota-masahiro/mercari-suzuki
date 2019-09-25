@@ -37,13 +37,22 @@ public class ShowItemListController {
 	 * @return      商品一覧画面
 	 */
 	@RequestMapping("")
-	public String index(Integer arrow, Model model) {
+	public String index(Integer arrow, String brand, Model model) {
 
 		if (arrow == null || arrow == 0) {
 			arrow = 0;
 		}
 		
-		List<Item> itemList = showItemListService.findByPage(arrow);
+		if (brand != null) {
+			List<Item> itemList = showItemListService.findByPage(arrow, brand);
+			model.addAttribute("itemList", itemList);
+			model.addAttribute("arrow", arrow);
+			Integer totalPages = showItemListService.countPageBrand(brand);
+			model.addAttribute("totalPages", totalPages);
+			return "list";
+		}
+		
+		List<Item> itemList = showItemListService.findByPage(arrow, brand);
 		model.addAttribute("itemList", itemList);
 		model.addAttribute("arrow", arrow);
 		Integer totalPages = showItemListService.countPage();

@@ -27,11 +27,16 @@ public class ShowItemListService {
 	 * @param arrow カーソル
 	 * @return      商品情報一覧
 	 */
-	public List<Item> findByPage(Integer arrow) {
+	public List<Item> findByPage(Integer arrow, String brand) {
 
 		//カーソル移動処理
 		if (arrow != 0) {
 			arrow = moveArrow(arrow);
+		}
+
+		if (brand != null) {
+			arrow = 0;
+			return itemRepository.findByBrand(arrow, brand);
 		}
 
 		return itemRepository.findByPage(arrow);
@@ -49,6 +54,17 @@ public class ShowItemListService {
 
 
 	/**
+	 * 総ページ数を取得します.
+	 * 
+	 * @param brand ブランド
+	 * @return      総ページ数
+	 */
+	public Integer countPageBrand(String brand) {
+		return itemRepository.countPageBrand(brand);
+	}
+
+
+	/**
 	 * カーソルの移動処理をします.
 	 * 
 	 * @param arrow カーソル
@@ -58,17 +74,17 @@ public class ShowItemListService {
 		int move = arrow * 30;
 		return arrow += move;
 
-//		int i = 1;
-//		int move = arrow;
-//		while (true) {
-//
-//			if (arrow == i) {
-//				move =+ i*30;
-//				break;
-//			}
-//			i++;
-//		}
-//		return move;
+		//		int i = 1;
+		//		int move = arrow;
+		//		while (true) {
+		//
+		//			if (arrow == i) {
+		//				move =+ i*30;
+		//				break;
+		//			}
+		//			i++;
+		//		}
+		//		return move;
 	}
 
 }

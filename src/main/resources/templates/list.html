@@ -124,7 +124,7 @@
             <td class="item-category">
             	<a href=""><span th:text="${item.largeCategory}"></span></a> / <a href=""><span th:text="${item.mediumCategory}"></span></a> / <a href=""><span th:text="${item.smallCategory}"></span></a>
             </td>
-            <td class="item-brand"><a href=""><span th:text="${item.brand}"></span></a></td>
+            <td class="item-brand"><a th:href="@{/(brand=${item.brand})}"><span th:text="${item.brand}"></span></a></td>
             <td class="item-condition" th:text="${item.condition}">dummy condition</td>
           </tr>
 

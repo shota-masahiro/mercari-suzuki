@@ -83,8 +83,28 @@ public class ItemRepository {
 		List<Item> itemList = template.query(sql.toString(), param, ITEM_CATEGORY_ROW_MAPPER);
 		return itemList;
 	}
-	
-	
+
+
+	/**
+	 * 検索処理をします.
+	 * 
+	 * @param brand ブランド
+	 * @return      商品情報一覧
+	 */
+	public List<Item> findByBrand(Integer arrow, String brand) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT i.id i_id, i.name i_name, i.condition i_condition, i.category_id i_category_id, i.brand i_brand, i.price i_price, i.shipping i_shipping, i.description i_description,");
+		sql.append("c.id c_id, c.parent_id c_parent_id, c.category_name c_category_name, c.name_all c_name_all, split_part(c.name_all, '/', 1) largeCategory, split_part(c.name_all, '/', 2) mediumCategory, split_part(c.name_all, '/', 3) smallCategory ");
+		sql.append("FROM items i inner join category c on i.category_id = c.id ");
+		sql.append("WHERE i.brand = :brand ");
+		sql.append("ORDER BY i.id ");
+		sql.append("LIMIT 30 OFFSET :arrow;");
+		SqlParameterSource param = new MapSqlParameterSource().addValue("brand", brand).addValue("arrow", arrow);
+		List<Item> itemList = template.query(sql.toString(), param, ITEM_CATEGORY_ROW_MAPPER);
+		return itemList;
+	}
+
+
 	/**
 	 * 総ページ数を取得します.
 	 * 
@@ -95,6 +115,22 @@ public class ItemRepository {
 		sql.append("SELECT count(id) / 30");
 		sql.append("FROM items;");
 		SqlParameterSource param = new MapSqlParameterSource();
+		return template.queryForObject(sql.toString(), param, Integer.class);
+	}
+
+
+	/**
+	 * 総ページ数を取得します.
+	 * 
+	 * @param brand ブランド
+	 * @return 総ページ数
+	 */
+	public Integer countPageBrand(String brand) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT count(id) / 30");
+		sql.append("FROM items ");
+		sql.append("WHERE brand = :brand;");
+		SqlParameterSource param = new MapSqlParameterSource().addValue("brand", brand);
 		return template.queryForObject(sql.toString(), param, Integer.class);
 	}
 
