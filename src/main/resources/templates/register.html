@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <!-- css -->
+  <link th:href="@{/css/mercari.css}" rel="stylesheet">
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" 
     integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"/>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -28,21 +29,41 @@
     <div class="panel panel-default">
       <div class="panel-heading">Register Account</div>
       <div class="panel-body">
-        <form action="#" method="POST">
+      
+        <form th:action="@{/register/userRegister}" th:object="${registerUserForm}" method="post">
+        
           <div class="form-group">
-            <label for="mail">mail address</label>
-            <input type="email" class="form-control" id="mail">
+            <label for="name">name</label>
+            <label style="color:red" th:errors="*{name}" th:field="*{name}">error message</label>
+            <input type="text" class="form-control" id="name" name="name">
           </div>
+        
+          <div class="form-group">
+            <label for="mailAddress">mail address</label>
+            <label style="color:red" th:errors="*{mailAddress}" th:field="*{mailAddress}">error message</label>
+            <input type="text" class="form-control" id="mailAddress" name="mailAddress">
+          </div>
+          
           <div class="form-group">
             <label for="password">password</label>
-            <input type="text" class="form-control" id="password">
+            <label style="color:red" th:errors="*{password}" th:field="*{password}">error message</label>
+            <input type="password" class="form-control" id="password" name="password">
+          </div>
+          
+          <div class="form-group">
+            <label for="confirmationPassword">confirmationPassword</label>
+            <label style="color:red" th:errors="*{confirmationPassword}" th:field="*{confirmationPassword}">error message</label>
+            <input type="password" class="form-control" id="confirmationPassword" name="confirmationPassword">
           </div>
           <button type="submit" class="btn btn-default">Submit</button>
+          
         </form>
+        
       </div>
     </div>
+    </div>
     <div>
-      <a type="button" class="btn btn-default" href="./login.html"><i class="fa fa-reply"></i>&nbsp;Login page</a>
+      <a type="button" class="btn btn-default" th:href="@{/login}"><i class="fa fa-reply"></i>&nbsp;Login page</a>
     </div>
 </body>
 </html>

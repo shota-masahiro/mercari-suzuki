@@ -20,6 +20,18 @@ public class RegisterUserService {
 	@Autowired
 	private UserRepository userRepository;
 	
+	
+	/**
+	 * 検索処理をします.
+	 * 
+	 * @param form ユーザ登録情報
+	 * @return     userオブジェクト
+	 */
+	public User findByMailAddress(RegisterUserForm form) {
+		return userRepository.findByMailAddress(form.getMailAddress());
+	}
+	
+	
 	/**
 	 * 登録処理をします.
 	 * 
@@ -30,5 +42,5 @@ public class RegisterUserService {
 		BeanUtils.copyProperties(form, user);
 		userRepository.insert(user);
 	}
-	
+
 }

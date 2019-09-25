@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <!-- css -->
+  <link th:href="@{/css/mercari.css}" rel="stylesheet">
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" 
     integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"/>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -29,17 +30,22 @@
       <div class="panel-heading">Login</div>
       <div class="panel-body">
         <p class="text-danger">error:failed to login</p>
-        <form action="#" method="POST">
+        
+        <form th:action="@{/login/pre}" method="post">
+        
           <div class="form-group">
             <label for="mail">mail address</label>
             <input type="email" class="form-control" id="mail">
           </div>
+          
           <div class="form-group">
             <label for="password">password</label>
             <input type="password" class="form-control" id="password">
           </div>
+          
           <button type="submit" class="btn btn-default">Login</button>
         </form>
+        
       </div>
     </div>
     <div>

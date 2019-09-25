@@ -1,5 +1,9 @@
 package com.example.form;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+
 /**
  * ユーザ登録情報を受け取るフォーム.
  * 
@@ -7,15 +11,22 @@ package com.example.form;
  *
  */
 public class RegisterUserForm {
-	
+
 	/** 名前 */
+	@NotBlank(message = "名前を入力してください")
 	private String name;
-	
+
 	/** メールアドレス */
+	@NotBlank(message = "メールアドレスを入力してください")
+	@Email(message = "Eメールの形式は不正です")
 	private String mailAddress;
-	
+
 	/** パスワード */
+	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,32}$", message = "8文字以上32文字以内かつ小・大文字、数字を1つ以上入力してください")
 	private String password;
+
+	/** 確認用パスワード */
+	private String confirmationPassword;
 
 
 	public String getName() {
@@ -42,9 +53,18 @@ public class RegisterUserForm {
 	}
 
 
+	public String getConfirmationPassword() {
+		return confirmationPassword;
+	}
+	public void setConfirmationPassword(String confirmationPassword) {
+		this.confirmationPassword = confirmationPassword;
+	}
+
+
 	@Override
 	public String toString() {
-		return "LoginUserForm [name=" + name + ", mailAddress=" + mailAddress + ", password=" + password + "]";
+		return "RegisterUserForm [name=" + name + ", mailAddress=" + mailAddress + ", password=" + password
+				+ ", confirmationPassword=" + confirmationPassword + "]";
 	}
 
 }
