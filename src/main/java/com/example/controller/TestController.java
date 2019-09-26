@@ -1,9 +1,12 @@
 package com.example.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.domain.CategoryName;
 import com.example.repository.ItemRepository;
 
 /**
@@ -22,7 +25,8 @@ public class TestController {
 	// 動作確認用メソッド
 	@RequestMapping("")
 	public String index() {
-		System.out.println(itemRepository.findById(2));
+		List<CategoryName> cList = itemRepository.categoryLargeText();
+		System.out.println(cList);
 		return "test";
 	}
 	

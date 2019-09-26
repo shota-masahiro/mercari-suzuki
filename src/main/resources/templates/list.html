@@ -16,6 +16,66 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
     integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script th:src="@{/js/category.js}"></script> --> 
+  
+<script type="text/javascript">
+$(document).ready(function(){
+ 
+    // プルダウンのoption内容をコピー
+    var pd2 = $("#mediumCategory option").clone();
+    var pd3 = $("#smallCategory option").clone();
+ 
+    // 1→2連動
+    $("#largeCategory").change(function () {
+        // largeCategoryのvalue取得
+        var largeVal = $("#largeCategory").val();
+ 
+        // mediumCategoryのdisabled解除
+        $("#mediumCategory").removeAttr("disabled");
+ 
+        // 一旦、一旦mediumCategoryのoptionを削除
+        $("#mediumCategory option").remove();
+ 
+        // copy済みの元のmediumCategoryを表示
+        $(pd2).appendTo("#mediumCategory");
+ 
+        // mediumCategoryクラスのoptionを削除
+        $("#mediumCategory option[class != "+largeVal+"]").remove();
+ 
+        // mediumCategory先頭表示
+        $("#mediumCategory").prepend('<option value="" selected="selected">-- mediumCategory --</option>');
+ 
+        // smallCategory disabled処理
+        $("#smallCategory").attr("disabled", "disabled");
+        $("#smallCategory option").remove();
+        $("#smallCategory").prepend('<option value="---">-- smallCategory --</option>');
+    });
+
+    // 2→3連動
+    $("#mediumCategory").change(function () {
+        // mediumCategoryのvalue取得
+        var mediumVal = $("#mediumCategory").val();
+ 
+        // smallCategoryのdisabled解除
+        $("#smallCategory").removeAttr("disabled");
+ 
+        // 一旦、一旦smallCategoryのoptionを削除
+        $("#smallCategory option").remove();
+
+        // copy済みの元のsmallCategoryを表示
+        $(pd3).appendTo("#smallCategory");
+ 
+        // smallCategoryクラスのoptionを削除
+        $("#smallCategory option[class != "+mediumVal+"]").remove();
+ 
+        // smallCategory先頭表示
+        $("#smallCategory").prepend('<option value="" selected="selected">-- smallCategory --</option>');
+    });
+});
+</script>
+
   <title>Rakus Items</title>
 </head>
 <body>
@@ -49,41 +109,37 @@
 ​
     <!-- 検索フォーム -->
     <div id="forms">
-      <form action="" class="form-inline" role="form">
+      <form th:action="@{/}" th:object="${categorySearchForm}" class="form-inline" role="form" method="post">
         <div class="form-group">
-          <input type="input" class="form-control" id="name" placeholder="item name"/>
+          <input type="input" class="form-control" id="name" name="itemName" placeholder="item name"/>
         </div>
+        
         <div class="form-group"><i class="fa fa-plus"></i></div>
         <div class="form-group">
-          <select class="form-control">
-            <option>- parentCategory -</option>
-            <option>parentCategory1</option>
-            <option>parentCategory2</option>
-            <option>parentCategory3</option>
-            <option>parentCategory4</option>
-            <option>parentCategory5</option>
+
+          <select class="form-control" name="largeCategory" id="largeCategory">
+            <option value="---">-- largeCategory --</option>
+            <option th:each="large:${categoryLargeNameList}" th:text="${large.categoryLargeName}" th:value="${large.categoryLargeName}"></option>
           </select>
-          <select class="form-control">
-            <option>- childCategory -</option>
-            <option>childCategory1</option>
-            <option>childCategory2</option>
-            <option>childCategory3</option>
-            <option>childCategory4</option>
-            <option>childCategory5</option>
+
+          <select class="form-control" name="mediumCategory" id="mediumCategory" disabled="disabled">
+            <option value="---" class="---">-- mediumCategory --</option>
+            <option th:each="medium:${categoryMediumNameList}" th:text="${medium.categoryMediumName}" th:value="${medium.categoryLargeName + '/' + medium.categoryMediumName}" th:class="${medium.categoryLargeName}"></option>
           </select>
-          <select class="form-control">
-            <option>- grandChild -</option>
-            <option>grandChild1</option>
-            <option>grandChild2</option>
-            <option>grandChild3</option>
-            <option>grandChild4</option>
-            <option>grandChild5</option>
+
+          <select class="form-control" name="smallCategory" id="smallCategory" disabled="disabled">
+            <option value="---">-- smallCategory --</option>
+            <option th:each="small:${categorySmallNameList}" th:text="${small.categorySmallName}" th:value="${small.categorySmallName}" th:class="${small.categoryLargeName + '/' + small.categoryMediumName}"></option>
           </select>
+
         </div>
+        
         <div class="form-group"><i class="fa fa-plus"></i></div>
+        
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="brand"/>
+          <input type="text" class="form-control" name="brand" placeholder="brand"/>
         </div>
+        
         <div class="form-group"></div>
         <button type="submit" class="btn btn-default"><i class="fa fa-angle-double-right"></i> search</button>
       </form>
@@ -94,11 +150,11 @@
       <nav class="page-nav">
         <ul class="pager">
           <li class="previous" th:if="${arrow > 0}">
-          		<a th:href="@{/(arrow=${arrow - 1}, brand=${brand}, categoryId=${categoryId}, categoryName=${categoryName})}">&larr; prev</a>
+          		<a th:href="@{/(arrow=${arrow - 1}, brand=${brand}, categoryId=${categoryId}, categoryName=${categoryName}, itemName=${itemName})}">&larr; prev</a>
           </li>
 ​
           <li class="next" th:if="${arrow + 1 < totalPages}">
-          		<a th:href="@{/(arrow=${arrow + 1}, brand=${brand}, categoryId=${categoryId}, categoryName=${categoryName})}">next &rarr;</a>
+          		<a th:href="@{/(arrow=${arrow + 1}, brand=${brand}, categoryId=${categoryId}, categoryName=${categoryName}, itemName=${itemName})}">next &rarr;</a>
           </li>
         </ul>
       </nav>
@@ -140,11 +196,11 @@
       <nav class="page-nav">
         <ul class="pager">
           <li class="previous" th:if="${arrow > 0}">
-          		<a th:href="@{/(arrow=${arrow - 1}, brand=${brand}, categoryId=${categoryId}, categoryName=${categoryName})}">&larr; prev</a>
+          		<a th:href="@{/(arrow=${arrow - 1}, brand=${brand}, categoryId=${categoryId}, categoryName=${categoryName}, itemName=${itemName})}">&larr; prev</a>
           </li>
 ​
           <li class="next" th:if="${arrow + 1 < totalPages}">
-          		<a th:href="@{/(arrow=${arrow + 1}, brand=${brand}, categoryId=${categoryId}, categoryName=${categoryName})}">next &rarr;</a>
+          		<a th:href="@{/(arrow=${arrow + 1}, brand=${brand}, categoryId=${categoryId}, categoryName=${categoryName}, itemName=${itemName})}">next &rarr;</a>
           </li>
         </ul>
       </nav>

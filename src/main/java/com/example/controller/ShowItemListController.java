@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -7,8 +8,11 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.domain.CategoryName;
+import com.example.domain.CategorySearchForm;
 import com.example.domain.Item;
 import com.example.service.ShowItemListService;
 
@@ -28,6 +32,11 @@ public class ShowItemListController {
 	@Autowired
 	private HttpSession session;
 
+	@ModelAttribute
+	public CategorySearchForm setUpCategorySearchForm() {
+		return new CategorySearchForm();
+	}
+
 
 	/**
 	 * 商品一覧画面を出力します.
@@ -40,9 +49,30 @@ public class ShowItemListController {
 	@RequestMapping("")
 	public String index(Integer arrow, String brand, Model model,
 			String largeCategory, String mediumCategory, String smallCategory,
-			Integer categoryId, String categoryName) {
-		
-		System.out.println("リクエストarrow:" + arrow);
+			Integer categoryId, String categoryName, CategorySearchForm form,
+			String itemName) {
+
+		System.out.println("categoryId:" + categoryId);
+
+		System.out.println("categorySearchForm:" + form);
+		System.out.println("categorySearchForm■:" + form == null);
+		System.out.println("categorySearchForm□:" + form != null);
+
+
+		if (form.getItemName() != null || !"".equals(form.getItemName())) {
+			//商品名を受け取った場合
+			itemName = form.getItemName();
+		}
+
+		if (form.getLargeCategory() != null || !"".equals(form.getLargeCategory()) ) {
+			//カテゴリーが選択されていた場合
+		}
+
+		if (form.getBrand() != null || !"".equals(form.getBrand())) {
+			//ブランドが選択されていた場合
+			brand = form.getBrand();
+		}
+
 
 		String[] categorys = {largeCategory, mediumCategory, smallCategory};
 		if (categoryId != null) {
@@ -55,17 +85,22 @@ public class ShowItemListController {
 			}
 		}
 
+
 		if (arrow == null) {
 			arrow = 0;
 		}
 		if ("".equals(brand)) {
 			brand = null;
 		}
-		List<Item> itemList = showItemListService.findByPage(arrow, brand, categorys);
+		if ("".equals(itemName)) {
+			itemName = null;
+		}
+		List<Item> itemList = showItemListService.findByPage(arrow, brand, categorys, itemName);
 		model.addAttribute("itemList", itemList);
 		model.addAttribute("arrow", arrow);
 		model.addAttribute("brand", brand);
 
+		//メソッド化できる
 		Integer totalPages;
 		String category = null;
 		if (brand != null) {
@@ -85,9 +120,31 @@ public class ShowItemListController {
 		} else {
 			totalPages = showItemListService.countPage();
 		}
+		if (itemName != null) {
+			System.out.println("商品名検索の総ページ数を取得");
+			totalPages = showItemListService.countPageName(itemName);
+		} 
 		model.addAttribute("totalPages", totalPages);
 		model.addAttribute("categoryId", categoryId);
 		model.addAttribute("categoryName", category);
+
+		model.addAttribute("itemName", itemName);
+
+		//ここはsessionでメソッドで切り出し
+		List<CategoryName> categoryLargeNameList = showItemListService.categoryLargeText();
+		List<String> categoryLargeList = new LinkedList<>();
+		model.addAttribute("categoryLargeNameList", categoryLargeNameList);
+
+
+		List<CategoryName> categoryMediumNameList = showItemListService.categoryMediumText();
+		List<String> categoryMediumList = new LinkedList<>();
+		model.addAttribute("categoryMediumNameList", categoryMediumNameList);
+
+
+		List<CategoryName> categorySmallNameList = showItemListService.categorySmallText();
+		List<String> categorySmallList = new LinkedList<>();
+		model.addAttribute("categorySmallNameList", categorySmallNameList);
+
 		return "list";
 	}
 

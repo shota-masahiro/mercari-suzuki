@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.domain.CategoryName;
 import com.example.domain.Item;
 import com.example.repository.ItemRepository;
 
@@ -27,13 +28,28 @@ public class ShowItemListService {
 	 * @param arrow カーソル
 	 * @return      商品情報一覧
 	 */
-	public List<Item> findByPage(Integer arrow, String brand, String[] categorys) {
+	public List<Item> findByPage(Integer arrow, String brand, String[] categorys, String itemName) {
+		
 		//カーソル移動処理
 		if (arrow != 0) {
 			arrow = moveArrow(arrow);
 		}
+
+		//商品名とブランド名で検索
+		if (brand != null && itemName != null) {
+			return null;
+		}
+
+		//商品検索
+		if (itemName != null) {
+			return itemRepository.findByNamePage(("%"+itemName+"%"), arrow);
+		}
+
+		//
+
 		if (brand != null) {
-			return itemRepository.findByBrand(arrow, brand);
+			System.out.println("koko");
+			return itemRepository.findByBrand(arrow, ("%"+brand+"%"));
 		} else if (categorys[0] != null) {
 			return itemRepository.findByCategoryLarge(categorys[0], arrow);
 		} else if (categorys[1] != null) {
@@ -63,7 +79,7 @@ public class ShowItemListService {
 	 * @return      総ページ数
 	 */
 	public Integer countPageBrand(String brand) {
-		int page = itemRepository.countPageBrand(brand);
+		int page = itemRepository.countPageBrand(("%"+brand+"%"));
 		if (page == 0) {
 			page = 1;
 		}
@@ -93,6 +109,27 @@ public class ShowItemListService {
 			page = 1;
 		}
 		return page;
+	}
+
+	//商品のあいまい検索
+	public Integer countPageName(String itemName) {
+		int page = itemRepository.countPageName(("%"+itemName+"%"));
+		if (page == 0) {
+			page = 1;
+		}
+		return page;
+	}
+
+	public List<CategoryName> categoryLargeText() {
+		return itemRepository.categoryLargeText();
+	}
+
+	public List<CategoryName> categoryMediumText() {
+		return itemRepository.categoryMediumText();
+	}
+
+	public List<CategoryName> categorySmallText() {
+		return itemRepository.categorySmallText();
 	}
 
 
