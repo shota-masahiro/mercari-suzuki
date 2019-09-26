@@ -29,7 +29,7 @@ public class ShowItemListService {
 	 * @return      商品情報一覧
 	 */
 	public List<Item> findByPage(Integer arrow, String brand, String[] categorys, String itemName) {
-		
+
 		//カーソル移動処理
 		if (arrow != 0) {
 			arrow = moveArrow(arrow);
@@ -63,7 +63,7 @@ public class ShowItemListService {
 			} catch (Exception e) {
 				return itemRepository.findByCategoryMedium(categorys[1], arrow);
 			}
-			
+
 			return itemRepository.findByCategoryLarge(categorys[0], arrow);
 		} else if (categorys[1] != null) {
 			return itemRepository.findByCategoryMedium(categorys[1], arrow);
@@ -72,6 +72,11 @@ public class ShowItemListService {
 		}
 		System.out.println("arrow:" + arrow);
 		return itemRepository.findByPage(arrow);
+	}
+	
+	
+	public Item findByCategoryMediumInteger2(Integer parentId) {
+		return itemRepository.findByCategoryMediumIntegerSecond(parentId);
 	}
 
 
@@ -115,7 +120,7 @@ public class ShowItemListService {
 		}
 		return page;
 	}
-	
+
 	public Integer countPageMediumInteger(Integer parentId) {
 		int page = itemRepository.countPageMediumInteger(parentId);
 		if (page == 0) {
@@ -142,15 +147,15 @@ public class ShowItemListService {
 		}
 		return page;
 	}
-	
+
 	//商品名とブランド名のあいまい検索
-		public Integer countPageNameBrand(String itemName, String brand) {
-			int page = itemRepository.countPageNameBrand(("%"+itemName+"%"), ("%"+ brand +"%"));
-			if (page == 0) {
-				page = 1;
-			}
-			return page;
+	public Integer countPageNameBrand(String itemName, String brand) {
+		int page = itemRepository.countPageNameBrand(("%"+itemName+"%"), ("%"+ brand +"%"));
+		if (page == 0) {
+			page = 1;
 		}
+		return page;
+	}
 
 	public List<CategoryName> categoryLargeText() {
 		return itemRepository.categoryLargeText();

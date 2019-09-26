@@ -201,21 +201,39 @@ public class ItemRepository {
 		List<Item> itemList = template.query(sql.toString(), param, ITEM_CATEGORY_ROW_MAPPER);
 		return itemList;
 	}
-	
+
 	// 中カテゴリ用の検索メソッド
-		public List<Item> findByCategoryMediumInteger(Integer parentId, Integer arrow) {
-			StringBuilder sql = new StringBuilder();
-			//i.conditionをi.condition_idに変更した！けど自宅PC用だから意味ないよ！
-			sql.append("SELECT i.id i_id, i.name i_name, i.condition i_condition, i.category_id i_category_id, i.brand i_brand, i.price i_price, i.shipping i_shipping, i.description i_description,");
-			sql.append("c.id c_id, c.parent_id c_parent_id, c.category_name c_category_name, c.name_all c_name_all, split_part(c.name_all, '/', 1) largeCategory, split_part(c.name_all, '/', 2) mediumCategory, split_part(c.name_all, '/', 3) smallCategory ");
-			sql.append("FROM items i left outer join category c on i.category_id = c.id ");
-			sql.append("WHERE c.parent_id = :parentId ");
-			sql.append("ORDER BY i.id ");
-			sql.append("LIMIT 30 OFFSET :arrow;");
-			SqlParameterSource param = new MapSqlParameterSource().addValue("parentId", parentId).addValue("arrow", arrow);
-			List<Item> itemList = template.query(sql.toString(), param, ITEM_CATEGORY_ROW_MAPPER);
-			return itemList;
+	public List<Item> findByCategoryMediumInteger(Integer parentId, Integer arrow) {
+		StringBuilder sql = new StringBuilder();
+		//i.conditionをi.condition_idに変更した！けど自宅PC用だから意味ないよ！
+		sql.append("SELECT i.id i_id, i.name i_name, i.condition i_condition, i.category_id i_category_id, i.brand i_brand, i.price i_price, i.shipping i_shipping, i.description i_description,");
+		sql.append("c.id c_id, c.parent_id c_parent_id, c.category_name c_category_name, c.name_all c_name_all, split_part(c.name_all, '/', 1) largeCategory, split_part(c.name_all, '/', 2) mediumCategory, split_part(c.name_all, '/', 3) smallCategory ");
+		sql.append("FROM items i left outer join category c on i.category_id = c.id ");
+		sql.append("WHERE c.parent_id = :parentId ");
+		sql.append("ORDER BY i.id ");
+		sql.append("LIMIT 30 OFFSET :arrow;");
+		SqlParameterSource param = new MapSqlParameterSource().addValue("parentId", parentId).addValue("arrow", arrow);
+		List<Item> itemList = template.query(sql.toString(), param, ITEM_CATEGORY_ROW_MAPPER);
+		return itemList;
+	}
+
+
+	// 中カテゴリ用の検索メソッド
+	public Item findByCategoryMediumIntegerSecond(Integer parentId) {
+		StringBuilder sql = new StringBuilder();
+		//i.conditionをi.condition_idに変更した！けど自宅PC用だから意味ないよ！
+		sql.append("SELECT split_part(c.name_all, '/', 1) || '/' || split_part(c.name_all, '/', 2) mediumCategory ");
+		sql.append("FROM items i left outer join category c on i.category_id = c.id ");
+		sql.append("WHERE c.parent_id = :parentId ");
+		sql.append("ORDER BY i.id ");
+		sql.append("LIMIT 1 OFFSET 0;");
+		SqlParameterSource param = new MapSqlParameterSource().addValue("parentId", parentId);
+		List<Item> itemList = template.query(sql.toString(), param, ITEM_CATEGORY_ROW_MAPPER);
+		if (itemList.size() != 0) {
+			itemList.get(0);
 		}
+		return null;
+	}
 
 
 	// 小カテゴリ用の検索メソッド
@@ -284,17 +302,17 @@ public class ItemRepository {
 		SqlParameterSource param = new MapSqlParameterSource().addValue("medium", medium);
 		return template.queryForObject(sql.toString(), param, Integer.class);
 	}
-	
+
 	// 中カテゴリの総ページ数を取得
-		public Integer countPageMediumInteger(Integer parentId) {
-			StringBuilder sql = new StringBuilder();
-			//+1をしてないと割り切れなかった分がうまく表示されない
-			sql.append("SELECT count(i.id) / 30 ");
-			sql.append("FROM items i inner join category c on i.category_id = c.id ");
-			sql.append("WHERE c.parent_id = :parentId;");
-			SqlParameterSource param = new MapSqlParameterSource().addValue("parentId", parentId);
-			return template.queryForObject(sql.toString(), param, Integer.class);
-		}
+	public Integer countPageMediumInteger(Integer parentId) {
+		StringBuilder sql = new StringBuilder();
+		//+1をしてないと割り切れなかった分がうまく表示されない
+		sql.append("SELECT count(i.id) / 30 ");
+		sql.append("FROM items i inner join category c on i.category_id = c.id ");
+		sql.append("WHERE c.parent_id = :parentId;");
+		SqlParameterSource param = new MapSqlParameterSource().addValue("parentId", parentId);
+		return template.queryForObject(sql.toString(), param, Integer.class);
+	}
 
 	// 小カテゴリ
 	public Integer countPageSmall(String small) {
@@ -317,18 +335,18 @@ public class ItemRepository {
 		SqlParameterSource param = new MapSqlParameterSource().addValue("name", name);
 		return template.queryForObject(sql.toString(), param, Integer.class);
 	}
-	
+
 	// 商品名とブランド名検索
-		public Integer countPageNameBrand(String name, String brand) {
-			StringBuilder sql = new StringBuilder();
-			//+1をしてないと割り切れなかった分がうまく表示されない
-			sql.append("SELECT count(i.id) / 30 ");
-			sql.append("FROM items i INNER JOIN category c on i.category_id = c.id ");
-			sql.append("WHERE i.name LIKE :name AND i.brand LIKE :brand;");
-			SqlParameterSource param = new MapSqlParameterSource().addValue("name", name).addValue("brand", brand);
-			return template.queryForObject(sql.toString(), param, Integer.class);
-		}
-	
+	public Integer countPageNameBrand(String name, String brand) {
+		StringBuilder sql = new StringBuilder();
+		//+1をしてないと割り切れなかった分がうまく表示されない
+		sql.append("SELECT count(i.id) / 30 ");
+		sql.append("FROM items i INNER JOIN category c on i.category_id = c.id ");
+		sql.append("WHERE i.name LIKE :name AND i.brand LIKE :brand;");
+		SqlParameterSource param = new MapSqlParameterSource().addValue("name", name).addValue("brand", brand);
+		return template.queryForObject(sql.toString(), param, Integer.class);
+	}
+
 
 	//大カテゴリネーム取得
 	public List<CategoryName> categoryLargeText() {

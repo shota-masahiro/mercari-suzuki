@@ -114,11 +114,14 @@ public class ShowItemListController {
 			category = categorys[0];
 			if (categorys[1] != null) {
 				try {
-					int parentId = Integer.parseInt(categorys[1]);
+					Integer parentId = Integer.parseInt(categorys[1]);
 					totalPages = showItemListService.countPageMediumInteger(parentId);
+					System.out.println("実行totalPages:" + totalPages);
 					categoryId = 1;
-					category = categorys[1];
+					Item item = showItemListService.findByCategoryMediumInteger2(parentId);
+					category = item.getMediumCategory();
 				} catch (Exception e) {
+					System.out.println("ここで例外が起きています！");//ここで例外が起きて上記の処理が上書きされている.
 					totalPages = showItemListService.countPageMedium(categorys[1]);
 					categoryId = 1;
 					category = categorys[1];
@@ -131,6 +134,7 @@ public class ShowItemListController {
 				category = categorys[2];
 			}
 		} else if (categorys[1] != null) {
+			System.out.println("ここが実行されている?");
 			totalPages = showItemListService.countPageMedium(categorys[1]);
 			categoryId = 1;
 			category = categorys[1];
@@ -147,6 +151,7 @@ public class ShowItemListController {
 		if (itemName != null && brand != null) {
 			totalPages = showItemListService.countPageNameBrand(itemName, brand);
 		}
+		System.out.println("実行totalPages:" + totalPages);
 		model.addAttribute("totalPages", totalPages);
 		model.addAttribute("categoryId", categoryId);
 		model.addAttribute("categoryName", category);
