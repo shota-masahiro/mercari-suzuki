@@ -40,13 +40,13 @@
       </div>
     </div>
   </nav>
-
+​
   <div id="main" class="container-fluid">
     <!-- addItem link -->
     <div id="addItemButton">
       <a class="btn btn-default" th:href="@{/add}"><i class="fa fa-plus-square-o"></i> Add New Item</a>
     </div>
-
+​
     <!-- 検索フォーム -->
     <div id="forms">
       <form action="" class="form-inline" role="form">
@@ -88,22 +88,22 @@
         <button type="submit" class="btn btn-default"><i class="fa fa-angle-double-right"></i> search</button>
       </form>
     </div>
-
+​
     <!-- pagination -->
     <div class="pages">
       <nav class="page-nav">
         <ul class="pager">
           <li class="previous" th:if="${arrow > 0}">
-          		<a th:href="@{/(arrow=${arrow - 1})}">&larr; prev</a>
+          		<a th:href="@{/(arrow=${arrow - 1}, brand=${brand}, categoryId=${categoryId}, categoryName=${categoryName})}">&larr; prev</a>
           </li>
-
-          <li class="next">
-          		<a th:href="@{/(arrow=${arrow + 1})}">next &rarr;</a>
+​
+          <li class="next" th:if="${arrow + 1 < totalPages}">
+          		<a th:href="@{/(arrow=${arrow + 1}, brand=${brand}, categoryId=${categoryId}, categoryName=${categoryName})}">next &rarr;</a>
           </li>
         </ul>
       </nav>
     </div>
-
+​
     <!-- table -->
     <div class="table-responsive">
       <table id="item-table" class="table table-hover table-condensed">
@@ -117,32 +117,34 @@
           </tr>
         </thead>
         <tbody>
-
+​
           <tr th:each="item:${itemList}">
             <td class="item-name"><a th:href="@{'/detail/?id=' + ${item.id}}"><span th:text="${item.name}"></span></a></td>
             <td class="item-price" th:text="${item.price}">dummy price</td>
             <td class="item-category">
-            	<a href=""><span th:text="${item.largeCategory}"></span></a> / <a href=""><span th:text="${item.mediumCategory}"></span></a> / <a href=""><span th:text="${item.smallCategory}"></span></a>
+            	<a th:href="@{/(arrow=0, brand=${brand}, largeCategory=${item.largeCategory})}"><span th:text="${item.largeCategory}"></span></a> / 
+            	<a th:href="@{/(arrow=0, brand=${brand}, mediumCategory=${item.largeCategory + '/' + item.mediumCategory})}"><span th:text="${item.mediumCategory}"></span></a> / 
+            	<a th:href="@{/(arrow=0, brand=${brand}, smallCategory=${item.largeCategory + '/' + item.mediumCategory + '/' + item.smallCategory})}"><span th:text="${item.smallCategory}"></span></a>
             </td>
             <td class="item-brand"><a th:href="@{/(brand=${item.brand})}"><span th:text="${item.brand}"></span></a></td>
             <td class="item-condition" th:text="${item.condition}">dummy condition</td>
           </tr>
-
+​
         </tbody>
       </table>
     </div>
-
+​
     <!-- pagination -->
     <div class="pages">
       
       <nav class="page-nav">
         <ul class="pager">
           <li class="previous" th:if="${arrow > 0}">
-          		<a th:href="@{/(arrow=${arrow - 1})}">&larr; prev</a>
+          		<a th:href="@{/(arrow=${arrow - 1}, brand=${brand}, categoryId=${categoryId}, categoryName=${categoryName})}">&larr; prev</a>
           </li>
-
-          <li class="next">
-          		<a th:href="@{/(arrow=${arrow + 1})}">next &rarr;</a>
+​
+          <li class="next" th:if="${arrow + 1 < totalPages}">
+          		<a th:href="@{/(arrow=${arrow + 1}, brand=${brand}, categoryId=${categoryId}, categoryName=${categoryName})}">next &rarr;</a>
           </li>
         </ul>
       </nav>
@@ -154,6 +156,9 @@
             <div class="input-group col-xs-6">
               <label></label>
               <input type="text" class="form-control" name="arrow"/>
+              <input type="hidden" name="brand" th:value="${brand}">
+              <input type="hidden" name="categoryId" th:value="${categoryId}">
+              <input type="hidden" name="categoryName" th:value="${categoryName}">
               <!-- 総ページ数 -->
               <div class="input-group-addon" th:text="${' / ' + totalPages}">/ 20</div>
             </div>
