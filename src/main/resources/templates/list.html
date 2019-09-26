@@ -65,7 +65,7 @@ $(document).ready(function(){
         $("#smallCategory option").remove();
 
         // copy済みの元のsmallCategoryを表示
-        $(pd3).appendTo("#smallCategory");
+        $(pd3).appendTo("#smallCategory").val();
  
         // smallCategoryクラスのoptionを削除
         $("#smallCategory option[class != "+mediumVal+"]").remove();
@@ -111,35 +111,35 @@ $(document).ready(function(){
     <div id="forms">
       <form th:action="@{/}" th:object="${categorySearchForm}" class="form-inline" role="form" method="post">
         <div class="form-group">
-          <input type="input" class="form-control" id="name" name="itemName" placeholder="item name"/>
+          <input type="input" class="form-control" id="name" name="itemNameForm" placeholder="item name"/>
         </div>
         
         <div class="form-group"><i class="fa fa-plus"></i></div>
         <div class="form-group">
 
-          <select class="form-control" name="largeCategory" id="largeCategory">
+          <select class="form-control" name="largeCategoryForm" id="largeCategory">
             <option value="---">-- largeCategory --</option>
             <option th:each="large:${categoryLargeNameList}" th:text="${large.categoryLargeName}" th:value="${large.categoryLargeName}"></option>
           </select>
 
-          <select class="form-control" name="mediumCategory" id="mediumCategory" disabled="disabled">
+          <select class="form-control" name="mediumCategoryForm" id="mediumCategory" disabled="disabled">
             <option value="---" class="---">-- mediumCategory --</option>
-            <option th:each="medium:${categoryMediumNameList}" th:text="${medium.categoryMediumName}" th:value="${medium.categoryLargeName + '/' + medium.categoryMediumName}" th:class="${medium.categoryLargeName}"></option>
+            <option th:each="medium:${categoryMediumNameList}" th:text="${medium.categoryMediumName}" th:value="${medium.parentId}" th:class="${medium.categoryLargeName}"></option>
           </select>
 
-          <select class="form-control" name="smallCategory" id="smallCategory" disabled="disabled">
+          <select class="form-control" name="smallCategoryForm" id="smallCategory" disabled="disabled">
             <option value="---">-- smallCategory --</option>
-            <option th:each="small:${categorySmallNameList}" th:text="${small.categorySmallName}" th:value="${small.categorySmallName}" th:class="${small.categoryLargeName + '/' + small.categoryMediumName}"></option>
+            <option th:each="small:${categorySmallNameList}" th:text="${small.categorySmallName}" th:value="${small.categoryLargeName + '/' + small.categoryMediumName + '/' + small.categorySmallName}" th:class="${small.parentId}"></option>
           </select>
 
         </div>
         
         <div class="form-group"><i class="fa fa-plus"></i></div>
-        
+
         <div class="form-group">
-          <input type="text" class="form-control" name="brand" placeholder="brand"/>
+          <input type="text" class="form-control" name="brandForm" placeholder="brand"/>
         </div>
-        
+
         <div class="form-group"></div>
         <button type="submit" class="btn btn-default"><i class="fa fa-angle-double-right"></i> search</button>
       </form>

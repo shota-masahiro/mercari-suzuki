@@ -52,23 +52,28 @@ public class ShowItemListController {
 			Integer categoryId, String categoryName, CategorySearchForm form,
 			String itemName) {
 
-		System.out.println("categoryId:" + categoryId);
-
-		System.out.println("categorySearchForm:" + form);
-		System.out.println("categorySearchForm■:" + form == null);
-		System.out.println("categorySearchForm□:" + form != null);
-
-
-		if (form.getItemName() != null || !"".equals(form.getItemName())) {
-			itemName = form.getItemName();
+		if (form.getItemNameForm() != null || !"".equals(form.getItemNameForm())) {
+			itemName = form.getItemNameForm();
 		}
 
-		if (form.getLargeCategory() != null || !"".equals(form.getLargeCategory()) ) {
-			//カテゴリーが選択されていた場合
+		//formで受け取ったカテゴリー値を格納する処理
+		if (form.getLargeCategoryForm() != null || !"".equals(form.getLargeCategoryForm()) ) {
+			if (!"---".equals(form.getLargeCategoryForm())) {
+				largeCategory = form.getLargeCategoryForm();
+			}
+
+			if (form.getMediumCategoryForm() != null && !"".equals(form.getMediumCategoryForm()) && !"---".equals(form.getMediumCategoryForm())) {
+				System.out.println("まずはここが実行される");
+				mediumCategory = form.getMediumCategoryForm();
+			}
+
+			if (form.getSmallCategoryForm() != null && !"".equals(form.getSmallCategoryForm()) && !"---".equals(form.getSmallCategoryForm())) {
+				smallCategory = form.getSmallCategoryForm();
+			}
 		}
 
-		if (form.getBrand() != null || !"".equals(form.getBrand())) {
-			brand = form.getBrand();
+		if (form.getBrandForm() != null || !"".equals(form.getBrandForm())) {
+			brand = form.getBrandForm();
 		}
 
 
@@ -107,6 +112,24 @@ public class ShowItemListController {
 			totalPages = showItemListService.countPageLarge(categorys[0]);
 			categoryId = 0;
 			category = categorys[0];
+			if (categorys[1] != null) {
+				try {
+					int parentId = Integer.parseInt(categorys[1]);
+					totalPages = showItemListService.countPageMediumInteger(parentId);
+					categoryId = 1;
+					category = categorys[1];
+				} catch (Exception e) {
+					totalPages = showItemListService.countPageMedium(categorys[1]);
+					categoryId = 1;
+					category = categorys[1];
+				}
+				
+			}
+			if (categorys[2] != null) {
+				totalPages = showItemListService.countPageSmall(categorys[2]);
+				categoryId = 2;
+				category = categorys[2];
+			}
 		} else if (categorys[1] != null) {
 			totalPages = showItemListService.countPageMedium(categorys[1]);
 			categoryId = 1;
@@ -119,11 +142,9 @@ public class ShowItemListController {
 			totalPages = showItemListService.countPage();
 		}
 		if (itemName != null) {
-			System.out.println("商品名検索の総ページ数を取得");
 			totalPages = showItemListService.countPageName(itemName);
 		}
 		if (itemName != null && brand != null) {
-			System.out.println("itemNameとbrandで検索した総ページ数を取得");
 			totalPages = showItemListService.countPageNameBrand(itemName, brand);
 		}
 		model.addAttribute("totalPages", totalPages);

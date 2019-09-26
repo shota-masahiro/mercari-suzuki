@@ -7,67 +7,68 @@ package com.example.domain;
  *
  */
 public class CategorySearchForm {
-	
+
 	/** 商品名 */
-	private String itemName;
-	
+	private String itemNameForm;
+
 	/** 大カテゴリ */
-	private String largeCategory;
-	
+	private String largeCategoryForm;
+
 	/** 中カテゴリ */
-	private String mediumCategory;
-	
+	private String mediumCategoryForm;
+
 	/** 小カテゴリ */
-	private String smallCategory;
-	
+	private String smallCategoryForm;
+
 	/** ブランド名 */
-	private String brand;
+	private String brandForm;
 
 
-	public String getItemName() {
-		return itemName;
+	public String getItemNameForm() {
+		return itemNameForm;
 	}
-	public void setItemName(String itemName) {
-		this.itemName = itemName;
-	}
-
-
-	public String getLargeCategory() {
-		return largeCategory;
-	}
-	public void setLargeCategory(String largeCategory) {
-		this.largeCategory = largeCategory;
+	public void setItemNameForm(String itemNameForm) {
+		this.itemNameForm = itemNameForm;
 	}
 
 
-	public String getMediumCategory() {
-		return mediumCategory;
+	public String getLargeCategoryForm() {
+		return largeCategoryForm;
 	}
-	public void setMediumCategory(String mediumCategory) {
-		this.mediumCategory = mediumCategory;
-	}
-
-
-	public String getSmallCategory() {
-		return smallCategory;
-	}
-	public void setSmallCategory(String smallCategory) {
-		this.smallCategory = smallCategory;
+	public void setLargeCategoryForm(String largeCategoryForm) {
+		this.largeCategoryForm = largeCategoryForm;
 	}
 
 
-	public String getBrand() {
-		return brand;
+	public String getMediumCategoryForm() {
+		return mediumCategoryForm;
 	}
-	public void setBrand(String brand) {
-		this.brand = brand;
+	public void setMediumCategoryForm(String mediumCategoryForm) {
+		this.mediumCategoryForm = mediumCategoryForm;
+	}
+
+
+	public String getSmallCategoryForm() {
+		return smallCategoryForm;
+	}
+	public void setSmallCategoryForm(String smallCategoryForm) {
+		this.smallCategoryForm = smallCategoryForm;
+	}
+
+
+	public String getBrandForm() {
+		return brandForm;
+	}
+	public void setBrandForm(String brandForm) {
+		this.brandForm = brandForm;
 	}
 
 
 	@Override
 	public String toString() {
-		return "CategorySearchForm [itemName=" + itemName + ", largeCategory=" + largeCategory + ", mediumCategory="
-				+ mediumCategory + ", smallCategory=" + smallCategory + ", brand=" + brand + "]";
+		return "CategorySearchForm [itemNameForm=" + itemNameForm + ", largeCategoryForm=" + largeCategoryForm
+				+ ", mediumCategoryForm=" + mediumCategoryForm + ", smallCategoryForm=" + smallCategoryForm
+				+ ", brandForm=" + brandForm + "]";
 	}
 
 }

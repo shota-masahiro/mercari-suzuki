@@ -45,12 +45,25 @@ public class ShowItemListService {
 			return itemRepository.findByNamePage(("%"+itemName+"%"), arrow);
 		}
 
-		//
-
 		if (brand != null) {
 			System.out.println("koko");
 			return itemRepository.findByBrand(arrow, ("%"+brand+"%"));
 		} else if (categorys[0] != null) {
+			if (categorys[2] != null && !"---".equals(categorys[2])) {
+				return itemRepository.findByCategorySmall(categorys[2], arrow);
+			}
+			try {
+				if (categorys[1] != null) {
+					System.out.println("次にここが実行される");
+					System.out.println("categorys[1]:" + categorys[1]);
+					int parentId = Integer.parseInt(categorys[1]);
+					return itemRepository.findByCategoryMediumInteger(parentId, arrow);
+				}
+
+			} catch (Exception e) {
+				return itemRepository.findByCategoryMedium(categorys[1], arrow);
+			}
+			
 			return itemRepository.findByCategoryLarge(categorys[0], arrow);
 		} else if (categorys[1] != null) {
 			return itemRepository.findByCategoryMedium(categorys[1], arrow);
@@ -102,11 +115,21 @@ public class ShowItemListService {
 		}
 		return page;
 	}
+	
+	public Integer countPageMediumInteger(Integer parentId) {
+		int page = itemRepository.countPageMediumInteger(parentId);
+		if (page == 0) {
+			page = 1;
+		}
+		return page;
+	}
 
 	public Integer countPageSmall(String small) {
 		int page = itemRepository.countPageSmall(small);
 		if (page == 0) {
 			page = 1;
+		} else if (page == 1) {
+			page++;
 		}
 		return page;
 	}

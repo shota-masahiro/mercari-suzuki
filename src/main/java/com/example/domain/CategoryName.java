@@ -7,25 +7,35 @@ package com.example.domain;
  *
  */
 public class CategoryName {
-	
+
 	/** カテゴリ大ネーム */
 	private String categoryLargeName;
-	
+
 	/** カテゴリ中ネーム */
 	private String categoryMediumName;
-	
+
 	/** カテゴリ小ネーム */
 	private String categorySmallName;
+
+	/** 商品ID */
+	private Integer id;
+
+	/** parentID */
+	private Integer parentId;
 
 
 	public CategoryName() {
 
 	}
 
-	public CategoryName(String categoryLargeName, String categoryMediumName, String categorySmallName) {
+
+	public CategoryName(String categoryLargeName, String categoryMediumName, String categorySmallName, Integer id,
+			Integer parentId) {
 		this.categoryLargeName = categoryLargeName;
 		this.categoryMediumName = categoryMediumName;
 		this.categorySmallName = categorySmallName;
+		this.id = id;
+		this.parentId = parentId;
 	}
 
 
@@ -53,10 +63,26 @@ public class CategoryName {
 	}
 
 
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+
+	public Integer getParentId() {
+		return parentId;
+	}
+	public void setParentId(Integer parentId) {
+		this.parentId = parentId;
+	}
+
+
 	@Override
 	public String toString() {
 		return "CategoryName [categoryLargeName=" + categoryLargeName + ", categoryMediumName=" + categoryMediumName
-				+ ", categorySmallName=" + categorySmallName + "]";
+				+ ", categorySmallName=" + categorySmallName + ", id=" + id + ", parentId=" + parentId + "]";
 	}
 
 }
