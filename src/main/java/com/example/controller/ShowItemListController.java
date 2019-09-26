@@ -60,7 +60,6 @@ public class ShowItemListController {
 
 
 		if (form.getItemName() != null || !"".equals(form.getItemName())) {
-			//商品名を受け取った場合
 			itemName = form.getItemName();
 		}
 
@@ -69,7 +68,6 @@ public class ShowItemListController {
 		}
 
 		if (form.getBrand() != null || !"".equals(form.getBrand())) {
-			//ブランドが選択されていた場合
 			brand = form.getBrand();
 		}
 
@@ -123,7 +121,11 @@ public class ShowItemListController {
 		if (itemName != null) {
 			System.out.println("商品名検索の総ページ数を取得");
 			totalPages = showItemListService.countPageName(itemName);
-		} 
+		}
+		if (itemName != null && brand != null) {
+			System.out.println("itemNameとbrandで検索した総ページ数を取得");
+			totalPages = showItemListService.countPageNameBrand(itemName, brand);
+		}
 		model.addAttribute("totalPages", totalPages);
 		model.addAttribute("categoryId", categoryId);
 		model.addAttribute("categoryName", category);

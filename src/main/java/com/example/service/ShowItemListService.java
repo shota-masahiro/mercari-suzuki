@@ -37,7 +37,7 @@ public class ShowItemListService {
 
 		//商品名とブランド名で検索
 		if (brand != null && itemName != null) {
-			return null;
+			return itemRepository.findByNameBrandPage(("%"+itemName+"%"), ("%"+ brand +"%"), arrow);
 		}
 
 		//商品検索
@@ -119,6 +119,15 @@ public class ShowItemListService {
 		}
 		return page;
 	}
+	
+	//商品名とブランド名のあいまい検索
+		public Integer countPageNameBrand(String itemName, String brand) {
+			int page = itemRepository.countPageNameBrand(("%"+itemName+"%"), ("%"+ brand +"%"));
+			if (page == 0) {
+				page = 1;
+			}
+			return page;
+		}
 
 	public List<CategoryName> categoryLargeText() {
 		return itemRepository.categoryLargeText();
