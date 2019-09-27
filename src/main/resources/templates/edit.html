@@ -16,6 +16,64 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
     integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+ 
+    // プルダウンのoption内容をコピー
+    var pd2 = $("#mediumCategory option").clone();
+    var pd3 = $("#smallCategory option").clone();
+ 
+    // 1→2連動
+    $("#largeCategory").change(function () {
+        // largeCategoryのvalue取得
+        var largeVal = $("#largeCategory").val();
+ 
+        // mediumCategoryのdisabled解除
+        $("#mediumCategory").removeAttr("disabled");
+ 
+        // 一旦、一旦mediumCategoryのoptionを削除
+        $("#mediumCategory option").remove();
+ 
+        // copy済みの元のmediumCategoryを表示
+        $(pd2).appendTo("#mediumCategory");
+ 
+        // mediumCategoryクラスのoptionを削除
+        $("#mediumCategory option[class != "+largeVal+"]").remove();
+ 
+        // mediumCategory先頭表示
+        $("#mediumCategory").prepend('<option value="" selected="selected">-- mediumCategory --</option>');
+ 
+        // smallCategory disabled処理
+        $("#smallCategory").attr("disabled", "disabled");
+        $("#smallCategory option").remove();
+        $("#smallCategory").prepend('<option value="---">-- smallCategory --</option>');
+    });
+
+    // 2→3連動
+    $("#mediumCategory").change(function () {
+        // mediumCategoryのvalue取得
+        var mediumVal = $("#mediumCategory").val();
+ 
+        // smallCategoryのdisabled解除
+        $("#smallCategory").removeAttr("disabled");
+ 
+        // 一旦、一旦smallCategoryのoptionを削除
+        $("#smallCategory option").remove();
+
+        // copy済みの元のsmallCategoryを表示
+        $(pd3).appendTo("#smallCategory").val();
+ 
+        // smallCategoryクラスのoptionを削除
+        $("#smallCategory option[class != "+mediumVal+"]").remove();
+ 
+        // smallCategory先頭表示
+        $("#smallCategory").prepend('<option value="" selected="selected">-- smallCategory --</option>');
+    });
+});
+</script>
+  
+  
   <title>Rakus Items</title>
 </head>
 <body>
@@ -43,94 +101,87 @@
 
   <!-- details -->
   <div id="input-main" class="container">
-    <a type="button" class="btn btn-default" th:href="@{/detail(id=${id})}"><i class="fa fa-reply"></i> back</a>
+    <a type="button" class="btn btn-default" th:href="@{/detail(id=${item.id})}"><i class="fa fa-reply"></i> back</a>
     <h2>Edit</h2>
 
     <!-- edit form -->
-    <form action="#" method="POST" class="form-horizontal">
+    <form th:action="@{/edit/editItem}" th:object="${addEditItemForm}" method="post" class="form-horizontal">
+        <input type="hidden" name="id" th:value="${item.id}">
+        <input type="hidden" name="shipping" th:value="${item.shipping}">
+        <input type="hidden" name="categoryId" th:value="${item.categoryId}">
         <!-- name -->
         <div class="form-group">
           <label for="inputName" class="col-sm-2 control-label">name</label>
           <div class="col-sm-8">
-            <input type="text" class="form-control" id="inputName"/>
+            <input type="text" class="form-control" name="name" id="name" th:value="${item.name}">
           </div>
         </div>
+        
         <!-- price -->
         <div class="form-group">
           <label for="price" class="col-sm-2 control-label">price</label>
           <div class="col-sm-8">
-            <input type="text" class="form-control" id="price"/>
+            <input type="text" class="form-control" name="price" id="price" th:value="${item.getIntPrice()}">
           </div>
         </div>
+        
         <!-- category -->
         <div class="form-group">
           <label for="category" class="col-sm-2 control-label">category</label>
           <div class="col-sm-8">
-            <select class="form-control">
-              <option>- parentCategory -</option>
-              <option>parentCategory1</option>
-              <option>parentCategory2</option>
-              <option>parentCategory3</option>
-              <option>parentCategory4</option>
-              <option>parentCategory5</option>
+            <select class="form-control" name="largeCategory" id="largeCategory">
+              <option value="---">-- largeCategory --</option>
+              <option th:each="large:${session.categoryLargeNameList}" th:text="${large.categoryLargeName}" th:value="${large.categoryLargeName}" th:selected="${item.largeCategory == large.categoryLargeName}"></option>
             </select>
           </div>
         </div>
+        
         <div class="form-group">
           <label for="category" class="col-sm-2 control-label"></label>
           <div class="col-sm-8">
-            <select class="form-control">
-              <option>- childCategory -</option>
-              <option>childCategory1</option>
-              <option>childCategory2</option>
-              <option>childCategory3</option>
-              <option>childCategory4</option>
-              <option>childCategory5</option>
+            <select class="form-control" name="mediumCategory" id="mediumCategory"><!--  disabled="disabled" -->
+              <option value="---" class="---">-- mediumCategory --</option>
+              <option th:each="medium:${session.categoryMediumNameList}" th:text="${medium.categoryMediumName}" th:value="${medium.parentId}" th:class="${medium.categoryLargeName}" th:selected="${item.mediumCategory == medium.categoryMediumName}"></option>
             </select>
           </div>
         </div>
+        
         <div class="form-group">
           <label for="category" class="col-sm-2 control-label"></label>
           <div class="col-sm-8">
-            <select class="form-control">
-              <option>- grandChild -</option>
-              <option>grandChild1</option>
-              <option>grandChild2</option>
-              <option>grandChild3</option>
-              <option>grandChild4</option>
-              <option>grandChild5</option>
+            <select class="form-control" name="smallCategory" id="smallCategory"><!--  disabled="disabled" -->
+              <option value="---">-- smallCategory --</option>
+              <option th:each="small:${session.categorySmallNameList}" th:text="${small.categorySmallName}" th:value="${small.categoryLargeName + '/' + small.categoryMediumName + '/' + small.categorySmallName}" th:class="${small.parentId}" th:selected="${item.smallCategory == small.categorySmallName}"></option>
             </select>
           </div>
         </div>
+        
         <!-- brand -->
         <div class="form-group">
           <label for="brand" class="col-sm-2 control-label">brand</label>
           <div class="col-sm-8">
-            <input type="text" id="brand" class="form-control" name="brand"/>
+            <input type="text" id="brand" class="form-control" name="brand" th:value="${item.brand}">
           </div>
         </div>
+        
         <!-- condition -->
         <div class="form-group">
-          <label for="condition" class="col-sm-2 control-label">condition</label>
-          <div class="col-sm-8">
-            <label for="condition1" class="radio-inline">
-              <input type="radio" name="condition" id="condition1" value="1"/> 1
-            </label>
-            <label for="condition2" class="radio-inline">
-              <input type="radio" name="condition" id="condition2" value="2"/> 2
-            </label>
-            <label for="condition3" class="radio-inline">
-              <input type="radio" name="condition" id="condition3" value="3"/> 3
-            </label>
-          </div>
+        <label for="condition" class="col-sm-2 control-label">condition</label>
+        <div class="col-sm-8">
+          <label for="condition1" class="radio-inline-inline" th:each="condition:${conditionMap}">
+            <input type="radio" name="condition" th:id="${condition.key}" th:value="${condition.value}" th:text="${condition.value}" th:checked="${condition.value == item.condition}">&nbsp;&nbsp;
+          </label>
         </div>
+      </div>
+
         <!-- description -->
         <div class="form-group">
           <label for="description" class="col-sm-2 control-label">description</label>
           <div class="col-sm-8">
-            <textarea name="description" id="description" class="form-control" rows="5"></textarea>
+            <textarea name="description" id="description" class="form-control" rows="5" th:text="${item.description}"></textarea>
           </div>
         </div>
+        
         <!-- submit button -->
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">

@@ -1,8 +1,20 @@
 package com.example.controller;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.example.domain.Item;
+import com.example.form.AddEditItemForm;
+import com.example.service.EditItemService;
+import com.example.service.ShowItemDetailService;
 
 /**
  * 商品編集画面を操作するコントローラ.
@@ -13,12 +25,52 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/edit")
 public class EditItemController {
-	
-	
+
+	@Autowired
+	private ShowItemDetailService showItemDetailService;
+
+	@Autowired
+	private EditItemService editItemService;
+
+	@ModelAttribute
+	private AddEditItemForm setUpAddEditItemForm() {
+		return new AddEditItemForm();
+	}
+
+	/**
+	 * 商品編集画面を出力します.
+	 * 
+	 * @param id    商品ID
+	 * @param model リクエストスコープ
+	 * @return      商品編集画面
+	 */
 	@RequestMapping("")
 	public String toEdit(String id, Model model) {
-		model.addAttribute("id", id);
+		Item item = showItemDetailService.findById(id);
+		model.addAttribute("item", item);
+		Map<String, Integer> conditionMap = new LinkedHashMap<>();
+		for (int i = 1; i <= 3; i++) {
+			conditionMap.put("condition" + i, i);
+		}
+		model.addAttribute("conditionMap", conditionMap);
 		return "edit";
 	}
-	
+
+
+	//更新用メソッド
+	@RequestMapping("/editItem")
+	public String edit(
+			@Validated AddEditItemForm form,
+			BindingResult result,
+			Model model) {
+		
+		if (result.hasErrors()) {
+			return toEdit(form.getId(), model);
+		}
+		
+		form.setJoinCategory();
+		editItemService.update(form);
+		return "redirect:/";
+	}
+
 }

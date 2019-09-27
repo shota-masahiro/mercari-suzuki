@@ -17,11 +17,11 @@ import com.example.service.ShowItemDetailService;
 @Controller
 @RequestMapping("/detail")
 public class ShowItemDetailController {
-	
+
 	@Autowired
 	private ShowItemDetailService showItemDetailService;
-	
-	
+
+
 	/**
 	 * 商品詳細画面を出力します.
 	 * 
@@ -35,6 +35,6 @@ public class ShowItemDetailController {
 		model.addAttribute("item", item);
 		return "detail";
 	}
-	
-	
+
+
 }

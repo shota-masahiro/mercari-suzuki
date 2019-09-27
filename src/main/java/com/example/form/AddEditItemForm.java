@@ -1,5 +1,7 @@
 package com.example.form;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * 商品情報を受け取るフォーム.
  * 
@@ -8,22 +10,29 @@ package com.example.form;
  */
 public class AddEditItemForm {
 
+	/** 商品ID */
+	private String id;
+
 	/** 商品名 */
+	@NotBlank(message = "商品名を入力してください")
 	private String name;
 
 	/** 価格 */
+	@NotBlank(message = "価格を入力してください")
 	private String price;
 
 	/** カテゴリー */
 	private String category;
 
 	/** ブランド */
+	@NotBlank(message = "ブランド名を入力してください")
 	private String brand;
 
 	/** 商品状態 */
 	private String condition;
 
 	/** 商品説明 */
+	@NotBlank(message = "商品説明を入力してください")
 	private String description;
 
 	/** 大カテゴリ */
@@ -34,6 +43,12 @@ public class AddEditItemForm {
 
 	/** 小カテゴリ */
 	private String smallCategory;
+
+	/** 運送手段 */
+	private String shipping;
+
+	/** カテゴリーID */
+	private String categoryId;
 
 
 	public void setJoinCategory() {
@@ -119,11 +134,45 @@ public class AddEditItemForm {
 	}
 
 
+	public Integer getIntegerId() {
+		return Integer.parseInt(this.id);
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+
+
+	public Integer getIntegerShipping() {
+		return Integer.parseInt(this.shipping);
+	}
+	public String getShipping() {
+		return shipping;
+	}
+	public void setShipping(String shipping) {
+		this.shipping = shipping;
+	}
+
+
+	public Integer getIntegerCategoryId() {
+		return Integer.parseInt(this.categoryId);
+	}
+	public String getCategoryId() {
+		return categoryId;
+	}
+	public void setCategoryId(String categoryId) {
+		this.categoryId = categoryId;
+	}
+
+
 	@Override
 	public String toString() {
-		return "AddEditItemForm [name=" + name + ", price=" + price + ", category=" + category + ", brand=" + brand
-				+ ", condition=" + condition + ", description=" + description + ", largeCategory=" + largeCategory
-				+ ", mediumCategory=" + mediumCategory + ", smallCategory=" + smallCategory + "]";
+		return "AddEditItemForm [id=" + id + ", name=" + name + ", price=" + price + ", category=" + category
+				+ ", brand=" + brand + ", condition=" + condition + ", description=" + description + ", largeCategory="
+				+ largeCategory + ", mediumCategory=" + mediumCategory + ", smallCategory=" + smallCategory
+				+ ", shipping=" + shipping + ", categoryId=" + categoryId + "]";
 	}
 
 }

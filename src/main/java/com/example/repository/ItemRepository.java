@@ -595,9 +595,11 @@ public class ItemRepository {
 	 */
 	public void update(Item item) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("");
-		sql.append("");
-		sql.append("");
+		sql.append("UPDATE items ");
+		sql.append("SET name=:name, condition=:condition, category_id=:categoryId, brand=:brand, price=:price, shipping=:shipping, description=:description ");
+		sql.append("WHERE id=:id;");
+		SqlParameterSource param = new BeanPropertySqlParameterSource(item);
+		template.update(sql.toString(), param);
 	}
 
 

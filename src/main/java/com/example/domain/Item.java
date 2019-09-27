@@ -123,7 +123,9 @@ public class Item {
 		this.brand = brand;
 	}
 
-
+	public int getIntPrice() {
+		return (int)this.price;
+	}
 	public double getPrice() {
 		return price;
 	}

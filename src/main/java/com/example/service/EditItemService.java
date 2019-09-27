@@ -9,33 +9,36 @@ import com.example.form.AddEditItemForm;
 import com.example.repository.ItemRepository;
 
 /**
- * 商品追加情報を操作するサービス.
+ * 商品更新情報を操作するサービス.
  * 
  * @author shota.suzuki
  *
  */
 @Service
-public class AddItemService {
+public class EditItemService {
 
 	@Autowired
 	private ItemRepository itemRepository;
 
 	/**
-	 * 挿入処理をします.
+	 * 更新処理をします.
 	 * 
 	 * @param form リクエストパラメータ
 	 */
-	public void insert(AddEditItemForm form) {
+	public void update(AddEditItemForm form) {
 		Item item = new Item();
+		form.setJoinCategory();
 		BeanUtils.copyProperties(form, item);
 
 		int categoryId = itemRepository.findByCategoryAllName(form.getCategory());
 		item.setCategoryId(categoryId);
-		item.setShipping(0);
+
+		item.setId(form.getIntegerId());
 		item.setCondition(form.getIntegerCondition());
 		item.setPrice(form.getIntegerPrice());
+		item.setShipping(form.getIntegerShipping());
 
-		itemRepository.insert(item);
+		itemRepository.update(item);
 	}
 
 }

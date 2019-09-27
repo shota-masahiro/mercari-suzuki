@@ -1,6 +1,5 @@
 package com.example.controller;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
