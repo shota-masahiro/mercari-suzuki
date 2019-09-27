@@ -34,6 +34,12 @@ public class ShowItemListService {
 		if (arrow != 0) {
 			arrow = moveArrow(arrow);
 		}
+		
+		//商品名と大カテゴリで検索
+		if (itemName != null && categorys[0] != null) {
+			System.out.println("ここが実行される");
+			return itemRepository.findByNameCategoryLarge(arrow, ("%"+itemName+"%"), categorys[0]);
+		}
 
 		//商品名とブランド名で検索
 		if (brand != null && itemName != null) {
@@ -46,7 +52,6 @@ public class ShowItemListService {
 		}
 
 		if (brand != null) {
-			System.out.println("koko");
 			return itemRepository.findByBrand(arrow, ("%"+brand+"%"));
 		} else if (categorys[0] != null) {
 			if (categorys[2] != null && !"---".equals(categorys[2])) {
@@ -54,8 +59,6 @@ public class ShowItemListService {
 			}
 			try {
 				if (categorys[1] != null) {
-					System.out.println("次にここが実行される");
-					System.out.println("categorys[1]:" + categorys[1]);
 					int parentId = Integer.parseInt(categorys[1]);
 					return itemRepository.findByCategoryMediumInteger(parentId, arrow);
 				}
@@ -151,6 +154,15 @@ public class ShowItemListService {
 	//商品名とブランド名のあいまい検索
 	public Integer countPageNameBrand(String itemName, String brand) {
 		int page = itemRepository.countPageNameBrand(("%"+itemName+"%"), ("%"+ brand +"%"));
+		if (page == 0) {
+			page = 1;
+		}
+		return page;
+	}
+	
+	//商品名と大カテゴリで検索
+	public Integer countPageNameLarge(String itemName, String categoryNameLarge) {
+		int page = itemRepository.countPageNameLarge(("%"+itemName+"%"), categoryNameLarge);
 		if (page == 0) {
 			page = 1;
 		}

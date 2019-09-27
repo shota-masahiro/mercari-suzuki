@@ -63,7 +63,6 @@ public class ShowItemListController {
 			}
 
 			if (form.getMediumCategoryForm() != null && !"".equals(form.getMediumCategoryForm()) && !"---".equals(form.getMediumCategoryForm())) {
-				System.out.println("まずはここが実行される");
 				mediumCategory = form.getMediumCategoryForm();
 			}
 
@@ -99,9 +98,11 @@ public class ShowItemListController {
 			itemName = null;
 		}
 		List<Item> itemList = showItemListService.findByPage(arrow, brand, categorys, itemName);
+		System.out.println("取得したitemList:" + itemList);
 		model.addAttribute("itemList", itemList);
 		model.addAttribute("arrow", arrow);
 		model.addAttribute("brand", brand);
+
 
 		//メソッド化できる
 		Integer totalPages;
@@ -113,20 +114,19 @@ public class ShowItemListController {
 			categoryId = 0;
 			category = categorys[0];
 			if (categorys[1] != null) {
+
 				try {
 					Integer parentId = Integer.parseInt(categorys[1]);
 					totalPages = showItemListService.countPageMediumInteger(parentId);
-					System.out.println("実行totalPages:" + totalPages);
 					categoryId = 1;
 					Item item = showItemListService.findByCategoryMediumInteger2(parentId);
 					category = item.getMediumCategory();
 				} catch (Exception e) {
-					System.out.println("ここで例外が起きています！");//ここで例外が起きて上記の処理が上書きされている.
 					totalPages = showItemListService.countPageMedium(categorys[1]);
 					categoryId = 1;
 					category = categorys[1];
 				}
-				
+
 			}
 			if (categorys[2] != null) {
 				totalPages = showItemListService.countPageSmall(categorys[2]);
@@ -134,7 +134,6 @@ public class ShowItemListController {
 				category = categorys[2];
 			}
 		} else if (categorys[1] != null) {
-			System.out.println("ここが実行されている?");
 			totalPages = showItemListService.countPageMedium(categorys[1]);
 			categoryId = 1;
 			category = categorys[1];
@@ -151,7 +150,12 @@ public class ShowItemListController {
 		if (itemName != null && brand != null) {
 			totalPages = showItemListService.countPageNameBrand(itemName, brand);
 		}
-		System.out.println("実行totalPages:" + totalPages);
+		if (itemName != null && categorys[0] != null) {
+			System.out.println("ここが実行されるべき");
+			totalPages = showItemListService.countPageNameLarge(itemName, categorys[0]);
+			categoryId = 0;
+			category = categorys[0];
+		}
 		model.addAttribute("totalPages", totalPages);
 		model.addAttribute("categoryId", categoryId);
 		model.addAttribute("categoryName", category);
@@ -167,7 +171,6 @@ public class ShowItemListController {
 		List<CategoryName> categoryMediumNameList = showItemListService.categoryMediumText();
 		List<String> categoryMediumList = new LinkedList<>();
 		model.addAttribute("categoryMediumNameList", categoryMediumNameList);
-
 
 		List<CategoryName> categorySmallNameList = showItemListService.categorySmallText();
 		List<String> categorySmallList = new LinkedList<>();
