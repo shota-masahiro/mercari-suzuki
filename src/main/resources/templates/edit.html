@@ -114,6 +114,7 @@ $(document).ready(function(){
           <label for="inputName" class="col-sm-2 control-label">name</label>
           <div class="col-sm-8">
             <input type="text" class="form-control" name="name" id="name" th:value="${item.name}">
+            <label style="color:red" th:errors="*{name}" th:field="*{name}">error message</label>
           </div>
         </div>
         
@@ -122,6 +123,7 @@ $(document).ready(function(){
           <label for="price" class="col-sm-2 control-label">price</label>
           <div class="col-sm-8">
             <input type="text" class="form-control" name="price" id="price" th:value="${item.getIntPrice()}">
+            <label style="color:red" th:errors="*{price}" th:field="*{price}">error message</label>
           </div>
         </div>
         
@@ -156,11 +158,19 @@ $(document).ready(function(){
           </div>
         </div>
         
+        <div class="form-group">
+          <label for="category" class="col-sm-2 control-label"></label>
+          <div class="col-sm-8">
+            <label class="text-danger" style="color:red" th:if="${errorMessage}">カテゴリーを選択してください</label>
+          </div>
+        </div>
+        
         <!-- brand -->
         <div class="form-group">
           <label for="brand" class="col-sm-2 control-label">brand</label>
           <div class="col-sm-8">
             <input type="text" id="brand" class="form-control" name="brand" th:value="${item.brand}">
+            <label style="color:red" th:errors="*{brand}" th:field="*{brand}">error message</label>
           </div>
         </div>
         
@@ -179,6 +189,7 @@ $(document).ready(function(){
           <label for="description" class="col-sm-2 control-label">description</label>
           <div class="col-sm-8">
             <textarea name="description" id="description" class="form-control" rows="5" th:text="${item.description}"></textarea>
+            <label style="color:red" th:errors="*{description}" th:field="*{description}">error message</label>
           </div>
         </div>
         

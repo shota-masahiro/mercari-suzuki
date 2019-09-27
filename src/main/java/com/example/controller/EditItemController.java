@@ -45,7 +45,12 @@ public class EditItemController {
 	 * @return      商品編集画面
 	 */
 	@RequestMapping("")
-	public String toEdit(String id, Model model) {
+	public String toEdit(String id, Model model, String errorMessage) {
+
+		if (errorMessage != null) {
+			model.addAttribute("errorMessage", errorMessage);
+		}
+
 		Item item = showItemDetailService.findById(id);
 		model.addAttribute("item", item);
 		Map<String, Integer> conditionMap = new LinkedHashMap<>();
@@ -57,17 +62,30 @@ public class EditItemController {
 	}
 
 
-	//更新用メソッド
+	
+	/**
+	 * 更新処理をします.
+	 * 
+	 * @param form   リクエストパラメータ
+	 * @param result エラーチェック
+	 * @param model  リクエストスコープ
+	 * @return
+	 */
 	@RequestMapping("/editItem")
 	public String edit(
 			@Validated AddEditItemForm form,
 			BindingResult result,
 			Model model) {
-		
-		if (result.hasErrors()) {
-			return toEdit(form.getId(), model);
+
+		String errorMessage = null;
+		if ("---".equals(form.getLargeCategory()) || "".equals(form.getMediumCategory()) || "".equals(form.getSmallCategory())) {
+			errorMessage = "カテゴリーを選択してください";
 		}
-		
+
+		if (result.hasErrors()) {
+			return toEdit(form.getId(), model, errorMessage);
+		}
+
 		form.setJoinCategory();
 		editItemService.update(form);
 		return "redirect:/";

@@ -1,6 +1,7 @@
 package com.example.form;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 /**
  * 商品情報を受け取るフォーム.
@@ -18,6 +19,7 @@ public class AddEditItemForm {
 	private String name;
 
 	/** 価格 */
+	@Pattern(regexp = "^[0-9]+$", message = "半角数字で入力してください")
 	@NotBlank(message = "価格を入力してください")
 	private String price;
 
