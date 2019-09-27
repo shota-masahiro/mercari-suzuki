@@ -34,10 +34,43 @@ public class ShowItemListService {
 		if (arrow != 0) {
 			arrow = moveArrow(arrow);
 		}
-		
+
+		//商品名と大中小カテゴリとブランド名で検索
+		if (itemName != null && categorys[2] != null && brand != null) {
+			System.out.println("ここが実行される");
+			return itemRepository.findByNameCategorySmallBrand(arrow, ("%"+itemName+"%"), categorys[2], ("%"+brand+"%"));
+		}
+
+		//商品名と大中カテゴリとブランド名で検索
+		if (itemName != null && categorys[1] != null && brand != null) {
+			try {
+				return itemRepository.findByNameCategoryMediumBrandInteger(arrow, ("%"+itemName+"%"), Integer.parseInt(categorys[1]), ("%"+brand+"%"));
+			} catch (Exception e) {
+				return itemRepository.findByNameCategoryMediumBrand(arrow, ("%"+itemName+"%"), categorys[1], ("%"+brand+"%"));
+			}
+		}
+
+		//商品名と大カテゴリとブランド名で検索
+		if (itemName != null && categorys[0] != null && brand != null) {
+			return itemRepository.findByNameCategoryLargeBrand(arrow, ("%"+itemName+"%"), categorys[0], ("%"+brand+"%"));
+		}
+
+		//商品名と大中小カテゴリで検索
+		if (itemName != null && categorys[2] != null) {
+			return itemRepository.findByNameCategorySmall(arrow, ("%"+itemName+"%"), categorys[2]);
+		}
+
+		//商品名と大中カテゴリで検索
+		if (itemName != null && categorys[1] != null) {
+			try {
+				return itemRepository.findByNameCategoryMediumInteger(arrow, Integer.parseInt(categorys[1]), ("%"+itemName+"%"));
+			} catch (Exception e) {
+				return itemRepository.findByNameCategoryMedium(arrow, categorys[1], ("%"+itemName+"%"));
+			}
+		}
+
 		//商品名と大カテゴリで検索
 		if (itemName != null && categorys[0] != null) {
-			System.out.println("ここが実行される");
 			return itemRepository.findByNameCategoryLarge(arrow, ("%"+itemName+"%"), categorys[0]);
 		}
 
@@ -76,8 +109,8 @@ public class ShowItemListService {
 		System.out.println("arrow:" + arrow);
 		return itemRepository.findByPage(arrow);
 	}
-	
-	
+
+
 	public Item findByCategoryMediumInteger2(Integer parentId) {
 		return itemRepository.findByCategoryMediumIntegerSecond(parentId);
 	}
@@ -159,10 +192,69 @@ public class ShowItemListService {
 		}
 		return page;
 	}
-	
+
 	//商品名と大カテゴリで検索
 	public Integer countPageNameLarge(String itemName, String categoryNameLarge) {
 		int page = itemRepository.countPageNameLarge(("%"+itemName+"%"), categoryNameLarge);
+		if (page == 0) {
+			page = 1;
+		}
+		return page;
+	}
+
+	//商品名と中カテゴリで検索
+	public Integer countPageNameMediumInteger(String itemName, Integer parentId) {
+		int page = itemRepository.countPageNameMediumInteger(("%"+itemName+"%"), parentId);
+		if (page == 0) {
+			page = 1;
+		}
+		return page;
+	}
+	public Integer countPageNameMedium(String itemName, String categoryName) {
+		int page = itemRepository.countPageNameMedium(("%"+itemName+"%"), categoryName);
+		if (page == 0) {
+			page = 1;
+		}
+		return page;
+	}
+
+	//商品名と大カテゴリで検索
+	public Integer countPageNameSmall(String itemName, String categoryNameLarge) {
+		int page = itemRepository.countPageNameSmall(("%"+itemName+"%"), categoryNameLarge);
+		if (page == 0) {
+			page = 1;
+		}
+		return page;
+	}
+
+	//商品名と大カテゴリとブランド名で検索
+	public Integer countPageNameLargeBrand(String itemName, String categoryNameLarge, String brand) {
+		int page = itemRepository.countPageNameLargeBrand(("%"+itemName+"%"), categoryNameLarge, ("%"+brand+"%"));
+		if (page == 0) {
+			page = 1;
+		}
+		return page;
+	}
+
+	//商品名と中カテゴリとブランド名で検索
+	public Integer countPageNameMediumBrandInteger(String itemName, Integer parentId, String brand) {
+		int page = itemRepository.countPageNameMediumBrandInteger(("%"+itemName+"%"), parentId, brand);
+		if (page == 0) {
+			page = 1;
+		}
+		return page;
+	}
+	public Integer countPageNameMediumBrand(String itemName, String categoryName, String brand) {
+		int page = itemRepository.countPageNameMediumBrand(("%"+itemName+"%"), categoryName, brand);
+		if (page == 0) {
+			page = 1;
+		}
+		return page;
+	}
+
+	//商品名と小カテゴリとブランド名で検索
+	public Integer countPageNameSmallBrand(String itemName, String categoryName, String brand) {
+		int page = itemRepository.countPageNameSmallBrand(("%"+itemName+"%"), categoryName, ("%"+brand+"%"));
 		if (page == 0) {
 			page = 1;
 		}

@@ -1,7 +1,5 @@
 package com.example.form;
 
-import java.util.List;
-
 /**
  * 商品情報を受け取るフォーム.
  * 
@@ -17,7 +15,7 @@ public class AddEditItemForm {
 	private String price;
 
 	/** カテゴリー */
-	private List<String> categoryList;
+	private String category;
 
 	/** ブランド */
 	private String brand;
@@ -28,6 +26,20 @@ public class AddEditItemForm {
 	/** 商品説明 */
 	private String description;
 
+	/** 大カテゴリ */
+	private String largeCategory;
+
+	/** 中カテゴリ */
+	private String mediumCategory;
+
+	/** 小カテゴリ */
+	private String smallCategory;
+
+
+	public void setJoinCategory() {
+		this.category = this.smallCategory;
+	}
+
 
 	public String getName() {
 		return name;
@@ -37,6 +49,9 @@ public class AddEditItemForm {
 	}
 
 
+	public Integer getIntegerPrice() {
+		return Integer.parseInt(this.price);
+	}
 	public String getPrice() {
 		return price;
 	}
@@ -45,11 +60,11 @@ public class AddEditItemForm {
 	}
 
 
-	public List<String> getCategoryList() {
-		return categoryList;
+	public String getCategory() {
+		return category;
 	}
-	public void setCategoryList(List<String> categoryList) {
-		this.categoryList = categoryList;
+	public void setCategory(String category) {
+		this.category = category;
 	}
 
 
@@ -61,6 +76,9 @@ public class AddEditItemForm {
 	}
 
 
+	public Integer getIntegerCondition() {
+		return Integer.parseInt(this.condition);
+	}
 	public String getCondition() {
 		return condition;
 	}
@@ -77,10 +95,35 @@ public class AddEditItemForm {
 	}
 
 
+	public String getLargeCategory() {
+		return largeCategory;
+	}
+	public void setLargeCategory(String largeCategory) {
+		this.largeCategory = largeCategory;
+	}
+
+
+	public String getMediumCategory() {
+		return mediumCategory;
+	}
+	public void setMediumCategory(String mediumCategory) {
+		this.mediumCategory = mediumCategory;
+	}
+
+
+	public String getSmallCategory() {
+		return smallCategory;
+	}
+	public void setSmallCategory(String smallCategory) {
+		this.smallCategory = smallCategory;
+	}
+
+
 	@Override
 	public String toString() {
-		return "AddEditItemForm [name=" + name + ", price=" + price + ", categoryList=" + categoryList + ", brand="
-				+ brand + ", condition=" + condition + ", description=" + description + "]";
+		return "AddEditItemForm [name=" + name + ", price=" + price + ", category=" + category + ", brand=" + brand
+				+ ", condition=" + condition + ", description=" + description + ", largeCategory=" + largeCategory
+				+ ", mediumCategory=" + mediumCategory + ", smallCategory=" + smallCategory + "]";
 	}
 
 }

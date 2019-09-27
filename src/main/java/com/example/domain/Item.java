@@ -13,27 +13,27 @@ public class Item {
 
 	/** 商品名 */
 	private String name;
-
-	/** 商品状態 */
-	private Integer condition;
-
-	/** カテゴリーID */
-	private Integer categoryId;
-
+	
+	/** 価格 */
+	private double price;
+	
 	/** カテゴリー */
 	private String category;
-
+	
 	/** ブランド */
 	private String brand;
 
-	/** 価格 */
-	private double price;
-
+	/** 商品状態 */
+	private Integer condition;
+	
+	/** 商品説明 */
+	private String description;
+	
 	/** 運送手段 */
 	private Integer shipping;
 
-	/** 商品説明 */
-	private String description;
+	/** カテゴリーID */
+	private Integer categoryId;
 
 	/** 大カテゴリ */
 	private String largeCategory;
