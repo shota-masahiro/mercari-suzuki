@@ -25,7 +25,7 @@ public class LoginUser extends User {
 	 * @param authorityList 権限情報が入ったリスト
 	 */
 	public LoginUser(com.example.domain.User user, Collection<GrantedAuthority> authorityList) {
-		super(user.getMailAddress(), user.getPassword(), authorityList);
+		super(user.getEmail(), user.getPassword(), authorityList);
 		this.user = user;
 	}
 	

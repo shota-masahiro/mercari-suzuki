@@ -7,19 +7,19 @@ package com.example.domain;
  *
  */
 public class User {
-	
+
 	/** ID */
 	private Integer id;
-	
+
 	/** 名前 */
 	private String name;
-	
+
 	/** メールアドレス */
-	private String mailAddress;
-	
+	private String email;
+
 	/** パスワード */
 	private String password;
-	
+
 	/** 権限 */
 	private Integer authority;
 
@@ -29,10 +29,10 @@ public class User {
 	}
 
 
-	public User(Integer id, String name, String mailAddress, String password, Integer authority) {
+	public User(Integer id, String name, String email, String password, Integer authority) {
 		this.id = id;
 		this.name = name;
-		this.mailAddress = mailAddress;
+		this.email = email;
 		this.password = password;
 		this.authority = authority;
 	}
@@ -54,13 +54,11 @@ public class User {
 	}
 
 
-	public String getMailAddress() {
-		return mailAddress;
+	public String getEmail() {
+		return email;
 	}
-
-
-	public void setMailAddress(String mailAddress) {
-		this.mailAddress = mailAddress;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 
@@ -82,7 +80,8 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", password=" + password + ", authority=" + authority + "]";
+		return "User [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", authority="
+				+ authority + "]";
 	}
 
 }

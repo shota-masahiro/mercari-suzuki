@@ -31,8 +31,9 @@ public class UserRepository {
 		User user = new User();
 		user.setId(rs.getInt("id"));
 		user.setName(rs.getString("name"));
+		user.setEmail(rs.getString("mail_address"));
 		user.setPassword(rs.getString("password"));
-		user.setAuthority(rs.getInt("password"));
+		user.setAuthority(rs.getInt("authority"));
 		return user;
 	};
 	
@@ -40,15 +41,15 @@ public class UserRepository {
 	/**
 	 * user情報を取得します.
 	 * 
-	 * @param mailAddress メールアドレス
+	 * @param email メールアドレス
 	 * @return            userオブジェクト
 	 */
-	public User findByMailAddress(String mailAddress) {
+	public User findByMailAddress(String email) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT id, name, mail_address, password, authority ");
 		sql.append("FROM users ");
-		sql.append("WHERE mail_address=:mailAddress;");
-		SqlParameterSource param = new MapSqlParameterSource().addValue("mailAddress", mailAddress);
+		sql.append("WHERE mail_address=:email;");
+		SqlParameterSource param = new MapSqlParameterSource().addValue("email", email);
 		List<User> userList = template.query(sql.toString(), param, USER_ROW_MAPPER);
 		if (userList.size() != 0) {
 			return userList.get(0);
@@ -66,7 +67,7 @@ public class UserRepository {
 	public void insert(User user) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("INSERT INTO users(name, mail_address, password) ");
-		sql.append("VALUES(:name, :mailAddress, :password);");
+		sql.append("VALUES(:name, :email, :password);");
 		SqlParameterSource param = new BeanPropertySqlParameterSource(user);
 		template.update(sql.toString(), param);
 	}

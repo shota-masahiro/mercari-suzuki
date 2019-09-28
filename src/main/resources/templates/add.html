@@ -17,86 +17,14 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
     integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   
-<script type="text/javascript">
-$(document).ready(function(){
- 
-    // プルダウンのoption内容をコピー
-    var pd2 = $("#mediumCategory option").clone();
-    var pd3 = $("#smallCategory option").clone();
- 
-    // 1→2連動
-    $("#largeCategory").change(function () {
-        // largeCategoryのvalue取得
-        var largeVal = $("#largeCategory").val();
- 
-        // mediumCategoryのdisabled解除
-        $("#mediumCategory").removeAttr("disabled");
- 
-        // 一旦、一旦mediumCategoryのoptionを削除
-        $("#mediumCategory option").remove();
- 
-        // copy済みの元のmediumCategoryを表示
-        $(pd2).appendTo("#mediumCategory");
- 
-        // mediumCategoryクラスのoptionを削除
-        $("#mediumCategory option[class != "+largeVal+"]").remove();
- 
-        // mediumCategory先頭表示
-        $("#mediumCategory").prepend('<option value="" selected="selected">-- mediumCategory --</option>');
- 
-        // smallCategory disabled処理
-        $("#smallCategory").attr("disabled", "disabled");
-        $("#smallCategory option").remove();
-        $("#smallCategory").prepend('<option value="---">-- smallCategory --</option>');
-    });
-
-    // 2→3連動
-    $("#mediumCategory").change(function () {
-        // mediumCategoryのvalue取得
-        var mediumVal = $("#mediumCategory").val();
- 
-        // smallCategoryのdisabled解除
-        $("#smallCategory").removeAttr("disabled");
- 
-        // 一旦、一旦smallCategoryのoptionを削除
-        $("#smallCategory option").remove();
-
-        // copy済みの元のsmallCategoryを表示
-        $(pd3).appendTo("#smallCategory").val();
- 
-        // smallCategoryクラスのoptionを削除
-        $("#smallCategory option[class != "+mediumVal+"]").remove();
- 
-        // smallCategory先頭表示
-        $("#smallCategory").prepend('<option value="" selected="selected">-- smallCategory --</option>');
-    });
-});
-</script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script th:src="@{/js/category.js}"></script>
 
   <title>Rakus Items</title>
 </head>
 <body>
   <!-- navbar -->
-  <nav class="navbar navbar-inverse">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="./list.html">Rakus Items</a>
-    </div>
-    <div id="navbar" class="collapse navbar-collapse">
-      <div>
-        <ul class="nav navbar-nav navbar-right">
-          <li><a id="logout" href="./login.html">Logout&nbsp;<i class="fa fa-power-off"></i></a></li>
-        </ul>
-        <p class="navbar-text navbar-right">
-          <span id="loginName">user: userName</span>
-        </p>
-      </div>
-    </div>
-  </nav>
+  <span th:include="fragment::hedder2"></span>
 
   <!-- details -->
   <div id="input-main" class="container">

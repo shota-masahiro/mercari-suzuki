@@ -24,10 +24,5 @@ public class LoginUserController {
 	public String toLogin() {
 		return "login";
 	}
-	
-	//Spring securityの実装するまでの仮メソッド
-	@RequestMapping("/pre")
-	public String pre(Model model) {
-		return "list";
-	}
+
 }

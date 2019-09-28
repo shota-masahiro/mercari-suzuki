@@ -2,6 +2,7 @@ package com.example.service;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.domain.User;
@@ -16,11 +17,14 @@ import com.example.repository.UserRepository;
  */
 @Service
 public class RegisterUserService {
-	
+
 	@Autowired
 	private UserRepository userRepository;
-	
-	
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
+
 	/**
 	 * 検索処理をします.
 	 * 
@@ -30,8 +34,8 @@ public class RegisterUserService {
 	public User findByMailAddress(RegisterUserForm form) {
 		return userRepository.findByMailAddress(form.getMailAddress());
 	}
-	
-	
+
+
 	/**
 	 * 登録処理をします.
 	 * 
@@ -40,6 +44,7 @@ public class RegisterUserService {
 	public void insert(RegisterUserForm form) {
 		User user = new User();
 		BeanUtils.copyProperties(form, user);
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		userRepository.insert(user);
 	}
 
