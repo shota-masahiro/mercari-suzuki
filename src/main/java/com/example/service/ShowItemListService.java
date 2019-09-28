@@ -35,13 +35,12 @@ public class ShowItemListService {
 			arrow = moveArrow(arrow);
 		}
 
-		//商品名と大中小カテゴリとブランド名で検索
+		//商品名 + 大中小カテゴリ + ブランド名
 		if (itemName != null && categorys[2] != null && brand != null) {
-			System.out.println("ここが実行される");
 			return itemRepository.findByNameCategorySmallBrand(arrow, ("%"+itemName+"%"), categorys[2], ("%"+brand+"%"));
 		}
 
-		//商品名と大中カテゴリとブランド名で検索
+		//商品名 + 大中カテゴリ + ブランド名
 		if (itemName != null && categorys[1] != null && brand != null) {
 			try {
 				return itemRepository.findByNameCategoryMediumBrandInteger(arrow, ("%"+itemName+"%"), Integer.parseInt(categorys[1]), ("%"+brand+"%"));
@@ -50,17 +49,17 @@ public class ShowItemListService {
 			}
 		}
 
-		//商品名と大カテゴリとブランド名で検索
+		//商品名 + 大カテゴリ + ブランド名
 		if (itemName != null && categorys[0] != null && brand != null) {
 			return itemRepository.findByNameCategoryLargeBrand(arrow, ("%"+itemName+"%"), categorys[0], ("%"+brand+"%"));
 		}
 
-		//商品名と大中小カテゴリで検索
+		//商品名 + 大中小カテゴリ
 		if (itemName != null && categorys[2] != null) {
 			return itemRepository.findByNameCategorySmall(arrow, ("%"+itemName+"%"), categorys[2]);
 		}
 
-		//商品名と大中カテゴリで検索
+		//商品名 + 大中カテゴリ
 		if (itemName != null && categorys[1] != null) {
 			try {
 				return itemRepository.findByNameCategoryMediumInteger(arrow, Integer.parseInt(categorys[1]), ("%"+itemName+"%"));
@@ -69,44 +68,65 @@ public class ShowItemListService {
 			}
 		}
 
-		//商品名と大カテゴリで検索
+		//商品名 + 大カテゴリ
 		if (itemName != null && categorys[0] != null) {
 			return itemRepository.findByNameCategoryLarge(arrow, ("%"+itemName+"%"), categorys[0]);
 		}
 
-		//商品名とブランド名で検索
+		//大中小カテゴリ + ブランド名
+		if (categorys[2] != null && brand != null) {
+			return itemRepository.findByCategorySmallBrand(arrow, ("%"+brand+"%"), categorys[2]);
+		}
+
+		//大中カテゴリ + ブランド名
+		if (categorys[1] != null && brand != null) {
+			System.out.println("処理開始");
+			try {
+				return itemRepository.findByCategoryMediumBrandInteger(arrow, Integer.parseInt(categorys[1]), ("%"+brand+"%"));
+			} catch (Exception e) {
+				return itemRepository.findByCategoryMediumBrand(arrow, ("%"+brand+"%"), categorys[1]);
+			}
+		}
+
+		//大カテゴリ + ブランド名
+		if (categorys[0] != null && brand != null) {
+			return itemRepository.findByCategoryLargeBrand(arrow, ("%"+brand+"%"), categorys[0]);
+		}
+
+		//商品名 + ブランド名
 		if (brand != null && itemName != null) {
 			return itemRepository.findByNameBrandPage(("%"+itemName+"%"), ("%"+ brand +"%"), arrow);
 		}
 
-		//商品検索
+		//大中小カテゴリのみ
+		if (categorys[2] != null) {
+			return itemRepository.findByCategorySmall(categorys[2], arrow);
+		}
+
+		//大中カテゴリのみ
+		if (categorys[1] != null) {
+			try {
+				return itemRepository.findByCategoryMediumInteger(Integer.parseInt(categorys[1]), arrow);
+			} catch (Exception e) {
+				return itemRepository.findByCategoryMedium(categorys[1], arrow);
+			}
+		}
+
+		//大カテゴリのみ
+		if (categorys[0] != null) {
+			return itemRepository.findByCategoryLarge(categorys[0], arrow);
+		}
+
+		//ブランド名のみ
+		if (brand != null) {
+			return itemRepository.findByBrand(arrow, ("%"+brand+"%"));
+		}
+
+		//商品名のみ
 		if (itemName != null) {
 			return itemRepository.findByNamePage(("%"+itemName+"%"), arrow);
 		}
 
-		if (brand != null) {
-			return itemRepository.findByBrand(arrow, ("%"+brand+"%"));
-		} else if (categorys[0] != null) {
-			if (categorys[2] != null && !"---".equals(categorys[2])) {
-				return itemRepository.findByCategorySmall(categorys[2], arrow);
-			}
-			try {
-				if (categorys[1] != null) {
-					int parentId = Integer.parseInt(categorys[1]);
-					return itemRepository.findByCategoryMediumInteger(parentId, arrow);
-				}
-
-			} catch (Exception e) {
-				return itemRepository.findByCategoryMedium(categorys[1], arrow);
-			}
-
-			return itemRepository.findByCategoryLarge(categorys[0], arrow);
-		} else if (categorys[1] != null) {
-			return itemRepository.findByCategoryMedium(categorys[1], arrow);
-		} else if (categorys[2] != null) {
-			return itemRepository.findByCategorySmall(categorys[2], arrow);
-		}
-		System.out.println("arrow:" + arrow);
 		return itemRepository.findByPage(arrow);
 	}
 
@@ -218,7 +238,7 @@ public class ShowItemListService {
 		return page;
 	}
 
-	//商品名と大カテゴリで検索
+	//商品名と小カテゴリで検索
 	public Integer countPageNameSmall(String itemName, String categoryNameLarge) {
 		int page = itemRepository.countPageNameSmall(("%"+itemName+"%"), categoryNameLarge);
 		if (page == 0) {
@@ -226,6 +246,42 @@ public class ShowItemListService {
 		}
 		return page;
 	}
+
+
+	//大カテゴリとブランド名で検索
+	public Integer countPageLargeBrand(String brand, String categoryNameLarge) {
+		int page = itemRepository.countPageLargeBrand(("%"+brand+"%"), categoryNameLarge);
+		if (page == 0) {
+			page = 1;
+		}
+		return page;
+	}
+
+	//中カテゴリとブランド名で検索
+	public Integer countPageMediumBrandInteger(String brand, Integer parentId) {
+		int page = itemRepository.countPageMediumBrandInteger(("%"+brand+"%"), parentId);
+		if (page == 0) {
+			page = 1;
+		}
+		return page;
+	}
+	public Integer countPageMediumBrand(String brand, String categoryName) {
+		int page = itemRepository.countPageMediumBrand(("%"+brand+"%"), categoryName);
+		if (page == 0) {
+			page = 1;
+		}
+		return page;
+	}
+
+	//小カテゴリとブランド名で検索
+	public Integer countPageSmallBrand(String brand, String categoryNameLarge) {
+		int page = itemRepository.countPageSmallBrand(("%"+brand+"%"), categoryNameLarge);
+		if (page == 0) {
+			page = 1;
+		}
+		return page;
+	}
+
 
 	//商品名と大カテゴリとブランド名で検索
 	public Integer countPageNameLargeBrand(String itemName, String categoryNameLarge, String brand) {
