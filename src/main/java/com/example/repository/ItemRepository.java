@@ -33,6 +33,25 @@ public class ItemRepository {
 		item.setId(rs.getInt("i_id"));
 		item.setName(rs.getString("i_name"));
 		item.setCondition(rs.getInt("i_condition"));
+		item.setCategoryId(rs.getInt("categoryId"));
+		item.setCategory(rs.getString("c_name_all"));
+		item.setBrand(rs.getString("i_brand"));
+		item.setPrice(rs.getInt("i_price"));
+		item.setShipping(rs.getInt("i_shipping"));
+		item.setDescription(rs.getString("i_description"));
+		item.setLargeCategory(rs.getString("largeCategory"));
+		item.setMediumCategory(rs.getString("mediumCategory"));
+		item.setSmallCategory(rs.getString("smallCategory"));
+		item.setParentId(rs.getInt("c_parent_id"));
+		item.setSmallCategoryId(rs.getInt("c_id"));
+		return item;
+	};
+	
+	private static final RowMapper<Item> ITEM_CATEGORY_ROW_MAPPER55 = (rs, i) -> {
+		Item item = new Item();
+		item.setId(rs.getInt("i_id"));
+		item.setName(rs.getString("i_name"));
+		item.setCondition(rs.getInt("i_condition"));
 		item.setCategoryId(rs.getInt("i_category_id"));
 		item.setCategory(rs.getString("c_name_all"));
 		item.setBrand(rs.getString("i_brand"));
@@ -63,7 +82,6 @@ public class ItemRepository {
 	private static final RowMapper<CategoryName> CATEGORY_NAME_ROW_MAPPER2 = (rs, i) -> {
 		CategoryName categoryName = new CategoryName();
 		categoryName.setId(rs.getInt("id"));
-		//		categoryName.setCategoryLargeName(rs.getString("largeText"));
 		categoryName.setCategoryMediumName(rs.getString("category_name"));
 		categoryName.setParentId(rs.getInt("parent_id"));
 		return categoryName;
@@ -71,9 +89,8 @@ public class ItemRepository {
 
 	private static final RowMapper<CategoryName> CATEGORY_NAME_ROW_MAPPER3 = (rs, i) -> {
 		CategoryName categoryName = new CategoryName();
-		categoryName.setCategoryLargeName(rs.getString("largeText"));
-		categoryName.setCategoryMediumName(rs.getString("mediumText"));
-		categoryName.setCategorySmallName(rs.getString("smallText"));
+		categoryName.setId(rs.getInt("id"));
+		categoryName.setCategorySmallName(rs.getString("category_name"));
 		categoryName.setParentId(rs.getInt("parent_id"));
 		return categoryName;
 	};
@@ -110,8 +127,9 @@ public class ItemRepository {
 	public List<Item> findByPage(Integer arrow) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT i.id i_id, i.name i_name, i.condition i_condition, i.category_id i_category_id, i.brand i_brand, i.price i_price, i.shipping i_shipping, i.description i_description,");
-		sql.append("c.id c_id, c.parent_id c_parent_id, c.category_name c_category_name, c.name_all c_name_all, split_part(c.name_all, '/', 1) largeCategory, split_part(c.name_all, '/', 2) mediumCategory, split_part(c.name_all, '/', 3) smallCategory ");
-		sql.append("FROM items i left outer join category c on i.category_id = c.id ");
+		sql.append("c1.id c_id, c1.parent_id c_parent_id, c1.category_name c_category_name, c1.name_all c_name_all, split_part(c1.name_all, '/', 1) largeCategory, split_part(c1.name_all, '/', 2) mediumCategory, split_part(c1.name_all, '/', 3) smallCategory, c2.parent_id categoryId ");
+		sql.append("FROM category c1 LEFT OUTER JOIN category c2 ON c1.parent_id = c2.id ");
+		sql.append("LEFT OUTER JOIN items i ON c1.id = i.category_id ");
 		sql.append("ORDER BY i.id ");
 		sql.append("LIMIT 30 OFFSET :arrow;");
 		SqlParameterSource param = new MapSqlParameterSource().addValue("arrow", arrow);
@@ -356,68 +374,53 @@ public class ItemRepository {
 
 
 	// 大カテゴリ用の検索メソッド
-	public List<Item> findByCategoryLarge(String largeCategory, Integer arrow) {
+	public List<Item> findByCategoryLarge(Integer categoryId, Integer arrow) {
 		StringBuilder sql = new StringBuilder();
-		//i.conditionをi.condition_idに変更した！けど自宅PC用だから意味ないよ！
 		sql.append("SELECT i.id i_id, i.name i_name, i.condition i_condition, i.category_id i_category_id, i.brand i_brand, i.price i_price, i.shipping i_shipping, i.description i_description,");
-		sql.append("c.id c_id, c.parent_id c_parent_id, c.category_name c_category_name, c.name_all c_name_all, split_part(c.name_all, '/', 1) largeCategory, split_part(c.name_all, '/', 2) mediumCategory, split_part(c.name_all, '/', 3) smallCategory ");
-		sql.append("FROM items i left outer join category c on i.category_id = c.id ");
-		sql.append("WHERE split_part(c.name_all, '/', 1) = :largeCategory ");
+		sql.append("c1.id c_id, c1.parent_id c_parent_id, c1.category_name c_category_name, c1.name_all c_name_all, split_part(c1.name_all, '/', 1) largeCategory, split_part(c1.name_all, '/', 2) mediumCategory, split_part(c1.name_all, '/', 3) smallCategory, c2.parent_id categoryId ");
+		sql.append("FROM category c1 left OUTER join category c2 on c1.parent_id = c2.id ");
+		sql.append("LEFT OUTER JOIN items i on c1.id = i.category_id ");
+		sql.append("WHERE split_part(c1.name_all, '/', 1) = (SELECT category_name FROM category WHERE id=:categoryId) ");
 		sql.append("ORDER BY i.id ");
 		sql.append("LIMIT 30 OFFSET :arrow;");
-		SqlParameterSource param = new MapSqlParameterSource().addValue("largeCategory", largeCategory).addValue("arrow", arrow);
-		List<Item> itemList = template.query(sql.toString(), param, ITEM_CATEGORY_ROW_MAPPER);
-		return itemList;
-	}
-	// 大カテゴリ用の検索メソッド
-	public List<Item> findByCategoryLargeInteger(String largeCategory, Integer arrow) {
-		StringBuilder sql = new StringBuilder();
-		//i.conditionをi.condition_idに変更した！けど自宅PC用だから意味ないよ！
-		sql.append("SELECT i.id i_id, i.name i_name, i.condition i_condition, i.category_id i_category_id, i.brand i_brand, i.price i_price, i.shipping i_shipping, i.description i_description,");
-		sql.append("c.id c_id, c.parent_id c_parent_id, c.category_name c_category_name, c.name_all c_name_all, split_part(c.name_all, '/', 1) largeCategory, split_part(c.name_all, '/', 2) mediumCategory, split_part(c.name_all, '/', 3) smallCategory ");
-		sql.append("FROM items i left outer join category c on i.category_id = c.id ");
-		sql.append("WHERE split_part(c.name_all, '/', 1) = :largeCategory ");
-		sql.append("ORDER BY i.id ");
-		sql.append("LIMIT 30 OFFSET :arrow;");
-		SqlParameterSource param = new MapSqlParameterSource().addValue("largeCategory", largeCategory).addValue("arrow", arrow);
-		List<Item> itemList = template.query(sql.toString(), param, ITEM_CATEGORY_ROW_MAPPER);
-		return itemList;
-	}
-
-
-	// 中カテゴリ用の検索メソッド
-	public List<Item> findByCategoryMedium(String mediumCategory, Integer arrow) {
-		StringBuilder sql = new StringBuilder();
-		//i.conditionをi.condition_idに変更した！けど自宅PC用だから意味ないよ！
-		sql.append("SELECT i.id i_id, i.name i_name, i.condition i_condition, i.category_id i_category_id, i.brand i_brand, i.price i_price, i.shipping i_shipping, i.description i_description,");
-		sql.append("c.id c_id, c.parent_id c_parent_id, c.category_name c_category_name, c.name_all c_name_all, split_part(c.name_all, '/', 1) largeCategory, split_part(c.name_all, '/', 2) mediumCategory, split_part(c.name_all, '/', 3) smallCategory ");
-		sql.append("FROM items i left outer join category c on i.category_id = c.id ");
-		sql.append("WHERE (split_part(c.name_all, '/', 1) || '/' || split_part(c.name_all, '/', 2)) = :mediumCategory ");
-		sql.append("ORDER BY i.id ");
-		sql.append("LIMIT 30 OFFSET :arrow;");
-		SqlParameterSource param = new MapSqlParameterSource().addValue("mediumCategory", mediumCategory).addValue("arrow", arrow);
+		SqlParameterSource param = new MapSqlParameterSource().addValue("categoryId", categoryId).addValue("arrow", arrow);
 		List<Item> itemList = template.query(sql.toString(), param, ITEM_CATEGORY_ROW_MAPPER);
 		return itemList;
 	}
 
 	// 中カテゴリ用の検索メソッド
-	public List<Item> findByCategoryMediumInteger(Integer parentId, Integer arrow) {
+//	public List<Item> findByCategoryMedium(String mediumCategory, Integer arrow) {
+//		StringBuilder sql = new StringBuilder();
+//		//i.conditionをi.condition_idに変更した！けど自宅PC用だから意味ないよ！
+//		sql.append("SELECT i.id i_id, i.name i_name, i.condition i_condition, i.category_id i_category_id, i.brand i_brand, i.price i_price, i.shipping i_shipping, i.description i_description,");
+//		sql.append("c.id c_id, c.parent_id c_parent_id, c.category_name c_category_name, c.name_all c_name_all, split_part(c.name_all, '/', 1) largeCategory, split_part(c.name_all, '/', 2) mediumCategory, split_part(c.name_all, '/', 3) smallCategory ");
+//		sql.append("FROM items i left outer join category c on i.category_id = c.id ");
+//		sql.append("WHERE (split_part(c.name_all, '/', 1) || '/' || split_part(c.name_all, '/', 2)) = :mediumCategory ");
+//		sql.append("ORDER BY i.id ");
+//		sql.append("LIMIT 30 OFFSET :arrow;");
+//		SqlParameterSource param = new MapSqlParameterSource().addValue("mediumCategory", mediumCategory).addValue("arrow", arrow);
+//		List<Item> itemList = template.query(sql.toString(), param, ITEM_CATEGORY_ROW_MAPPER);
+//		return itemList;
+//	}
+
+	// 中カテゴリ用の検索メソッド
+	public List<Item> findByCategoryMedium(Integer categoryId, Integer arrow) {
+		System.out.println("確認:"+categoryId);
 		StringBuilder sql = new StringBuilder();
-		//i.conditionをi.condition_idに変更した！けど自宅PC用だから意味ないよ！
 		sql.append("SELECT i.id i_id, i.name i_name, i.condition i_condition, i.category_id i_category_id, i.brand i_brand, i.price i_price, i.shipping i_shipping, i.description i_description,");
-		sql.append("c.id c_id, c.parent_id c_parent_id, c.category_name c_category_name, c.name_all c_name_all, split_part(c.name_all, '/', 1) largeCategory, split_part(c.name_all, '/', 2) mediumCategory, split_part(c.name_all, '/', 3) smallCategory ");
-		sql.append("FROM items i left outer join category c on i.category_id = c.id ");
-		sql.append("WHERE c.parent_id = :parentId ");
+		sql.append("c1.id c_id, c1.parent_id c_parent_id, c1.category_name c_category_name, c1.name_all c_name_all, split_part(c1.name_all, '/', 1) largeCategory, split_part(c1.name_all, '/', 2) mediumCategory, split_part(c1.name_all, '/', 3) smallCategory, c2.parent_id categoryId ");
+		sql.append("FROM category c1 LEFT OUTER JOIN category c2 ON c1.parent_id = c2.id ");
+		sql.append("LEFT OUTER JOIN items i ON c1.id = i.category_id ");
+		sql.append("WHERE (split_part(c1.name_all, '/', 1) || '/' || split_part(c1.name_all, '/', 2)) = (SELECT (c2.category_name || '/' || c1.category_name) FROM category c1 LEFT OUTER JOIN category c2 ON c1.parent_id = c2.id WHERE c1.id = :categoryId) ");
 		sql.append("ORDER BY i.id ");
 		sql.append("LIMIT 30 OFFSET :arrow;");
-		SqlParameterSource param = new MapSqlParameterSource().addValue("parentId", parentId).addValue("arrow", arrow);
+		SqlParameterSource param = new MapSqlParameterSource().addValue("categoryId", categoryId).addValue("arrow", arrow);
 		List<Item> itemList = template.query(sql.toString(), param, ITEM_CATEGORY_ROW_MAPPER);
 		return itemList;
 	}
 	// 中カテゴリ用の検索メソッド!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	public Item findByCategoryMediumIntegerSecond(Integer parentId) {
 		StringBuilder sql = new StringBuilder();
-		//i.conditionをi.condition_idに変更した！けど自宅PC用だから意味ないよ！
 		sql.append("SELECT split_part(c.name_all, '/', 1) || '/' || split_part(c.name_all, '/', 2) mediumCategory ");
 		sql.append("FROM items i left outer join category c on i.category_id = c.id ");
 		sql.append("WHERE c.parent_id = :parentId ");
@@ -428,18 +431,17 @@ public class ItemRepository {
 		return item;
 	}
 
-
 	// 小カテゴリ用の検索メソッド
-	public List<Item> findByCategorySmall(String smallCategory, Integer arrow) {
+	public List<Item> findByCategorySmall(Integer categoryId, Integer arrow) {
 		StringBuilder sql = new StringBuilder();
-		//i.conditionをi.condition_idに変更した！けど自宅PC用だから意味ないよ！
 		sql.append("SELECT i.id i_id, i.name i_name, i.condition i_condition, i.category_id i_category_id, i.brand i_brand, i.price i_price, i.shipping i_shipping, i.description i_description,");
-		sql.append("c.id c_id, c.parent_id c_parent_id, c.category_name c_category_name, c.name_all c_name_all, split_part(c.name_all, '/', 1) largeCategory, split_part(c.name_all, '/', 2) mediumCategory, split_part(c.name_all, '/', 3) smallCategory ");
-		sql.append("FROM items i left outer join category c on i.category_id = c.id ");
-		sql.append("WHERE (split_part(c.name_all, '/', 1) || '/' || split_part(c.name_all, '/', 2) || '/' || split_part(c.name_all, '/', 3)) = :smallCategory ");
+		sql.append("c1.id c_id, c1.parent_id c_parent_id, c1.category_name c_category_name, c1.name_all c_name_all, split_part(c1.name_all, '/', 1) largeCategory, split_part(c1.name_all, '/', 2) mediumCategory, split_part(c1.name_all, '/', 3) smallCategory, c2.parent_id categoryId ");
+		sql.append("FROM category c1 LEFT OUTER JOIN category c2 ON c1.parent_id = c2.id ");
+		sql.append("LEFT OUTER JOIN items i ON c1.id = i.category_id ");
+		sql.append("WHERE (split_part(c1.name_all, '/', 1) || '/' || split_part(c1.name_all, '/', 2) || '/' || split_part(c1.name_all, '/', 3)) = (SELECT name_all FROM category WHERE id = :categoryId)");
 		sql.append("ORDER BY i.id ");
 		sql.append("LIMIT 30 OFFSET :arrow;");
-		SqlParameterSource param = new MapSqlParameterSource().addValue("smallCategory", smallCategory).addValue("arrow", arrow);
+		SqlParameterSource param = new MapSqlParameterSource().addValue("categoryId", categoryId).addValue("arrow", arrow);
 		List<Item> itemList = template.query(sql.toString(), param, ITEM_CATEGORY_ROW_MAPPER);
 		return itemList;
 	}
@@ -475,46 +477,33 @@ public class ItemRepository {
 	}
 
 	// 大カテゴリの総ページ数を取得
-	public Integer countPageLarge(String large) {
+	public Integer countPageLarge(Integer categoryId) {
 		StringBuilder sql = new StringBuilder();
-		//+1をしてないと割り切れなかった分がうまく表示されない
 		sql.append("SELECT count(i.id) / 30 ");
 		sql.append("FROM items i inner join category c on i.category_id = c.id ");
-		sql.append("WHERE split_part(c.name_all, '/', 1) = :large;");
-		SqlParameterSource param = new MapSqlParameterSource().addValue("large", large);
+		sql.append("WHERE split_part(c.name_all, '/', 1) = (SELECT category_name FROM category WHERE id = :categoryId);");
+		SqlParameterSource param = new MapSqlParameterSource().addValue("categoryId", categoryId);
 		return template.queryForObject(sql.toString(), param, Integer.class);
 	}
 
 	// 中カテゴリの総ページ数を取得
-	public Integer countPageMedium(String medium) {
+	public Integer countPageMedium(Integer categoryId) {
 		StringBuilder sql = new StringBuilder();
-		//+1をしてないと割り切れなかった分がうまく表示されない
 		sql.append("SELECT count(i.id) / 30 ");
-		sql.append("FROM items i inner join category c on i.category_id = c.id ");
-		sql.append("WHERE (split_part(c.name_all, '/', 1) || '/' || split_part(c.name_all, '/', 2)) = :medium;");
-		SqlParameterSource param = new MapSqlParameterSource().addValue("medium", medium);
-		return template.queryForObject(sql.toString(), param, Integer.class);
-	}
-
-	// 中カテゴリの総ページ数を取得
-	public Integer countPageMediumInteger(Integer parentId) {
-		StringBuilder sql = new StringBuilder();
-		//+1をしてないと割り切れなかった分がうまく表示されない
-		sql.append("SELECT count(i.id) / 30 ");
-		sql.append("FROM items i inner join category c on i.category_id = c.id ");
-		sql.append("WHERE c.parent_id = :parentId;");
-		SqlParameterSource param = new MapSqlParameterSource().addValue("parentId", parentId);
+		sql.append("FROM category c1 LEFT OUTER JOIN category c2 ON c1.parent_id = c2.id ");
+		sql.append("LEFT OUTER JOIN items i ON c1.id = i.category_id ");
+		sql.append("WHERE (split_part(c1.name_all, '/', 1) || '/' || split_part(c1.name_all, '/', 2)) = (SELECT (c2.category_name || '/' || c1.category_name) FROM category c1 LEFT OUTER JOIN category c2 ON c1.parent_id = c2.id WHERE c1.id = :categoryId);");
+		SqlParameterSource param = new MapSqlParameterSource().addValue("categoryId", categoryId);
 		return template.queryForObject(sql.toString(), param, Integer.class);
 	}
 
 	// 小カテゴリ
-	public Integer countPageSmall(String small) {
+	public Integer countPageSmall(Integer categoryId) {
 		StringBuilder sql = new StringBuilder();
-		//+1をしてないと割り切れなかった分がうまく表示されない
 		sql.append("SELECT count(i.id) / 30 ");
 		sql.append("FROM items i inner join category c on i.category_id = c.id ");
-		sql.append("WHERE (split_part(c.name_all, '/', 1) || '/' || split_part(c.name_all, '/', 2) || '/' || split_part(c.name_all, '/', 3)) = :small;");
-		SqlParameterSource param = new MapSqlParameterSource().addValue("small", small);
+		sql.append("WHERE (split_part(c.name_all, '/', 1) || '/' || split_part(c.name_all, '/', 2) || '/' || split_part(c.name_all, '/', 3)) = (SELECT name_all FROM category WHERE id = :categoryId);");
+		SqlParameterSource param = new MapSqlParameterSource().addValue("categoryId", categoryId);
 		return template.queryForObject(sql.toString(), param, Integer.class);
 	}
 
@@ -697,9 +686,9 @@ public class ItemRepository {
 	//小カテゴリネーム取得
 	public List<CategoryName> categorySmallText() {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT distinct split_part(name_all, '/', 1) largeText, split_part(name_all, '/', 2) mediumText, split_part(name_all, '/', 3) smallText, parent_id ");
+		sql.append("SELECT id, parent_id, category_name, name_all ");
 		sql.append("FROM category ");
-		sql.append("WHERE split_part(name_all, '/', 3) IS NOT NULL;");
+		sql.append("WHERE parent_id IS NOT NULL AND name_all IS NOT NULL;");
 		List<CategoryName> categoryLargeList = template.query(sql.toString(), CATEGORY_NAME_ROW_MAPPER3);
 		return categoryLargeList;
 	}

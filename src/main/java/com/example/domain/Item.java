@@ -13,22 +13,22 @@ public class Item {
 
 	/** 商品名 */
 	private String name;
-	
+
 	/** 価格 */
 	private double price;
-	
+
 	/** カテゴリー */
 	private String category;
-	
+
 	/** ブランド */
 	private String brand;
 
 	/** 商品状態 */
 	private Integer condition;
-	
+
 	/** 商品説明 */
 	private String description;
-	
+
 	/** 運送手段 */
 	private Integer shipping;
 
@@ -44,30 +44,38 @@ public class Item {
 	/** 小カテゴリ */
 	private String smallCategory;
 
+	/** 大カテゴリID */
+	private Integer parentId;
+
+	private Integer smallCategoryId;
+
 
 	public Item() {
 
 	}
 
 
-	public Item(Integer id, String name, Integer condition, Integer categoryId, String category, String brand,
-			double price, Integer shipping, String description, String largeCategory, String mediumCategory,
-			String smallCategory) {
+	public Item(Integer id, String name, double price, String category, String brand, Integer condition,
+			String description, Integer shipping, Integer categoryId, String largeCategory, String mediumCategory,
+			String smallCategory, Integer parentId, Integer smallCategoryId) {
+		super();
 		this.id = id;
 		this.name = name;
-		this.condition = condition;
-		this.categoryId = categoryId;
+		this.price = price;
 		this.category = category;
 		this.brand = brand;
-		this.price = price;
-		this.shipping = shipping;
+		this.condition = condition;
 		this.description = description;
+		this.shipping = shipping;
+		this.categoryId = categoryId;
 		this.largeCategory = largeCategory;
 		this.mediumCategory = mediumCategory;
 		this.smallCategory = smallCategory;
+		this.parentId = parentId;
+		this.smallCategoryId = smallCategoryId;
 	}
-	
-	
+
+
 	public void setCategorys() {
 		String[] categorys = this.category.split("/");
 		this.setLargeCategory(categorys[0]);
@@ -174,12 +182,29 @@ public class Item {
 	}
 
 
+	public Integer getParentId() {
+		return parentId;
+	}
+	public void setParentId(Integer parentId) {
+		this.parentId = parentId;
+	}
+
+
+	public Integer getSmallCategoryId() {
+		return smallCategoryId;
+	}
+	public void setSmallCategoryId(Integer smallCategoryId) {
+		this.smallCategoryId = smallCategoryId;
+	}
+
+
 	@Override
 	public String toString() {
-		return "Item [id=" + id + ", name=" + name + ", condition=" + condition + ", categoryId=" + categoryId
-				+ ", category=" + category + ", brand=" + brand + ", price=" + price + ", shipping=" + shipping
-				+ ", description=" + description + ", LargeCategory=" + largeCategory + ", MediumCategory="
-				+ mediumCategory + ", SmallCategory=" + smallCategory + "]";
+		return "Item [id=" + id + ", name=" + name + ", price=" + price + ", category=" + category + ", brand=" + brand
+				+ ", condition=" + condition + ", description=" + description + ", shipping=" + shipping
+				+ ", categoryId=" + categoryId + ", largeCategory=" + largeCategory + ", mediumCategory="
+				+ mediumCategory + ", smallCategory=" + smallCategory + ", parentId=" + parentId + ", smallCategoryId="
+				+ smallCategoryId + "]";
 	}
 
 }

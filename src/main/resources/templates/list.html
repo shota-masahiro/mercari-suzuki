@@ -54,7 +54,7 @@
 
           <select class="form-control" name="smallCategoryForm" id="smallCategory" disabled="disabled">
             <option value="---">-- smallCategory --</option>
-            <option th:each="small:${session.categorySmallNameList}" th:text="${small.categorySmallName}" th:value="${small.categoryLargeName + '/' + small.categoryMediumName + '/' + small.categorySmallName}" th:class="${small.parentId}"></option>
+            <option th:each="small:${session.categorySmallNameList}" th:text="${small.categorySmallName}" th:value="${small.id}" th:class="${small.parentId}"></option>
           </select>
 
         </div>
@@ -103,9 +103,9 @@
             <td class="item-name"><a th:href="@{'/detail/?id=' + ${item.id}}"><span th:text="${item.name}"></span></a></td>
             <td class="item-price" th:text="${item.price}">dummy price</td>
             <td class="item-category">
-            	<a th:href="@{/(arrow=0, brand=${brand}, largeCategory=${item.largeCategory})}"><span th:text="${item.largeCategory}"></span></a> / 
-            	<a th:href="@{/(arrow=0, brand=${brand}, mediumCategory=${item.largeCategory + '/' + item.mediumCategory})}"><span th:text="${item.mediumCategory}"></span></a> / 
-            	<a th:href="@{/(arrow=0, brand=${brand}, smallCategory=${item.largeCategory + '/' + item.mediumCategory + '/' + item.smallCategory})}"><span th:text="${item.smallCategory}"></span></a>
+            	<a th:href="@{/(arrow=0, brand=${brand}, largeCategory=${item.categoryId})}"><span th:text="${item.largeCategory}"></span></a> / 
+            	<a th:href="@{/(arrow=0, brand=${brand}, mediumCategory=${item.parentId})}"><span th:text="${item.mediumCategory}"></span></a> / 
+            	<a th:href="@{/(arrow=0, brand=${brand}, smallCategory=${item.smallCategoryId})}"><span th:text="${item.smallCategory}"></span></a>
             </td>
             <td class="item-brand"><a th:href="@{/(brand=${item.brand})}"><span th:text="${item.brand}"></span></a></td>
             <td class="item-condition" th:text="${item.condition}">dummy condition</td>

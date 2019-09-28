@@ -32,6 +32,9 @@ public class CategorySearchForm {
 	}
 
 
+	public Integer getIntLargeCategoryForm() {
+		return Integer.parseInt(this.largeCategoryForm);
+	}
 	public String getLargeCategoryForm() {
 		return largeCategoryForm;
 	}
@@ -40,6 +43,9 @@ public class CategorySearchForm {
 	}
 
 
+	public Integer getIntCategoryForm() {
+		return Integer.parseInt(this.mediumCategoryForm);
+	}
 	public String getMediumCategoryForm() {
 		return mediumCategoryForm;
 	}
@@ -48,6 +54,9 @@ public class CategorySearchForm {
 	}
 
 
+	public Integer getIntSmallCategoryForm() {
+		return Integer.parseInt(this.smallCategoryForm);
+	}
 	public String getSmallCategoryForm() {
 		return smallCategoryForm;
 	}
