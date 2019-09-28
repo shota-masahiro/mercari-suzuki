@@ -19,7 +19,7 @@ public class RegisterUserForm {
 	/** メールアドレス */
 	@NotBlank(message = "メールアドレスを入力してください")
 	@Email(message = "Eメールの形式は不正です")
-	private String mailAddress;
+	private String email;
 
 	/** パスワード */
 	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,32}$", message = "8文字以上32文字以内かつ小・大文字、数字を1つ以上入力してください")
@@ -37,11 +37,11 @@ public class RegisterUserForm {
 	}
 
 
-	public String getMailAddress() {
-		return mailAddress;
+	public String getEmail() {
+		return email;
 	}
-	public void setMailAddress(String mailAddress) {
-		this.mailAddress = mailAddress;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 
@@ -63,7 +63,7 @@ public class RegisterUserForm {
 
 	@Override
 	public String toString() {
-		return "RegisterUserForm [name=" + name + ", mailAddress=" + mailAddress + ", password=" + password
+		return "RegisterUserForm [name=" + name + ", email=" + email + ", password=" + password
 				+ ", confirmationPassword=" + confirmationPassword + "]";
 	}
 

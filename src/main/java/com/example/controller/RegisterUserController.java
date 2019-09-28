@@ -57,7 +57,7 @@ public class RegisterUserController {
 		//メールアドレスの重複チェック
 		User user = registerUserService.findByMailAddress(form);
 		if (user != null) {
-			result.rejectValue("mailAddress", "", "そのメールアドレスは既に登録されています");
+			result.rejectValue("email", "", "そのメールアドレスは既に登録されています");
 		}
 		
 		//確認用パスワードチェック
@@ -70,6 +70,7 @@ public class RegisterUserController {
 			return toRegister();
 		}
 		
+		System.out.println("form:" + form);
 		registerUserService.insert(form);
 		return "redirect:/login";
 	}

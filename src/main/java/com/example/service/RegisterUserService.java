@@ -32,7 +32,7 @@ public class RegisterUserService {
 	 * @return     userオブジェクト
 	 */
 	public User findByMailAddress(RegisterUserForm form) {
-		return userRepository.findByMailAddress(form.getMailAddress());
+		return userRepository.findByMailAddress(form.getEmail());
 	}
 
 
@@ -45,6 +45,7 @@ public class RegisterUserService {
 		User user = new User();
 		BeanUtils.copyProperties(form, user);
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		System.out.println("user:"+user);
 		userRepository.insert(user);
 	}
 
