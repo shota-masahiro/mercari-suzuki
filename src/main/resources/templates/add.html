@@ -57,7 +57,7 @@
         <div class="col-sm-8">
           <select class="form-control" name="largeCategory" id="largeCategory">
             <option value="---">-- largeCategory --</option>
-            <option th:each="large:${session.categoryLargeNameList}" th:text="${large.categoryLargeName}" th:value="${large.categoryLargeName}"></option>
+            <option th:each="large:${session.categoryLargeNameList}" th:text="${large.categoryName}" th:value="${large.id}"></option>
           </select>
         </div>
       </div>
@@ -67,7 +67,7 @@
         <div class="col-sm-8">
           <select class="form-control" name="mediumCategory" id="mediumCategory" disabled="disabled">
             <option value="---" class="---">-- mediumCategory --</option>
-            <option th:each="medium:${session.categoryMediumNameList}" th:text="${medium.categoryMediumName}" th:value="${medium.parentId}" th:class="${medium.categoryLargeName}"></option>
+            <option th:each="medium:${session.categoryMediumNameList}" th:text="${medium.categoryName}" th:value="${medium.id}" th:class="${medium.parentId}"></option>
           </select>
         </div>
       </div>
@@ -77,7 +77,7 @@
         <div class="col-sm-8">
           <select class="form-control" name="smallCategory" id="smallCategory" disabled="disabled">
             <option value="---">-- smallCategory --</option>
-            <option th:each="small:${session.categorySmallNameList}" th:text="${small.categorySmallName}" th:value="${small.categoryLargeName + '/' + small.categoryMediumName + '/' + small.categorySmallName}" th:class="${small.parentId}"></option>
+            <option th:each="small:${session.categorySmallNameList}" th:text="${small.categoryName}" th:value="${small.id}" th:class="${small.parentId}"></option>
           </select>
         </div>
       </div>

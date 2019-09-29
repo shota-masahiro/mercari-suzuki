@@ -70,7 +70,7 @@ public class AddItemController {
 			Model model) {
 
 		String errorMessage = null;
-		if ("---".equals(form.getLargeCategory()) || "".equals(form.getMediumCategory()) || "".equals(form.getSmallCategory())) {
+		if ("---".equals(form.getLargeCategory()) || "---".equals(form.getMediumCategory()) || "---".equals(form.getSmallCategory())) {
 			errorMessage = "カテゴリーを選択してください";
 		}
 

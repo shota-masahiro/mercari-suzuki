@@ -155,7 +155,7 @@ public class ItemRepository {
 		return itemList;
 	}
 	public List<Item> findByNameCategoryMedium(Integer arrow, String itemName, Integer categoryId) {// 商品名と中カテゴリーで検索します.
-		StringBuilder sql = new StringBuilder(getCountSQL());
+		StringBuilder sql = new StringBuilder(getSQL());
 		sql.append("WHERE i.name LIKE :itemName AND (split_part(c1.name_all, '/', 1) || '/' || split_part(c1.name_all, '/', 2)) = (SELECT (c2.category_name || '/' || c1.category_name) FROM category c1 LEFT OUTER JOIN category c2 ON c1.parent_id = c2.id WHERE c1.id = :categoryId) ");
 		sql.append("ORDER BY i.id LIMIT 30 OFFSET :arrow;");
 		SqlParameterSource param = new MapSqlParameterSource().addValue("arrow", arrow).addValue("itemName", itemName).addValue("categoryId", categoryId);
@@ -207,7 +207,7 @@ public class ItemRepository {
 		return itemList;
 	}
 	public List<Item> findByNameCategoryMediumBrand(Integer arrow, String itemName, Integer categoryId, String brand) {// 商品名と中カテゴリーとブランド名で検索します.
-		StringBuilder sql = new StringBuilder(getCountSQL());
+		StringBuilder sql = new StringBuilder(getSQL());
 		sql.append("WHERE i.name LIKE :itemName AND (split_part(c1.name_all, '/', 1) || '/' || split_part(c1.name_all, '/', 2)) = (SELECT (c2.category_name || '/' || c1.category_name) FROM category c1 LEFT OUTER JOIN category c2 ON c1.parent_id = c2.id WHERE c1.id = :categoryId) AND i.brand LIKE :brand ");
 		sql.append("ORDER BY i.id LIMIT 30 OFFSET :arrow;");
 		SqlParameterSource param = new MapSqlParameterSource().addValue("arrow", arrow).addValue("itemName", itemName).addValue("categoryId", categoryId).addValue("brand", brand);

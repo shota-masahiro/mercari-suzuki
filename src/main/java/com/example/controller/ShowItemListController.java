@@ -48,8 +48,8 @@ public class ShowItemListController {
 	@RequestMapping("")
 	public String index(Integer arrow, String brand, Model model,
 			Integer largeCategory, Integer mediumCategory, Integer smallCategory,
-			Integer categoryId, String[] categoryIds, CategorySearchForm form,
-			String itemName) {
+			Integer[] categoryIds, CategorySearchForm form, String itemName
+			) {
 
 		Integer checkCategory = (Integer) session.getAttribute("checkCategory");
 		//		if (checkCategory == null) {}
@@ -59,10 +59,8 @@ public class ShowItemListController {
 			itemName = form.getItemNameForm();
 		}
 
-		if (form.getLargeCategoryForm() != null && !"".equals(form.getLargeCategoryForm()) ) { 
-			if (!"---".equals(form.getLargeCategoryForm())) {
-				largeCategory = form.getIntLargeCategoryForm();
-			}
+		if (form.getLargeCategoryForm() != null && !"".equals(form.getLargeCategoryForm()) && !"---".equals(form.getLargeCategoryForm())) { 
+			largeCategory = form.getIntLargeCategoryForm();
 
 			if (form.getMediumCategoryForm() != null && !"".equals(form.getMediumCategoryForm()) && !"---".equals(form.getMediumCategoryForm())) {
 				mediumCategory = form.getIntCategoryForm();
@@ -73,11 +71,17 @@ public class ShowItemListController {
 			}
 		}
 
+		if (categoryIds != null) {
+
+		} else if (largeCategory != null || mediumCategory != null || smallCategory != null) {
+			categoryIds = new Integer[]{largeCategory, mediumCategory, smallCategory};
+		} else {
+			categoryIds = new Integer[]{null, null, null};
+		}
+
 		if (form.getBrandForm() != null && !"".equals(form.getBrandForm())) {
 			brand = form.getBrandForm();
 		}
-
-		Integer[] categorys = {largeCategory, mediumCategory, smallCategory};
 
 		if (arrow == null) {
 			arrow = 0;
@@ -88,15 +92,15 @@ public class ShowItemListController {
 		if ("".equals(itemName)) {
 			itemName = null;
 		}
-		List<Item> itemList = showItemListService.findByPage(arrow, brand, categorys, itemName);
+		List<Item> itemList = showItemListService.findByPage(arrow, brand, categoryIds, itemName);
 		model.addAttribute("itemList", itemList);
 		model.addAttribute("arrow", arrow);
 		model.addAttribute("brand", brand);
-		model.addAttribute("itemName", itemName); // itemNameはセレクトボックスに連動している商品名の検索の値
+		model.addAttribute("itemName", itemName);
 
-		Integer totalPages = showItemListService.getCountPage(itemName, categorys, brand);
+		Integer totalPages = showItemListService.getCountPage(itemName, categoryIds, brand);
 		model.addAttribute("totalPages", totalPages);
-		model.addAttribute("categoryIds", categorys);
+		model.addAttribute("categoryIds", categoryIds);
 
 		return "list";
 	}

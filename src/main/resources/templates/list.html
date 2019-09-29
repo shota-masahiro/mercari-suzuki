@@ -36,7 +36,7 @@
     <div id="forms">
       <form th:action="@{/}" th:object="${categorySearchForm}" class="form-inline" role="form" method="post">
         <div class="form-group">
-          <input type="input" class="form-control" id="name" name="itemNameForm" placeholder="item name"/>
+          <input type="text" class="form-control" id="name" name="itemNameForm" th:value="${itemName}" placeholder="item name"/>
         </div>
         
         <div class="form-group"><i class="fa fa-plus"></i></div>
@@ -44,17 +44,17 @@
 
           <select class="form-control" name="largeCategoryForm" id="largeCategory">
             <option value="---">-- largeCategory --</option>
-            <option th:each="large:${session.categoryLargeNameList}" th:text="${large.categoryName}" th:value="${large.id}"></option>
+            <option th:each="large:${session.categoryLargeNameList}" th:text="${large.categoryName}" th:value="${large.id}" th:selected="${categoryIds[0] == large.id}"></option>
           </select>
 
           <select class="form-control" name="mediumCategoryForm" id="mediumCategory" disabled="disabled">
             <option value="---" class="---">-- mediumCategory --</option>
-            <option th:each="medium:${session.categoryMediumNameList}" th:text="${medium.categoryName}" th:value="${medium.id}" th:class="${medium.parentId}"></option>
+            <option th:each="medium:${session.categoryMediumNameList}" th:text="${medium.categoryName}" th:value="${medium.id}" th:class="${medium.parentId}" th:selected="${categoryIds[1] == medium.id}"></option>
           </select>
 
           <select class="form-control" name="smallCategoryForm" id="smallCategory" disabled="disabled">
             <option value="---">-- smallCategory --</option>
-            <option th:each="small:${session.categorySmallNameList}" th:text="${small.categoryName}" th:value="${small.id}" th:class="${small.parentId}"></option>
+            <option th:each="small:${session.categorySmallNameList}" th:text="${small.categoryName}" th:value="${small.id}" th:class="${small.parentId}" th:selected="${categoryIds[2] == small.id}"></option>
           </select>
 
         </div>
@@ -62,7 +62,7 @@
         <div class="form-group"><i class="fa fa-plus"></i></div>
 
         <div class="form-group">
-          <input type="text" class="form-control" name="brandForm" placeholder="brand"/>
+          <input type="text" class="form-control" name="brandForm" th:value="${brand}" placeholder="brand"/>
         </div>
 
         <div class="form-group"></div>
@@ -98,14 +98,14 @@
           </tr>
         </thead>
         <tbody>
-​
+
           <tr th:each="item:${itemList}">
             <td class="item-name"><a th:href="@{'/detail/?id=' + ${item.id}}"><span th:text="${item.name}"></span></a></td>
             <td class="item-price" th:text="${item.price}">dummy price</td>
             <td class="item-category">
-            	<a th:href="@{/(arrow=0, brand=${brand}, largeCategory=${item.categoryId})}"><span th:text="${item.largeCategory}"></span></a> / 
-            	<a th:href="@{/(arrow=0, brand=${brand}, mediumCategory=${item.parentId})}"><span th:text="${item.mediumCategory}"></span></a> / 
-            	<a th:href="@{/(arrow=0, brand=${brand}, smallCategory=${item.smallCategoryId})}"><span th:text="${item.smallCategory}"></span></a>
+            	<a th:href="@{/(arrow=0, largeCategory=${item.categoryId})}"><span th:text="${item.largeCategory}"></span></a> / 
+            	<a th:href="@{/(arrow=0, largeCategory=${item.categoryId}, mediumCategory=${item.parentId})}"><span th:text="${item.mediumCategory}"></span></a> / 
+            	<a th:href="@{/(arrow=0, largeCategory=${item.categoryId}, mediumCategory=${item.parentId}, smallCategory=${item.smallCategoryId})}"><span th:text="${item.smallCategory}"></span></a>
             </td>
             <td class="item-brand"><a th:href="@{/(brand=${item.brand})}"><span th:text="${item.brand}"></span></a></td>
             <td class="item-condition" th:text="${item.condition}">dummy condition</td>
@@ -132,13 +132,16 @@
       
       <!-- ページ番号を指定して表示するフォーム -->
       <div id="select-page">
-        <form class="form-inline" th:action="@{/}">
+        <form class="form-inline" th:action="@{/}" method="post">
           <div class="form-group">
             <div class="input-group col-xs-6">
               <label></label>
-              <input type="text" class="form-control" name="arrow"/>
+              <input type="text" class="form-control" name="arrow" th:value="${arrow}"/>
               <input type="hidden" name="brand" th:value="${brand}">
-              <input type="hidden" name="categoryIds" th:value="${categoryIds}">
+              <input type="hidden" name="itemName" th:value="${itemName}">
+              <input type="hidden" name="largeCategory" th:value="${categoryIds[0]}">
+              <input type="hidden" name="mediumCategory" th:value="${categoryIds[1]}">
+              <input type="hidden" name="smallCategory" th:value="${categoryIds[2]}">
               <!-- 総ページ数 -->
               <div class="input-group-addon" th:text="${' / ' + totalPages}">/ 20</div>
             </div>
