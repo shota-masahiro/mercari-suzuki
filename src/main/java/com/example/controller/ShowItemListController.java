@@ -48,10 +48,9 @@ public class ShowItemListController {
 	@RequestMapping("")
 	public String index(Integer arrow, String brand, Model model,
 			Integer largeCategory, Integer mediumCategory, Integer smallCategory,
-			Integer categoryId, String categoryName, CategorySearchForm form,
+			Integer categoryId, String[] categoryIds, CategorySearchForm form,
 			String itemName) {
 
-		//プルダウンset処理
 		Integer checkCategory = (Integer) session.getAttribute("checkCategory");
 		//		if (checkCategory == null) {}
 		setCategory();
@@ -60,8 +59,7 @@ public class ShowItemListController {
 			itemName = form.getItemNameForm();
 		}
 
-		//formで受け取ったカテゴリー値を格納する処理
-		if (form.getLargeCategoryForm() != null && !"".equals(form.getLargeCategoryForm()) ) {
+		if (form.getLargeCategoryForm() != null && !"".equals(form.getLargeCategoryForm()) ) { 
 			if (!"---".equals(form.getLargeCategoryForm())) {
 				largeCategory = form.getIntLargeCategoryForm();
 			}
@@ -79,18 +77,7 @@ public class ShowItemListController {
 			brand = form.getBrandForm();
 		}
 
-
 		Integer[] categorys = {largeCategory, mediumCategory, smallCategory};
-		if (categoryId != null) {
-			if (categoryId == 0) {
-				categorys[0] = largeCategory;
-			} else if (categoryId == 1) {
-				categorys[1] = mediumCategory;
-			} else if (categoryId == 2) {
-				categorys[2] = smallCategory;
-			}
-		}
-
 
 		if (arrow == null) {
 			arrow = 0;
@@ -105,144 +92,98 @@ public class ShowItemListController {
 		model.addAttribute("itemList", itemList);
 		model.addAttribute("arrow", arrow);
 		model.addAttribute("brand", brand);
-		model.addAttribute("itemName", itemName);
+		model.addAttribute("itemName", itemName); // itemNameはセレクトボックスに連動している商品名の検索の値
+
 
 		Integer totalPages = null;
-		Integer category = null;
 		boolean key = true;
 
-		//商品名 + 大中小カテゴリ + ブランド名
-//		if (itemName != null && categorys[2] != null && brand != null && key) {
-//			totalPages = showItemListService.countPageNameSmallBrand(itemName, categorys[2], brand);
-//			categoryId = 2;
-//			category = categorys[2];
-//			key = false;
-//		}
+		//		if (itemName != null && categorys[2] != null && brand != null && key) { //商品名 + 大中小カテゴリ + ブランド名
+		//			totalPages = showItemListService.countPageNameSmallBrand(itemName, categorys[2], brand);
+		//			key = false;
+		//		}
 
-		//商品名 + 大中カテゴリ + ブランド名
-//		if (itemName != null && categorys[1] != null && brand != null && key) {
-//				totalPages = showItemListService.countPageNameMediumBrandInteger(itemName, Integer.parseInt(categorys[1]), brand);
-//				categoryId = 1;
-//				category = categorys[1];
-//				key = false;
-//		}
+		//		if (itemName != null && categorys[1] != null && brand != null && key) { //商品名 + 大中カテゴリ + ブランド名
+		//			totalPages = showItemListService.countPageNameMediumBrandInteger(itemName, categorys[1], brand);
+		//			key = false;
+		//		}
 
-		//商品名 + 大カテゴリ + ブランド名
-//		if (itemName != null && categorys[0] != null && brand != null && key) {
-//			totalPages = showItemListService.countPageNameLargeBrand(itemName, categorys[0], brand);
-//			categoryId = 0;
-//			category = categorys[0];
-//			key = false;
-//		}
+		//		if (itemName != null && categorys[0] != null && brand != null && key) { //商品名 + 大カテゴリ + ブランド名
+		//			totalPages = showItemListService.countPageNameLargeBrand(itemName, categorys[0], brand);
+		//			key = false;
+		//		}
 
-		//商品名 + 大中小カテゴリ
-//		if (itemName != null && categorys[2] != null && key) {
-//			totalPages = showItemListService.countPageNameLarge(itemName, categorys[0]);
-//			categoryId = 2;
-//			category = categorys[2];
-//			key = false;
-//		}
+		if (itemName != null && categorys[2] != null && key) { //商品名 + 大中小カテゴリ
+			totalPages = showItemListService.countPageNameSmall(itemName, categorys[2]);
+			key = false;
+		}
 
-		//商品名 + 大中カテゴリ
-//		if (itemName != null && categorys[1] != null && key) {
-//				totalPages = showItemListService.countPageNameMediumInteger(itemName, Integer.parseInt(categorys[1]));
-//				categoryId = 1;
-//				category = categorys[0];
-//				key = false;
-//		}
+		if (itemName != null && categorys[1] != null && key) { //商品名 + 大中カテゴリ
+			totalPages = showItemListService.countPageNameMedium(itemName, categorys[1]);
+			key = false;
+		}
 
-		//商品名 + 大カテゴリ
-//		if (itemName != null && categorys[0] != null && key) {
-//			totalPages = showItemListService.countPageNameLarge(itemName, categorys[0]);
-//			categoryId = 0;
-//			category = categorys[0];
-//			key = false;
-//		}
+		if (itemName != null && categorys[0] != null && key) { //商品名 + 大カテゴリ
+			totalPages = showItemListService.countPageNameLarge(itemName, categorys[0]);
+			key = false;
+		}
 
-		//大中小カテゴリ + ブランド名
-//		if (categorys[2] != null && brand != null && key) {
-//			totalPages = showItemListService.countPageSmallBrand(brand, categorys[2]);
-//			categoryId = 2;
-//			category = categorys[2];
-//			key = false;
-//		}
+		//		if (categorys[2] != null && brand != null && key) { //大中小カテゴリ + ブランド名
+		//			totalPages = showItemListService.countPageSmallBrand(brand, categorys[2]);
+		//			key = false;
+		//		}
 
-		//大中カテゴリ + ブランド名
-//		if (categorys[1] != null && brand != null && key) {
-//				totalPages = showItemListService.countPageMediumBrandInteger(brand, parentId);
-//				categoryId = 1;
-//		category = categorys[1];
-//				key = false;
-//		}
+		//		if (categorys[1] != null && brand != null && key) { //大中カテゴリ + ブランド名
+		//			totalPages = showItemListService.countPageMediumBrandInteger(brand, parentId);
+		//			key = false;
+		//		}
 
-		//大カテゴリ + ブランド名
-//		if (categorys[0] != null && brand != null && key) {
-//			totalPages = showItemListService.countPageLargeBrand(brand, categorys[0]);
-//			categoryId = 0;
-//			category = categorys[0];
-//			key = false;
-//		}
+		//		if (categorys[0] != null && brand != null && key) { //大カテゴリ + ブランド名
+		//			totalPages = showItemListService.countPageLargeBrand(brand, categorys[0]);
+		//			key = false;
+		//		}
 
-		//商品名 + ブランド名 ok 
-		if (itemName != null && brand != null && key) {
+		if (itemName != null && brand != null && key) { //商品名 + ブランド名 ok 
 			totalPages = showItemListService.countPageNameBrand(itemName, brand);
 			key = false;
 		}
 
-		//lengthで判定して中身が空ではなかったらサービスに渡す
-		//サービスでは1つのメソッドで配列を受け取り、そこからリポジトリの呼出しを分岐させる,
-
-		//大中小カテゴリのみ ok 
-		if (categorys[2] != null && key) {
+		if (categorys[2] != null && key) { //大中小カテゴリのみ ok 
 			totalPages = showItemListService.countPageSmall(categorys[2]);
-			categoryId = 2;
-			category = categorys[2];
 			key = false;
 		}
-
-		//大中カテゴリのみ ok
-		if (categorys[1] != null && key) {
-				totalPages = showItemListService.countPageMedium(categorys[1]);
-				categoryId = 1;
-				category = categorys[1];
-				key = false;
+		
+		if (categorys[1] != null && key) { //大中カテゴリのみ ok
+			totalPages = showItemListService.countPageMedium(categorys[1]);
+			key = false;
 		}
-
-		//大カテゴリのみ ok
-		if (categorys[0] != null && key) {
+		
+		if (categorys[0] != null && key) { //大カテゴリのみ ok
 			totalPages = showItemListService.countPageLarge(categorys[0]);
-			categoryId = 0;
-			category = categorys[0];
 			key = false;
 		}
 
-		//ブランド名のみ ok
-		if (brand != null && key) {
+		if (brand != null && key) { //ブランド名のみ ok
 			totalPages = showItemListService.countPageBrand(brand);
 			key = false;
 		}
-
-		//商品名のみ ok
-		if (itemName != null && key) {
+		
+		if (itemName != null && key) { //商品名のみ ok
 			totalPages = showItemListService.countPageName(itemName);
 			key = false;
 		}
 
-		//全件検索
-		if (key) {
+		if (key) { //全件検索 ok
 			totalPages = showItemListService.countPage();
 		}
 
 		model.addAttribute("totalPages", totalPages);
-		model.addAttribute("categoryId", categoryId);
-//		model.addAttribute("categoryName", category);
+		model.addAttribute("categoryIds", categorys);
 
 		return "list";
 	}
 
-	/**
-	 * プルダウンで使用する値をsetします.
-	 */
+	/** プルダウンで使用する値をsetします. */
 	private void setCategory() {
 		List<CategoryName> categoryLargeNameList = showItemListService.categoryLargeText();
 		session.setAttribute("categoryLargeNameList", categoryLargeNameList);
@@ -253,7 +194,6 @@ public class ShowItemListController {
 		List<CategoryName> categorySmallNameList = showItemListService.categorySmallText();
 		session.setAttribute("categorySmallNameList", categorySmallNameList);
 
-		//確認用
 		session.setAttribute("checkCategory", -99);
 	}
 

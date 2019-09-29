@@ -42,17 +42,17 @@
         <div class="form-group"><i class="fa fa-plus"></i></div>
         <div class="form-group">
 
-          <select class="form-control" name="largeCategoryForm" id="largeCategory">
+          <select class="form-control" name="largeCategoryForm" id="largeCategoryForm">
             <option value="---">-- largeCategory --</option>
             <option th:each="large:${session.categoryLargeNameList}" th:text="${large.categoryLargeName}" th:value="${large.id}"></option>
           </select>
 
-          <select class="form-control" name="mediumCategoryForm" id="mediumCategory" disabled="disabled">
+          <select class="form-control" name="mediumCategoryForm" id="mediumCategoryForm" disabled="disabled">
             <option value="---" class="---">-- mediumCategory --</option>
             <option th:each="medium:${session.categoryMediumNameList}" th:text="${medium.categoryMediumName}" th:value="${medium.id}" th:class="${medium.parentId}"></option>
           </select>
 
-          <select class="form-control" name="smallCategoryForm" id="smallCategory" disabled="disabled">
+          <select class="form-control" name="smallCategoryForm" id="smallCategoryForm" disabled="disabled">
             <option value="---">-- smallCategory --</option>
             <option th:each="small:${session.categorySmallNameList}" th:text="${small.categorySmallName}" th:value="${small.id}" th:class="${small.parentId}"></option>
           </select>
@@ -75,11 +75,11 @@
       <nav class="page-nav">
         <ul class="pager">
           <li class="previous" th:if="${arrow > 0}">
-          		<a th:href="@{/(arrow=${arrow - 1}, brand=${brand}, categoryId=${categoryId}, categoryName=${categoryName}, itemName=${itemName})}">&larr; prev</a>
+          		<a th:href="@{/(arrow=${arrow - 1}, brand=${brand}, categoryIds=${categoryIds}, itemName=${itemName})}">&larr; prev</a>
           </li>
 ​
           <li class="next" th:if="${arrow + 1 < totalPages}">
-          		<a th:href="@{/(arrow=${arrow + 1}, brand=${brand}, categoryId=${categoryId}, categoryName=${categoryName}, itemName=${itemName})}">next &rarr;</a>
+          		<a th:href="@{/(arrow=${arrow + 1}, brand=${brand}, categoryIds=${categoryIds}, itemName=${itemName})}">next &rarr;</a>
           </li>
         </ul>
       </nav>
@@ -121,11 +121,11 @@
       <nav class="page-nav">
         <ul class="pager">
           <li class="previous" th:if="${arrow > 0}">
-          		<a th:href="@{/(arrow=${arrow - 1}, brand=${brand}, categoryId=${categoryId}, categoryName=${categoryName}, itemName=${itemName})}">&larr; prev</a>
+          		<a th:href="@{/(arrow=${arrow - 1}, brand=${brand}, categoryIds=${categoryIds}, itemName=${itemName})}">&larr; prev</a>
           </li>
 ​
           <li class="next" th:if="${arrow + 1 < totalPages}">
-          		<a th:href="@{/(arrow=${arrow + 1}, brand=${brand}, categoryId=${categoryId}, categoryName=${categoryName}, itemName=${itemName})}">next &rarr;</a>
+          		<a th:href="@{/(arrow=${arrow + 1}, brand=${brand}, categoryIds=${categoryIds}, itemName=${itemName})}">next &rarr;</a>
           </li>
         </ul>
       </nav>
@@ -138,8 +138,7 @@
               <label></label>
               <input type="text" class="form-control" name="arrow"/>
               <input type="hidden" name="brand" th:value="${brand}">
-              <input type="hidden" name="categoryId" th:value="${categoryId}">
-              <input type="hidden" name="categoryName" th:value="${categoryName}">
+              <input type="hidden" name="categoryIds" th:value="${categoryIds}">
               <!-- 総ページ数 -->
               <div class="input-group-addon" th:text="${' / ' + totalPages}">/ 20</div>
             </div>

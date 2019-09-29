@@ -7,6 +7,13 @@ public class BooleanTest {
 		String brand = "", itemName = "";
 		String largeCategory = null, mediumCategory = null, smallCategory = null;
 		String[] categorys = {largeCategory, mediumCategory, smallCategory};
+		
+		StringBuilder sql = new StringBuilder();
+		sql.append("test aa");
+		
+		StringBuilder checkSQL = new StringBuilder(sql);
+		checkSQL.append("   testest");
+		System.out.println(checkSQL);
 
 		boolean key = true;
 
