@@ -98,91 +98,84 @@ public class ShowItemListService {
 	}
 
 
-	public Integer countPage() {// 全件検索のページ数
-		return itemRepository.countPage();
-	}
-	public Integer countPageName(String itemName) {// 商品のあいまい検索
-		int page = itemRepository.countPageName(("%"+itemName+"%"));
-		page = countPlasPage(page);
-		return page;
-	}
-	public Integer countPageBrand(String brand) {// ブランド名のあいまい検索
-		int page = itemRepository.countPageBrand(("%"+brand+"%"));
-		page = countPlasPage(page);
-		return page;
-	}
-	public Integer countPageNameBrand(String itemName, String brand) {// 商品名とブランド名のあいまい検索
-		int page = itemRepository.countPageNameBrand(("%"+itemName+"%"), ("%"+ brand +"%"));
-		page = countPlasPage(page);
-		return page;
-	}
+	public Integer getCountPage(String itemName, Integer[] categorys, String brand) {
 
+		if (itemName != null && categorys[2] != null && brand != null) {// 商品名 + 大中小カテゴリ + ブランド名
+			int page = itemRepository.countPageNameSmallBrand(("%"+itemName+"%"), categorys[2], ("%"+brand+"%"));
+			return countPlasPage(page);
+		}
 
-	public Integer countPageSmall(Integer small) {// 小カテゴリのみの検索ページ数
-		int page = itemRepository.countPageSmall(small);
-		page = countPlasPage(page);
-		return page;
-	}
-	public Integer countPageMedium(Integer categoryId) {// 中カテゴリのみの検索ページ数
-		int page = itemRepository.countPageMedium(categoryId);
-		page = countPlasPage(page);
-		return page;
-	}
-	public Integer countPageLarge(Integer categoryId) {// 大カテゴリのみの検索ページ数
-		int page = itemRepository.countPageLarge(categoryId);
-		page = countPlasPage(page);
-		return page;
-	}
+		if (itemName != null && categorys[1] != null && brand != null) {// 商品名 + 大中カテゴリ + ブランド名
+			int page = itemRepository.countPageNameMediumBrand(("%"+itemName+"%"), categorys[1], ("%"+brand+"%"));
+			return countPlasPage(page);
+		}
 
+		if (itemName != null && categorys[0] != null && brand != null) {// 商品名 + 大カテゴリ + ブランド名
+			int page = itemRepository.countPageNameLargeBrand(("%"+itemName+"%"), categorys[0], ("%"+brand+"%"));
+			return countPlasPage(page);
+		}
 
-	public Integer countPageNameSmall(String itemName, Integer categoryId) {// 商品名と小カテゴリで検索
-		int page = itemRepository.countPageNameSmall(("%"+itemName+"%"), categoryId);
-		page = countPlasPage(page);
-		return page;
-	}
-	public Integer countPageNameMedium(String itemName, Integer categoryId) {// 商品名と中カテゴリで検索
-		int page = itemRepository.countPageNameMedium(("%"+itemName+"%"), categoryId);
-		page = countPlasPage(page);
-		return page;
-	}
-	public Integer countPageNameLarge(String itemName, Integer categoryId) {// 商品名と大カテゴリで検索
-		int page = itemRepository.countPageNameLarge(("%"+itemName+"%"), categoryId);
-		page = countPlasPage(page);
-		return page;
-	}
+		if (itemName != null && categorys[2] != null) {// 商品名 + 大中小カテゴリ
+			int page = itemRepository.countPageNameSmall(("%"+itemName+"%"), categorys[2]);
+			return countPlasPage(page);
+		}
 
+		if (itemName != null && categorys[1] != null) {// 商品名 + 大中カテゴリ
+			int page = itemRepository.countPageNameMedium(("%"+itemName+"%"), categorys[1]);
+			return countPlasPage(page);
+		}
 
-	public Integer countPageSmallBrand(Integer categoryId, String brand) {// 小カテゴリとブランド名で検索
-		int page = itemRepository.countPageSmallBrand(categoryId, ("%"+brand+"%"));
-		page = countPlasPage(page);
-		return page;
-	}
-	public Integer countPageMediumBrand(Integer categoryId, String brand) {// 中カテゴリとブランド名で検索
-		int page = itemRepository.countPageMediumBrand(categoryId, ("%"+brand+"%"));
-		page = countPlasPage(page);
-		return page;
-	}
-	public Integer countPageLargeBrand(Integer categoryId, String brand) {// 大カテゴリとブランド名で検索
-		int page = itemRepository.countPageLargeBrand(categoryId, ("%"+brand+"%"));
-		page = countPlasPage(page);
-		return page;
-	}
+		if (itemName != null && categorys[0] != null) {// 商品名 + 大カテゴリ
+			int page = itemRepository.countPageNameLarge(("%"+itemName+"%"), categorys[0]);
+			return countPlasPage(page);
+		}
 
+		if (categorys[2] != null && brand != null) {// 大中小カテゴリ + ブランド名
+			int page = itemRepository.countPageSmallBrand(categorys[2], ("%"+brand+"%"));
+			return countPlasPage(page);
+		}
 
-	public Integer countPageNameSmallBrand(String itemName, Integer categoryId, String brand) {// 商品名と小カテゴリとブランド名で検索
-		int page = itemRepository.countPageNameSmallBrand(("%"+itemName+"%"), categoryId, ("%"+brand+"%"));
-		page = countPlasPage(page);
-		return page;
-	}
-	public Integer countPageNameMediumBrand(String itemName, Integer categoryId, String brand) {// 商品名と中カテゴリとブランド名で検索
-		int page = itemRepository.countPageNameMediumBrand(("%"+itemName+"%"), categoryId, ("%"+brand+"%"));
-		page = countPlasPage(page);
-		return page;
-	}
-	public Integer countPageNameLargeBrand(String itemName, Integer categoryId, String brand) {// 商品名と大カテゴリとブランド名で検索
-		int page = itemRepository.countPageNameLargeBrand(("%"+itemName+"%"), categoryId, ("%"+brand+"%"));
-		page = countPlasPage(page);
-		return page;
+		if (categorys[1] != null && brand != null) {// 大中カテゴリ + ブランド名
+			int page = itemRepository.countPageMediumBrand(categorys[1], ("%"+brand+"%"));
+			return countPlasPage(page);
+		}
+
+		if (categorys[0] != null && brand != null) {// 大カテゴリ + ブランド名
+			int page = itemRepository.countPageLargeBrand(categorys[0], ("%"+brand+"%"));
+			return countPlasPage(page);
+		}
+
+		if (itemName != null && brand != null) {// 商品名 + ブランド名 
+			int page = itemRepository.countPageNameBrand(("%"+itemName+"%"), ("%"+ brand +"%"));
+			return countPlasPage(page);
+		}
+
+		if (categorys[2] != null) {// 大中小カテゴリのみ 
+			int page = itemRepository.countPageSmall(categorys[2]);
+			return countPlasPage(page);
+		}
+
+		if (categorys[1] != null) {// 大中カテゴリのみ
+			int page = itemRepository.countPageMedium(categorys[1]);
+			return countPlasPage(page);
+		}
+
+		if (categorys[0] != null) {// 大カテゴリのみ
+			int page = itemRepository.countPageLarge(categorys[0]);
+			return countPlasPage(page);
+		}
+
+		if (brand != null) {// ブランド名のみ
+			int page = itemRepository.countPageBrand(("%"+brand+"%"));
+			return countPlasPage(page);
+		}
+
+		if (itemName != null) {// 商品名のみ
+			int page = itemRepository.countPageName(("%"+itemName+"%"));
+			return countPlasPage(page);
+		}
+
+		return itemRepository.countPage();// 全件検索のページ数
 	}
 
 

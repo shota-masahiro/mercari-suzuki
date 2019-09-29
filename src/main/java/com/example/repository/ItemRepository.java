@@ -73,8 +73,7 @@ public class ItemRepository {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT i.id i_id, i.name i_name, i.condition i_condition, i.category_id i_category_id, i.brand i_brand, i.price i_price, i.shipping i_shipping, i.description i_description,");
 		sql.append("c.id c_id, c.parent_id c_parent_id, c.category_name c_category_name, c.name_all c_name_all, split_part(c.name_all, '/', 1) largeCategory, split_part(c.name_all, '/', 2) mediumCategory, split_part(c.name_all, '/', 3) smallCategory ");
-		sql.append("FROM items i left outer join category c on i.category_id = c.id ");
-		sql.append("WHERE i.id=:id;");
+		sql.append("FROM items i left outer join category c on i.category_id = c.id WHERE i.id=:id;");
 		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
 		List<Item> itemList = template.query(sql.toString(), param, ITEM_CATEGORY_ROW_MAPPER);
 		if (itemList.size() != 0) {
@@ -326,26 +325,20 @@ public class ItemRepository {
 
 
 	public Integer countPageNameLargeBrand(String itemName, Integer categoryId, String brand) {// 商品名と大カテゴリとブランド名の総ページ数を取得
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT (count(id) / 30) + 1 ");
-		sql.append("FROM items i inner join category c on i.category_id = c.id ");
-		sql.append("WHERE i.name LIKE :itemName AND split_part(c.name_all, '/', 1) = :categoryNameLarge AND i.brand LIKE :brand;");
+		StringBuilder sql = new StringBuilder(getCountSQL());
+		sql.append("WHERE i.name LIKE :itemName AND split_part(c.name_all, '/', 1) = (SELECT category_name FROM category WHERE id = :categoryId) AND i.brand LIKE :brand;");
 		SqlParameterSource param = new MapSqlParameterSource().addValue("itemName", itemName).addValue("categoryId", categoryId).addValue("brand", brand);
 		return template.queryForObject(sql.toString(), param, Integer.class);
 	}
 	public Integer countPageNameMediumBrand(String itemName, Integer categoryId, String brand) {// 商品名と中カテゴリとブランド名の総ページ数を取得
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT (count(id) / 30) + 1 ");
-		sql.append("FROM items i inner join category c on i.category_id = c.id ");
-		sql.append("WHERE i.name LIKE :itemName AND (split_part(c.name_all, '/', 1) || '/' || split_part(c.name_all, '/', 2)) = :categoryName AND i.brand LIKE :brand;");
+		StringBuilder sql = new StringBuilder(getCountSQL2());
+		sql.append("WHERE i.name LIKE :itemName AND (split_part(c1.name_all, '/', 1) || '/' || split_part(c1.name_all, '/', 2)) = (SELECT (c2.category_name || '/' || c1.category_name) FROM category c1 LEFT OUTER JOIN category c2 ON c1.parent_id = c2.id WHERE c1.id = :categoryId) AND i.brand LIKE :brand;");
 		SqlParameterSource param = new MapSqlParameterSource().addValue("itemName", itemName).addValue("categoryId", categoryId).addValue("brand", brand);
 		return template.queryForObject(sql.toString(), param, Integer.class);
 	}
 	public Integer countPageNameSmallBrand(String itemName, Integer categoryId, String brand) {// 商品名と小カテゴリとブランド名の総ページ数を取得
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT (count(id) / 30) + 1 ");
-		sql.append("FROM items i inner join category c on i.category_id = c.id ");
-		sql.append("WHERE i.name LIKE :itemName AND (split_part(c.name_all, '/', 1) || '/' || split_part(c.name_all, '/', 2) || '/' || split_part(c.name_all, '/', 3)) = :categoryName AND i.brand LIKE :brand;");
+		StringBuilder sql = new StringBuilder(getCountSQL());
+		sql.append("WHERE i.name LIKE :itemName AND (split_part(c.name_all, '/', 1) || '/' || split_part(c.name_all, '/', 2) || '/' || split_part(c.name_all, '/', 3)) = (SELECT name_all FROM category WHERE id = :categoryId) AND i.brand LIKE :brand;");
 		SqlParameterSource param = new MapSqlParameterSource().addValue("itemName", itemName).addValue("categoryId", categoryId).addValue("brand", brand);
 		return template.queryForObject(sql.toString(), param, Integer.class);
 	}
