@@ -98,82 +98,82 @@ public class ShowItemListController {
 		Integer totalPages = null;
 		boolean key = true;
 
-		//		if (itemName != null && categorys[2] != null && brand != null && key) { //商品名 + 大中小カテゴリ + ブランド名
-		//			totalPages = showItemListService.countPageNameSmallBrand(itemName, categorys[2], brand);
-		//			key = false;
-		//		}
+		if (itemName != null && categorys[2] != null && brand != null && key) {// 商品名 + 大中小カテゴリ + ブランド名
+			totalPages = showItemListService.countPageNameSmallBrand(itemName, categorys[2], brand);
+			key = false;
+		}
 
-		//		if (itemName != null && categorys[1] != null && brand != null && key) { //商品名 + 大中カテゴリ + ブランド名
-		//			totalPages = showItemListService.countPageNameMediumBrandInteger(itemName, categorys[1], brand);
-		//			key = false;
-		//		}
+		if (itemName != null && categorys[1] != null && brand != null && key) {// 商品名 + 大中カテゴリ + ブランド名
+			totalPages = showItemListService.countPageNameMediumBrand(itemName, categorys[1], brand);
+			key = false;
+		}
 
-		//		if (itemName != null && categorys[0] != null && brand != null && key) { //商品名 + 大カテゴリ + ブランド名
-		//			totalPages = showItemListService.countPageNameLargeBrand(itemName, categorys[0], brand);
-		//			key = false;
-		//		}
+		if (itemName != null && categorys[0] != null && brand != null && key) {// 商品名 + 大カテゴリ + ブランド名
+			totalPages = showItemListService.countPageNameLargeBrand(itemName, categorys[0], brand);
+			key = false;
+		}
 
-		if (itemName != null && categorys[2] != null && key) { //商品名 + 大中小カテゴリ
+		if (itemName != null && categorys[2] != null && key) {// 商品名 + 大中小カテゴリ
 			totalPages = showItemListService.countPageNameSmall(itemName, categorys[2]);
 			key = false;
 		}
 
-		if (itemName != null && categorys[1] != null && key) { //商品名 + 大中カテゴリ
+		if (itemName != null && categorys[1] != null && key) {// 商品名 + 大中カテゴリ
 			totalPages = showItemListService.countPageNameMedium(itemName, categorys[1]);
 			key = false;
 		}
 
-		if (itemName != null && categorys[0] != null && key) { //商品名 + 大カテゴリ
+		if (itemName != null && categorys[0] != null && key) {// 商品名 + 大カテゴリ
 			totalPages = showItemListService.countPageNameLarge(itemName, categorys[0]);
 			key = false;
 		}
 
-		//		if (categorys[2] != null && brand != null && key) { //大中小カテゴリ + ブランド名
-		//			totalPages = showItemListService.countPageSmallBrand(brand, categorys[2]);
-		//			key = false;
-		//		}
+		if (categorys[2] != null && brand != null && key) {// 大中小カテゴリ + ブランド名
+			totalPages = showItemListService.countPageSmallBrand(categorys[2], brand);
+			key = false;
+		}
 
-		//		if (categorys[1] != null && brand != null && key) { //大中カテゴリ + ブランド名
-		//			totalPages = showItemListService.countPageMediumBrandInteger(brand, parentId);
-		//			key = false;
-		//		}
+		if (categorys[1] != null && brand != null && key) {// 大中カテゴリ + ブランド名
+			totalPages = showItemListService.countPageMediumBrand(categorys[1], brand);
+			key = false;
+		}
 
-		//		if (categorys[0] != null && brand != null && key) { //大カテゴリ + ブランド名
-		//			totalPages = showItemListService.countPageLargeBrand(brand, categorys[0]);
-		//			key = false;
-		//		}
+		if (categorys[0] != null && brand != null && key) {// 大カテゴリ + ブランド名
+			totalPages = showItemListService.countPageLargeBrand(categorys[0], brand);
+			key = false;
+		}
 
-		if (itemName != null && brand != null && key) { //商品名 + ブランド名 ok 
+		if (itemName != null && brand != null && key) {// 商品名 + ブランド名 
 			totalPages = showItemListService.countPageNameBrand(itemName, brand);
 			key = false;
 		}
 
-		if (categorys[2] != null && key) { //大中小カテゴリのみ ok 
+		if (categorys[2] != null && key) {// 大中小カテゴリのみ 
 			totalPages = showItemListService.countPageSmall(categorys[2]);
 			key = false;
 		}
-		
-		if (categorys[1] != null && key) { //大中カテゴリのみ ok
+
+		if (categorys[1] != null && key) {// 大中カテゴリのみ
 			totalPages = showItemListService.countPageMedium(categorys[1]);
 			key = false;
 		}
-		
-		if (categorys[0] != null && key) { //大カテゴリのみ ok
+
+		if (categorys[0] != null && key) {// 大カテゴリのみ
 			totalPages = showItemListService.countPageLarge(categorys[0]);
 			key = false;
 		}
 
-		if (brand != null && key) { //ブランド名のみ ok
+		if (brand != null && key) {// ブランド名のみ
 			totalPages = showItemListService.countPageBrand(brand);
 			key = false;
 		}
-		
-		if (itemName != null && key) { //商品名のみ ok
+
+		if (itemName != null && key) {// 商品名のみ
 			totalPages = showItemListService.countPageName(itemName);
 			key = false;
 		}
 
-		if (key) { //全件検索 ok
+		if (key) {// 全件検索
 			totalPages = showItemListService.countPage();
 		}
 

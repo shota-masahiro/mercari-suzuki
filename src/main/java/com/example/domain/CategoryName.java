@@ -17,6 +17,9 @@ public class CategoryName {
 	/** カテゴリ小ネーム */
 	private String categorySmallName;
 
+	/** カテゴリ大中小ネーム */
+	private String categoryName;
+
 	/** 商品ID */
 	private Integer id;
 
@@ -29,13 +32,22 @@ public class CategoryName {
 	}
 
 
-	public CategoryName(String categoryLargeName, String categoryMediumName, String categorySmallName, Integer id,
-			Integer parentId) {
+	public CategoryName(String categoryLargeName, String categoryMediumName, String categorySmallName,
+			String categoryName, Integer id, Integer parentId) {
 		this.categoryLargeName = categoryLargeName;
 		this.categoryMediumName = categoryMediumName;
 		this.categorySmallName = categorySmallName;
+		this.categoryName = categoryName;
 		this.id = id;
 		this.parentId = parentId;
+	}
+
+
+	public String getCategoryName() {
+		return categoryName;
+	}
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
 	}
 
 
@@ -82,7 +94,8 @@ public class CategoryName {
 	@Override
 	public String toString() {
 		return "CategoryName [categoryLargeName=" + categoryLargeName + ", categoryMediumName=" + categoryMediumName
-				+ ", categorySmallName=" + categorySmallName + ", id=" + id + ", parentId=" + parentId + "]";
+				+ ", categorySmallName=" + categorySmallName + ", categoryName=" + categoryName + ", id=" + id
+				+ ", parentId=" + parentId + "]";
 	}
 
 }
