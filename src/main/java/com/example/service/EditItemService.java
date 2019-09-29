@@ -30,7 +30,7 @@ public class EditItemService {
 		form.setJoinCategory();
 		BeanUtils.copyProperties(form, item);
 
-		int categoryId = itemRepository.findByCategoryAllName(form.getCategory());
+		int categoryId = itemRepository.findByCategoryAllName(form.getIntegerSmallCategory());
 		item.setCategoryId(categoryId);
 
 		item.setId(form.getIntegerId());

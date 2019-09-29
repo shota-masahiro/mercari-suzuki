@@ -70,10 +70,8 @@ public class ItemRepository {
 	 * @return   itemオブジェクト
 	 */
 	public Item findById(Integer id) {
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT i.id i_id, i.name i_name, i.condition i_condition, i.category_id i_category_id, i.brand i_brand, i.price i_price, i.shipping i_shipping, i.description i_description,");
-		sql.append("c.id c_id, c.parent_id c_parent_id, c.category_name c_category_name, c.name_all c_name_all, split_part(c.name_all, '/', 1) largeCategory, split_part(c.name_all, '/', 2) mediumCategory, split_part(c.name_all, '/', 3) smallCategory ");
-		sql.append("FROM items i left outer join category c on i.category_id = c.id WHERE i.id=:id;");
+		StringBuilder sql = new StringBuilder(getSQL());
+		sql.append("WHERE i.id = :id;");
 		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
 		List<Item> itemList = template.query(sql.toString(), param, ITEM_CATEGORY_ROW_MAPPER);
 		if (itemList.size() != 0) {
@@ -384,13 +382,13 @@ public class ItemRepository {
 	/**
 	 * カテゴリIDを取得します.
 	 * 
-	 * @param categoryName カテゴリ名(大/中/小)
+	 * @param categoryId カテゴリ名(大/中/小)
 	 * @return             カテゴリID
 	 */
-	public Integer findByCategoryAllName(String categoryName) {
+	public Integer findByCategoryAllName(Integer categoryId) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT id FROM category WHERE name_all = :categoryName;");
-		SqlParameterSource param = new MapSqlParameterSource().addValue("categoryName", categoryName);
+		sql.append("SELECT id FROM category WHERE id = :categoryId;");
+		SqlParameterSource param = new MapSqlParameterSource().addValue("categoryId", categoryId);
 		return template.queryForObject(sql.toString(), param, Integer.class);
 	}
 

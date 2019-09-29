@@ -127,7 +127,9 @@ public class AddEditItemForm {
 		this.mediumCategory = mediumCategory;
 	}
 
-
+	public Integer getIntegerSmallCategory() {
+		return Integer.parseInt(this.smallCategory);
+	}
 	public String getSmallCategory() {
 		return smallCategory;
 	}
