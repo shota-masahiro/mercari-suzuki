@@ -52,7 +52,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		    		"/register",
 		    		"/register/userRegister",
 		    		"/",
-		    		"/detail/")
+		    		"/detail/",
+		    		"/test")
 		    .permitAll()
 		    .anyRequest().authenticated(); //上記以外のパスは認証が必要
 		

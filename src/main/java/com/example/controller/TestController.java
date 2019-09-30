@@ -1,13 +1,10 @@
 package com.example.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.domain.CategoryName;
-import com.example.repository.ItemRepository;
+import com.example.repository.TestRepository;
 
 /**
  * 動作確認用
@@ -18,16 +15,20 @@ import com.example.repository.ItemRepository;
 @Controller
 @RequestMapping("/test")
 public class TestController {
-	
+
 	@Autowired
-	private ItemRepository itemRepository;
-	
-	// 動作確認用メソッド
+	private TestRepository testRepository;
+
 	@RequestMapping("")
 	public String index() {
-		List<CategoryName> cList = itemRepository.categoryLargeText();
-		System.out.println(cList);
+
+		Integer arrow = 0;
+		String itemName = "Nike";
+		String nameAll = "Men";
+		String brand = "Nike";
+		testRepository.search(arrow, itemName, nameAll, brand).forEach(System.out::println);
+
 		return "test";
 	}
-	
+
 }

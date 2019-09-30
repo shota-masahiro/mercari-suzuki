@@ -90,7 +90,8 @@ public class ItemRepository {
 	 */
 	public List<Item> findByPage(Integer arrow) {// 全件検索用のメソッド
 		StringBuilder sql = new StringBuilder(getSQL());
-		sql.append("ORDER BY i.id LIMIT 30 OFFSET :arrow;");
+//		sql.append("ORDER BY i.id LIMIT 30 OFFSET :arrow;");
+		sql.append("LIMIT 30 OFFSET :arrow;");
 		SqlParameterSource param = new MapSqlParameterSource().addValue("arrow", arrow);
 		List<Item> itemList = template.query(sql.toString(), param, ITEM_CATEGORY_ROW_MAPPER);
 		return itemList;

@@ -27,7 +27,6 @@ public class AddEditItemForm {
 	private String category;
 
 	/** ブランド */
-	@NotBlank(message = "ブランド名を入力してください")
 	private String brand;
 
 	/** 商品状態 */

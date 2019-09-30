@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.example.domain.CategoryName;
 import com.example.domain.CategorySearchForm;
 import com.example.domain.Item;
+import com.example.service.CountPageService;
 import com.example.service.ShowItemListService;
 
 /**
@@ -30,6 +31,9 @@ public class ShowItemListController {
 
 	@Autowired
 	private HttpSession session;
+	
+	@Autowired
+	private CountPageService countPageService;
 
 	@ModelAttribute
 	public CategorySearchForm setUpCategorySearchForm() {
@@ -48,12 +52,12 @@ public class ShowItemListController {
 	@RequestMapping("")
 	public String index(Integer arrow, String brand, Model model,
 			Integer largeCategory, Integer mediumCategory, Integer smallCategory,
-			Integer[] categoryIds, CategorySearchForm form, String itemName
-			) {
+			Integer[] categoryIds, CategorySearchForm form, String itemName) {
 
 		Integer checkCategory = (Integer) session.getAttribute("checkCategory");
-		//		if (checkCategory == null) {}
-		setCategory();
+		if (checkCategory == null) {
+			setCategory();
+		}
 
 		if (form.getItemNameForm() != null && !"".equals(form.getItemNameForm())) {
 			itemName = form.getItemNameForm();
@@ -92,11 +96,15 @@ public class ShowItemListController {
 		if ("".equals(itemName)) {
 			itemName = null;
 		}
+		
+//		countPageService.run(itemName, categoryIds, brand, model);
+		
 		List<Item> itemList = showItemListService.findByPage(arrow, brand, categoryIds, itemName);
 		model.addAttribute("itemList", itemList);
 		model.addAttribute("arrow", arrow);
 		model.addAttribute("brand", brand);
 		model.addAttribute("itemName", itemName);
+		
 
 		Integer totalPages = showItemListService.getCountPage(itemName, categoryIds, brand);
 		model.addAttribute("totalPages", totalPages);
