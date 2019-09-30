@@ -31,9 +31,6 @@ public class ShowItemListController {
 
 	@Autowired
 	private HttpSession session;
-	
-	@Autowired
-	private CountPageService countPageService;
 
 	@ModelAttribute
 	public CategorySearchForm setUpCategorySearchForm() {
@@ -96,15 +93,13 @@ public class ShowItemListController {
 		if ("".equals(itemName)) {
 			itemName = null;
 		}
-		
-//		countPageService.run(itemName, categoryIds, brand, model);
-		
+
 		List<Item> itemList = showItemListService.findByPage(arrow, brand, categoryIds, itemName);
 		model.addAttribute("itemList", itemList);
 		model.addAttribute("arrow", arrow);
 		model.addAttribute("brand", brand);
 		model.addAttribute("itemName", itemName);
-		
+
 
 		Integer totalPages = showItemListService.getCountPage(itemName, categoryIds, brand);
 		model.addAttribute("totalPages", totalPages);

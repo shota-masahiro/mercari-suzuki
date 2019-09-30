@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.domain.TestNameAll;
 import com.example.repository.TestRepository;
 
 /**
@@ -24,8 +25,11 @@ public class TestController {
 
 		Integer arrow = 0;
 		String itemName = "Nike";
-		String nameAll = "Men";
 		String brand = "Nike";
+
+		Integer[] categoryIds = {15, null, null};
+		TestNameAll nameAll = testRepository.searchName(categoryIds);
+
 		testRepository.search(arrow, itemName, nameAll, brand).forEach(System.out::println);
 
 		return "test";
