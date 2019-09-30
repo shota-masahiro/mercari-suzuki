@@ -3,6 +3,17 @@ package com.example;
 public class BooleanTest {
 
 	public static void main(String[] args) {
+		
+		
+		String nameAll = "Men/Top/PPP";
+		
+		String largeName = nameAll.split("/")[0];
+		String mediumName = nameAll.split("/")[1];
+		String smallName = nameAll.split("/")[2];
+		System.out.println("largeName:"+largeName);
+		System.out.println("mediumName:"+mediumName);
+		System.out.println("smallName:"+smallName);
+		
 
 		String brand = "", itemName = "";
 		String largeCategory = null, mediumCategory = null, smallCategory = null;

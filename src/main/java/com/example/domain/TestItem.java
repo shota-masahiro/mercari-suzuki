@@ -3,16 +3,16 @@ package com.example.domain;
 public class TestItem {
 
 	/** itemID */
-	private Integer id;
+	private Integer itemId;
 
 	/** 商品名 */
-	private String name;
+	private String itemName;
 
 	/** 商品状態 */
 	private Integer condition;
 
 	/** カテゴリー */
-	private Integer category;
+	private Integer categoryId;
 
 	/** ブランド */
 	private String brand;
@@ -26,6 +26,15 @@ public class TestItem {
 	/** 商品説明 */
 	private String description;
 
+	/** 大カテゴリID */
+	private Integer largeCategoryId;
+
+	/** 中カテゴリID */
+	private Integer mediumCategoryId;
+
+	/** 小カテゴリID */
+	private Integer smallCategoryId;
+
 	/** カテゴリー大中小 */
 	private String nameAll;
 
@@ -35,33 +44,48 @@ public class TestItem {
 	}
 
 
-	public TestItem(Integer id, String name, Integer condition, Integer category, String brand, Integer price,
-			Integer shipping, String description, String nameAll) {
-		this.id = id;
-		this.name = name;
+	public TestItem(Integer itemId, String itemName, Integer condition, Integer categoryId, String brand, Integer price,
+			Integer shipping, String description, Integer largeCategoryId, Integer mediumCategoryId,
+			Integer smallCategoryId, String nameAll) {
+		this.itemId = itemId;
+		this.itemName = itemName;
 		this.condition = condition;
-		this.category = category;
+		this.categoryId = categoryId;
 		this.brand = brand;
 		this.price = price;
 		this.shipping = shipping;
 		this.description = description;
+		this.largeCategoryId = largeCategoryId;
+		this.mediumCategoryId = mediumCategoryId;
+		this.smallCategoryId = smallCategoryId;
 		this.nameAll = nameAll;
 	}
 
 
-	public Integer getId() {
-		return id;
+	public String getLargeCategoryName() {
+		return this.nameAll.split("/")[0];
 	}
-	public void setId(Integer id) {
-		this.id = id;
+	public String getMediumCategoryName() {
+		return this.nameAll.split("/")[1];
+	}
+	public String getSmallCategoryName() {
+		return this.nameAll.split("/")[2];
 	}
 
 
-	public String getName() {
-		return name;
+	public Integer getItemId() {
+		return itemId;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setItemId(Integer itemId) {
+		this.itemId = itemId;
+	}
+
+
+	public String getItemName() {
+		return itemName;
+	}
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
 	}
 
 
@@ -73,11 +97,11 @@ public class TestItem {
 	}
 
 
-	public Integer getCategory() {
-		return category;
+	public Integer getCategoryId() {
+		return categoryId;
 	}
-	public void setCategory(Integer category) {
-		this.category = category;
+	public void setCategoryId(Integer categoryId) {
+		this.categoryId = categoryId;
 	}
 
 
@@ -113,6 +137,30 @@ public class TestItem {
 	}
 
 
+	public Integer getLargeCategoryId() {
+		return largeCategoryId;
+	}
+	public void setLargeCategoryId(Integer largeCategoryId) {
+		this.largeCategoryId = largeCategoryId;
+	}
+
+
+	public Integer getMediumCategoryId() {
+		return mediumCategoryId;
+	}
+	public void setMediumCategoryId(Integer mediumCategoryId) {
+		this.mediumCategoryId = mediumCategoryId;
+	}
+
+
+	public Integer getSmallCategoryId() {
+		return smallCategoryId;
+	}
+	public void setSmallCategoryId(Integer smallCategoryId) {
+		this.smallCategoryId = smallCategoryId;
+	}
+
+
 	public String getNameAll() {
 		return nameAll;
 	}
@@ -123,9 +171,10 @@ public class TestItem {
 
 	@Override
 	public String toString() {
-		return "TestForm [id=" + id + ", name=" + name + ", condition=" + condition + ", category=" + category
-				+ ", brand=" + brand + ", price=" + price + ", shipping=" + shipping + ", description=" + description
-				+ ", nameAll=" + nameAll + "]";
+		return "TestItem [itemId=" + itemId + ", itemName=" + itemName + ", condition=" + condition + ", categoryId="
+				+ categoryId + ", brand=" + brand + ", price=" + price + ", shipping=" + shipping + ", description="
+				+ description + ", largeCategoryId=" + largeCategoryId + ", mediumCategoryId=" + mediumCategoryId
+				+ ", smallCategoryId=" + smallCategoryId + ", nameAll=" + nameAll + "]";
 	}
 
 }

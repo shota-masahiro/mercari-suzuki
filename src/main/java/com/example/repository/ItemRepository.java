@@ -3,6 +3,7 @@ package com.example.repository;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Repository;
 
 import com.example.domain.CategoryName;
 import com.example.domain.Item;
+import com.example.domain.TestItem;
+import com.example.domain.TestNameAll;
 
 /**
  * itemsテーブルを操作するリポジトリ.
@@ -24,6 +27,101 @@ public class ItemRepository {
 
 	@Autowired
 	private NamedParameterJdbcTemplate template;
+
+	private static final RowMapper<TestItem> ITEM_ROW_MAPPER = new BeanPropertyRowMapper<>(TestItem.class);
+
+	private static final RowMapper<TestNameAll> NAME_ALL_ROW_MAPPER = new BeanPropertyRowMapper<>(TestNameAll.class);
+
+
+	//検索実行用のメソッド カテゴリー大中小の値を取得
+	public TestNameAll searchName(Integer[] categoryIds) {
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		if (categoryIds[0] == null) {
+			return null;
+		}
+		String sql = createNameAllSQL(categoryIds, params);
+		return template.queryForObject(sql, params, NAME_ALL_ROW_MAPPER);
+	}
+	private String createNameAllSQL(Integer[] categoryIds, MapSqlParameterSource params) {// SQLを整形する
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT c1.category_name largeName, c2.category_name midiumName, c2.name_all smallName ");
+		sql.append("FROM category c1 LEFT OUTER JOIN category c2 ON c1.id = c2.parent_id ");
+
+		if (categoryIds[2] != null) {
+			sql.append("WHERE c2.id=:smallId;");
+			params.addValue("smallId", categoryIds[2]);
+		} else if (categoryIds[1] != null) {
+			sql.append("WHERE c1.id=:largeId AND c2.id=:midiumId;");
+			params.addValue("largeId", categoryIds[0]).addValue("midiumId", categoryIds[1]);
+		} else if (categoryIds[0] != null) {
+			StringBuilder sql2 = new StringBuilder("SELECT category_name largeName FROM category WHERE id=:largeId;");
+			params.addValue("largeId", categoryIds[0]);
+			return sql2.toString();
+		}
+		return sql.toString();
+	}
+
+
+	public List<TestItem> search(Integer arrow, String itemName, TestNameAll nameAll, String brand, String countPage) {// 検索の実行メソッド 商品一覧を取得する
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		String sql = createSQL(arrow, itemName, nameAll, brand, countPage, params);
+		return template.query(sql, params, ITEM_ROW_MAPPER);
+	}
+	public Integer searchCount(Integer arrow, String itemName, TestNameAll nameAll, String brand, String countPage) {// 検索の実行メソッド ページ数を取得する
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		String sql = createSQL(arrow, itemName, nameAll, brand, countPage, params);
+		return template.queryForObject(sql, params, Integer.class);
+	}
+	private String createSQL(Integer arrow, String itemName, TestNameAll nameAll, String brand, String countPage, MapSqlParameterSource params) {// SQLを整形する
+		StringBuilder sql = new StringBuilder();
+
+		sql.append("SELECT i.id itemId, i.name itemName, i.condition condition, i.category_id categoryId, i.brand brand, i.price price, i.shipping shipping, i.description description, ");
+		sql.append("c.id largeCategoryId, c.parent_id mediumCategoryId, c2.parent_id smallCategoryId, c.name_all nameAll ");
+		sql.append("FROM items i LEFT OUTER JOIN category c ON i.category_id = c.id ");
+		sql.append("LEFT OUTER JOIN category c2 ON c.parent_id = c2.id ");
+		sql.append("WHERE 1=1 ");
+
+		// 商品名(あいまい検索)
+		if (itemName != null) {
+			sql.append("AND i.name LIKE :itemName ");
+			params.addValue("itemName", "%"+itemName+"%");
+		}
+
+		//カテゴリー名
+		if (nameAll != null) {
+			if (nameAll.getSmallName() != null) {
+				sql.append("AND c.name_all LIKE :nameAll ");
+				params.addValue("nameAll", nameAll.getSmallName()+"%");
+			} else if (nameAll.getMidiumName() != null) {
+				sql.append("AND c.name_all LIKE :nameAll ");
+				params.addValue("nameAll", nameAll.getMidiumName()+"%");
+			}
+			sql.append("AND c.name_all LIKE :nameAll ");
+			params.addValue("nameAll", nameAll.getLargeName()+"%");
+
+		}
+
+		//ブランド名
+		if (brand != null) {
+			sql.append("AND i.brand LIKE :brand ");
+			params.addValue("brand", brand);
+		}
+
+		//ページ数を取得
+		if ("count".equals(countPage)) {
+			String countSQL = sql.toString();
+			countSQL = countSQL.replaceFirst("SELECT.+FROM", "SELECT count(*) FROM");
+			return countSQL;
+		} else {
+			sql.append("ORDER BY i.id ");
+			sql.append("LIMIT 30 OFFSET :arrow;");
+			params.addValue("arrow", arrow);
+		}
+
+		return sql.toString();
+	}
+
+
 
 	/**
 	 * Itemオブジェクトを生成するローマッパー.
@@ -90,7 +188,7 @@ public class ItemRepository {
 	 */
 	public List<Item> findByPage(Integer arrow) {// 全件検索用のメソッド
 		StringBuilder sql = new StringBuilder(getSQL());
-//		sql.append("ORDER BY i.id LIMIT 30 OFFSET :arrow;");
+		//		sql.append("ORDER BY i.id LIMIT 30 OFFSET :arrow;");
 		sql.append("LIMIT 30 OFFSET :arrow;");
 		SqlParameterSource param = new MapSqlParameterSource().addValue("arrow", arrow);
 		List<Item> itemList = template.query(sql.toString(), param, ITEM_CATEGORY_ROW_MAPPER);

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.domain.CategoryName;
 import com.example.domain.Item;
+import com.example.domain.TestItem;
+import com.example.domain.TestNameAll;
 import com.example.repository.ItemRepository;
 
 /**
@@ -20,6 +22,19 @@ public class ShowItemListService {
 
 	@Autowired
 	private ItemRepository itemRepository;
+
+
+	public List<TestItem> search(Integer arrow, String itemName, TestNameAll nameAll, String brand, String countPage) {
+		return itemRepository.search(arrow, itemName, nameAll, brand, countPage);
+	}
+
+	public Integer searchCount(Integer arrow, String itemName, TestNameAll nameAll, String brand, String countPage) {
+		return itemRepository.searchCount(arrow, itemName, nameAll, brand, countPage);
+	}
+
+	public TestNameAll searchName(Integer[] categoryIds) {
+		return itemRepository.searchName(categoryIds);
+	}
 
 
 	/**

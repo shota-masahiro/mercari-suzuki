@@ -100,12 +100,12 @@
         <tbody>
 
           <tr th:each="item:${itemList}">
-            <td class="item-name"><a th:href="@{'/detail/?id=' + ${item.id}}"><span th:text="${item.name}"></span></a></td>
+            <td class="item-name"><a th:href="@{'/detail/?id=' + ${item.itemId}}"><span th:text="${item.itemName}"></span></a></td>
             <td class="item-price" th:text="${item.price}">dummy price</td>
             <td class="item-category">
-            	<a th:href="@{/(arrow=0, largeCategory=${item.categoryId})}"><span th:text="${item.largeCategory}"></span></a> / 
-            	<a th:href="@{/(arrow=0, largeCategory=${item.categoryId}, mediumCategory=${item.parentId})}"><span th:text="${item.mediumCategory}"></span></a> / 
-            	<a th:href="@{/(arrow=0, largeCategory=${item.categoryId}, mediumCategory=${item.parentId}, smallCategory=${item.smallCategoryId})}"><span th:text="${item.smallCategory}"></span></a>
+            	<a th:href="@{/(arrow=0, largeCategory=${item.largeCategoryId})}"><span th:text="${item.getLargeCategoryName()}"></span></a> / 
+            	<a th:href="@{/(arrow=0, largeCategory=${item.largeCategoryId}, mediumCategory=${item.mediumCategoryId})}"><span th:text="${item.getMediumCategoryName()}"></span></a> / 
+            	<a th:href="@{/(arrow=0, largeCategory=${item.largeCategoryId}, mediumCategory=${item.mediumCategoryId}, smallCategory=${item.smallCategoryId})}"><span th:text="${item.getSmallCategoryName()}"></span></a>
             </td>
             <td class="item-brand"><a th:href="@{/(brand=${item.brand})}"><span th:text="${item.brand}"></span></a></td>
             <td class="item-condition" th:text="${item.condition}">dummy condition</td>

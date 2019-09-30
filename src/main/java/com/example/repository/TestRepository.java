@@ -27,7 +27,7 @@ public class TestRepository {
 	@Autowired
 	private NamedParameterJdbcTemplate template;
 
-	//検索実行用のメソッド
+	//検索実行用のメソッド カテゴリー大中小の値を取得
 	public TestNameAll searchName(Integer[] categoryIds) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		if (categoryIds[0] == null) {
@@ -58,16 +58,22 @@ public class TestRepository {
 	}
 
 
-
-	//検索の実行メソッド
-	public List<TestItem> search(Integer arrow, String itemName, TestNameAll nameAll, String brand) {
+	//検索の実行メソッド 商品一覧を取得する
+	public List<TestItem> search(Integer arrow, String itemName, TestNameAll nameAll, String brand, String countPage) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
-		String sql = createSQL(arrow, itemName, nameAll, brand, params);
+		String sql = createSQL(arrow, itemName, nameAll, brand, countPage, params);
 		return template.query(sql, params, ITEM_ROW_MAPPER);
 	}
 
+	//検索の実行メソッド 商品数を取得する
+	public Integer searchCount(Integer arrow, String itemName, TestNameAll nameAll, String brand, String countPage) {
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		String sql = createSQL(arrow, itemName, nameAll, brand, countPage, params);
+		return template.queryForObject(sql, params, Integer.class);
+	}
+
 	//SQLを整形する
-	private String createSQL(Integer arrow, String itemName, TestNameAll nameAll, String brand, MapSqlParameterSource params) {
+	private String createSQL(Integer arrow, String itemName, TestNameAll nameAll, String brand, String countPage, MapSqlParameterSource params) {
 		StringBuilder sql = new StringBuilder();
 
 		sql.append("SELECT i.id as id, i.name as name, condition, category_id, brand, price, shipping, description, name_all ");
@@ -81,7 +87,7 @@ public class TestRepository {
 		}
 
 		//カテゴリー名
-		if (nameAll.getLargeName() != null) {
+		if (nameAll != null) {
 			if (nameAll.getSmallName() != null) {
 				sql.append("AND name_all LIKE :nameAll ");
 				params.addValue("nameAll", nameAll.getSmallName()+"%");
@@ -100,9 +106,16 @@ public class TestRepository {
 			params.addValue("brand", brand);
 		}
 
-		sql.append("ORDER BY i.id ");
-		sql.append("LIMIT 30 OFFSET :arrow;");
-		params.addValue("arrow", arrow);
+		//ページ数を取得
+		if ("count".equals(countPage)) {
+			String countSQL = sql.toString();
+			countSQL = countSQL.replaceFirst("SELECT.+FROM", "SELECT count(*) FROM");
+			return countSQL;
+		} else {
+			sql.append("ORDER BY i.id ");
+			sql.append("LIMIT 30 OFFSET :arrow;");
+			params.addValue("arrow", arrow);
+		}
 
 		return sql.toString();
 	}

@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.domain.CategoryName;
 import com.example.domain.CategorySearchForm;
-import com.example.domain.Item;
-import com.example.service.CountPageService;
+import com.example.domain.TestItem;
+import com.example.domain.TestNameAll;
 import com.example.service.ShowItemListService;
 
 /**
@@ -37,6 +37,8 @@ public class ShowItemListController {
 		return new CategorySearchForm();
 	}
 
+	/** ページ数を割り出すために使用する値 */
+	private static final int ROW_PAR_PAGE = 30;
 
 	/**
 	 * 商品一覧画面を出力します.
@@ -94,15 +96,22 @@ public class ShowItemListController {
 			itemName = null;
 		}
 
-		List<Item> itemList = showItemListService.findByPage(arrow, brand, categoryIds, itemName);
+		String countPage = "";
+		TestNameAll nameAll = showItemListService.searchName(categoryIds);
+		List<TestItem> itemList = showItemListService.search(arrow, itemName, nameAll, brand, countPage);
+		System.out.println("itemList:"+itemList);
 		model.addAttribute("itemList", itemList);
 		model.addAttribute("arrow", arrow);
 		model.addAttribute("brand", brand);
 		model.addAttribute("itemName", itemName);
 
-
-		Integer totalPages = showItemListService.getCountPage(itemName, categoryIds, brand);
-		model.addAttribute("totalPages", totalPages);
+		countPage = "count";
+		Integer totalPages = showItemListService.searchCount(arrow, itemName, nameAll, brand, countPage);
+		int maxPage = totalPages / ROW_PAR_PAGE;
+		if (totalPages % ROW_PAR_PAGE != 0) {
+			maxPage++;
+		}
+		model.addAttribute("totalPages", maxPage);
 		model.addAttribute("categoryIds", categoryIds);
 
 		return "list";
