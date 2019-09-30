@@ -18,7 +18,7 @@ public class TestItem {
 	private String brand;
 
 	/** 料金 */
-	private Integer price;
+	private double price;
 
 	/** 配送手段 */
 	private Integer shipping;
@@ -44,7 +44,7 @@ public class TestItem {
 	}
 
 
-	public TestItem(Integer itemId, String itemName, Integer condition, Integer categoryId, String brand, Integer price,
+	public TestItem(Integer itemId, String itemName, Integer condition, Integer categoryId, String brand, double price,
 			Integer shipping, String description, Integer largeCategoryId, Integer mediumCategoryId,
 			Integer smallCategoryId, String nameAll) {
 		this.itemId = itemId;
@@ -113,10 +113,10 @@ public class TestItem {
 	}
 
 
-	public Integer getPrice() {
+	public double getPrice() {
 		return price;
 	}
-	public void setPrice(Integer price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
 

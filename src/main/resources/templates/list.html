@@ -101,7 +101,7 @@
 
           <tr th:each="item:${itemList}">
             <td class="item-name"><a th:href="@{'/detail/?id=' + ${item.itemId}}"><span th:text="${item.itemName}"></span></a></td>
-            <td class="item-price" th:text="${item.price}">dummy price</td>
+            <td class="item-price" th:text="${'$' + item.price}">dummy price</td>
             <td class="item-category">
             	<a th:href="@{/(arrow=0, largeCategory=${item.largeCategoryId})}"><span th:text="${item.getLargeCategoryName()}"></span></a> / 
             	<a th:href="@{/(arrow=0, largeCategory=${item.largeCategoryId}, mediumCategory=${item.mediumCategoryId})}"><span th:text="${item.getMediumCategoryName()}"></span></a> / 
