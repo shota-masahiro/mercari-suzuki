@@ -17,6 +17,14 @@ public class TestNameAll {
 	}
 
 
+	public String getLargeMediumName() {
+		return this.largeName+"/"+this.midiumName;
+	}
+	public String getLargeMediumSmallName() {
+		return this.largeName+"/"+this.midiumName+"/"+this.smallName;
+	}
+
+
 	public String getLargeName() {
 		return largeName;
 	}

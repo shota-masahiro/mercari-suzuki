@@ -76,7 +76,7 @@ public class ItemRepository {
 		StringBuilder sql = new StringBuilder();
 
 		sql.append("SELECT i.id itemId, i.name itemName, i.condition condition, i.category_id categoryId, i.brand brand, i.price price, i.shipping shipping, i.description description, ");
-		sql.append("c.id largeCategoryId, c.parent_id mediumCategoryId, c2.parent_id smallCategoryId, c.name_all nameAll ");
+		sql.append("c2.parent_id largeCategoryId, c.parent_id mediumCategoryId, c.id smallCategoryId, c.name_all nameAll ");
 		sql.append("FROM items i LEFT OUTER JOIN category c ON i.category_id = c.id ");
 		sql.append("LEFT OUTER JOIN category c2 ON c.parent_id = c2.id ");
 		sql.append("WHERE 1=1 ");
@@ -91,10 +91,10 @@ public class ItemRepository {
 		if (nameAll != null) {
 			if (nameAll.getSmallName() != null) {
 				sql.append("AND c.name_all LIKE :nameAll ");
-				params.addValue("nameAll", nameAll.getSmallName()+"%");
+				params.addValue("nameAll", nameAll.getLargeMediumSmallName());
 			} else if (nameAll.getMidiumName() != null) {
 				sql.append("AND c.name_all LIKE :nameAll ");
-				params.addValue("nameAll", nameAll.getMidiumName()+"%");
+				params.addValue("nameAll", nameAll.getLargeMediumName()+"%");
 			}
 			sql.append("AND c.name_all LIKE :nameAll ");
 			params.addValue("nameAll", nameAll.getLargeName()+"%");
