@@ -31,12 +31,12 @@
         <tbody>
           <tr>
             <th>ID</th>
-            <td th:text="${item.id}">1</td>
+            <td th:text="${item.itemId}">1</td>
           </tr>
 
           <tr>
             <th>name</th>
-            <td th:text="${item.name}">Razer BlackWidow Chroma Keyboard</td>
+            <td th:text="${item.itemName}">Razer BlackWidow Chroma Keyboard</td>
           </tr>
 
           <tr>
@@ -46,7 +46,7 @@
 
           <tr>
             <th>category</th>
-            <td th:text="${item.category}">Electronics / Computers &amp; Tablets / Components &amp; Parts</td>
+            <td th:text="${item.nameAll}">Electronics / Computers &amp; Tablets / Components &amp; Parts</td>
           </tr>
 
           <tr>
@@ -65,7 +65,7 @@
           </tr>
         </tbody>
       </table>
-      <a type="button" class="btn btn-default" th:href="@{/edit(id=${item.id})}"><i class="fa fa-pencil-square-o"></i>&nbsp;edit</a>
+      <a type="button" class="btn btn-default" th:href="@{/edit(id=${item.itemId})}"><i class="fa fa-pencil-square-o"></i>&nbsp;edit</a>
     </div>
   </div>
 </body>

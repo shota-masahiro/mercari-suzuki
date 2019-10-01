@@ -29,7 +29,7 @@ public class EditItemService {
 		Item item = new Item();
 		form.setJoinCategory();
 		BeanUtils.copyProperties(form, item);
-		
+
 		System.out.println("form:"+form);
 
 		int categoryId = itemRepository.findByCategoryAllName(form.getIntegerSmallCategory()); // kokoでエラーが起きている

@@ -1,5 +1,11 @@
 package com.example.domain;
 
+/**
+ * 商品情報を表すドメイン.
+ * 
+ * @author shota.suzuki
+ *
+ */
 public class TestItem {
 
 	/** itemID */
@@ -112,7 +118,9 @@ public class TestItem {
 		this.brand = brand;
 	}
 
-
+	public int getIntPrice() {
+		return (int)this.price;
+	}
 	public double getPrice() {
 		return price;
 	}

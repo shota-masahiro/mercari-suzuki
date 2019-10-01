@@ -3,7 +3,7 @@ package com.example.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.domain.Item;
+import com.example.domain.TestItem;
 import com.example.repository.ItemRepository;
 
 /**
@@ -20,11 +20,12 @@ public class ShowItemDetailService {
 	
 	/**
 	 * 検索処理をします.
+	 * @param <TestItem>
 	 * 
 	 * @param id 商品ID
 	 * @return   itemオブジェクト
 	 */
-	public Item findById(String id) {
+	public TestItem findById(String id) {
 		return itemRepository.findById(Integer.parseInt(id));
 	}
 	

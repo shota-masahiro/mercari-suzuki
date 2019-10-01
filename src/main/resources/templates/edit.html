@@ -28,19 +28,19 @@
 
   <!-- details -->
   <div id="input-main" class="container">
-    <a type="button" class="btn btn-default" th:href="@{/detail(id=${item.id})}"><i class="fa fa-reply"></i> back</a>
+    <a type="button" class="btn btn-default" th:href="@{/detail(id=${item.itemId})}"><i class="fa fa-reply"></i> back</a>
     <h2>Edit</h2>
 
     <!-- edit form -->
     <form th:action="@{/edit/editItem}" th:object="${addEditItemForm}" method="post" class="form-horizontal">
-        <input type="hidden" name="id" th:value="${item.id}">
+        <input type="hidden" name="id" th:value="${item.itemId}">
         <input type="hidden" name="shipping" th:value="${item.shipping}">
         <input type="hidden" name="categoryId" th:value="${item.categoryId}">
         <!-- name -->
         <div class="form-group">
           <label for="inputName" class="col-sm-2 control-label">name</label>
           <div class="col-sm-8">
-            <input type="text" class="form-control" name="name" id="name" th:value="${item.name}">
+            <input type="text" class="form-control" name="name" id="name" th:value="${item.itemName}">
             <label style="color:red" th:errors="*{name}" th:field="*{name}">error message</label>
           </div>
         </div>
@@ -60,7 +60,7 @@
           <div class="col-sm-8">
             <select class="form-control" name="largeCategory" id="largeCategory">
               <option value="---">-- largeCategory --</option>
-              <option th:each="large:${session.categoryLargeNameList}" th:text="${large.categoryName}" th:value="${large.id}" th:selected="${item.largeCategory == large.categoryName}"></option>
+              <option th:each="large:${session.categoryLargeNameList}" th:text="${large.categoryName}" th:value="${large.id}" th:selected="${item.largeCategoryId == large.id}"></option>
             </select>
           </div>
         </div>
@@ -70,7 +70,7 @@
           <div class="col-sm-8">
             <select class="form-control" name="mediumCategory" id="mediumCategory" disabled="disabled">
               <option value="---" class="---">-- mediumCategory --</option>
-              <option th:each="medium:${session.categoryMediumNameList}" th:text="${medium.categoryName}" th:value="${medium.id}" th:class="${medium.parentId}" th:selected="${item.mediumCategory == medium.categoryName}"></option>
+              <option th:each="medium:${session.categoryMediumNameList}" th:text="${medium.categoryName}" th:value="${medium.id}" th:class="${medium.parentId}" th:selected="${item.mediumCategoryId == medium.id}"></option>
             </select>
           </div>
         </div>
@@ -80,7 +80,7 @@
           <div class="col-sm-8">
             <select class="form-control" name="smallCategory" id="smallCategory" disabled="disabled">
               <option value="---">-- smallCategory --</option>
-              <option th:each="small:${session.categorySmallNameList}" th:text="${small.categoryName}" th:value="${small.id}" th:class="${small.parentId}" th:selected="${item.smallCategory == small.categorySmallName}"></option>
+              <option th:each="small:${session.categorySmallNameList}" th:text="${small.categoryName}" th:value="${small.id}" th:class="${small.parentId}" th:selected="${item.smallCategoryId == small.id}"></option>
             </select>
           </div>
         </div>

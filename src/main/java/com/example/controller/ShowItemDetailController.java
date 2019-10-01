@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.domain.Item;
+import com.example.domain.TestItem;
 import com.example.service.ShowItemDetailService;
 
 /**
@@ -31,7 +31,7 @@ public class ShowItemDetailController {
 	 */
 	@RequestMapping("")
 	public String detail(String id, Model model) {
-		Item item = showItemDetailService.findById(id);
+		TestItem item = showItemDetailService.findById(id);
 		model.addAttribute("item", item);
 		return "detail";
 	}

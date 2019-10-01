@@ -66,7 +66,7 @@ public class ItemRepository {
 		return sql.toString();
 	}
 
-
+	/** 商品検索とページ数の値を取得します. */
 	public List<TestItem> search(Integer arrow, String itemName, TestNameAll nameAll, String brand, String countPage) {// 検索の実行メソッド 商品一覧を取得する
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		String sql = createSQL(arrow, itemName, nameAll, brand, countPage, params);
@@ -126,46 +126,21 @@ public class ItemRepository {
 		return sql.toString();
 	}
 
-
-	/** Itemオブジェクトを生成するローマッパー. */
-	private static final RowMapper<Item> ITEM_CATEGORY_ROW_MAPPER = (rs, i) -> {
-		Item item = new Item();
-		item.setId(rs.getInt("i_id"));
-		item.setName(rs.getString("i_name"));
-		item.setCondition(rs.getInt("i_condition"));
-		item.setCategoryId(rs.getInt("categoryId"));
-		item.setCategory(rs.getString("c_name_all"));
-		item.setBrand(rs.getString("i_brand"));
-		item.setPrice(rs.getInt("i_price"));
-		item.setShipping(rs.getInt("i_shipping"));
-		item.setDescription(rs.getString("i_description"));
-		item.setLargeCategory(rs.getString("largeCategory"));
-		item.setMediumCategory(rs.getString("mediumCategory"));
-		item.setSmallCategory(rs.getString("smallCategory"));
-		item.setParentId(rs.getInt("c_parent_id"));
-		item.setSmallCategoryId(rs.getInt("c_id"));
-		return item;
-	};
-
-	public StringBuilder getSQL() {// 共通用のSQLを取得
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT i.id i_id, i.name i_name, i.condition i_condition, i.category_id i_category_id, i.brand i_brand, i.price i_price, i.shipping i_shipping, i.description i_description,");
-		sql.append("c1.id c_id, c1.parent_id c_parent_id, c1.category_name c_category_name, c1.name_all c_name_all, split_part(c1.name_all, '/', 1) largeCategory, split_part(c1.name_all, '/', 2) mediumCategory, split_part(c1.name_all, '/', 3) smallCategory, c2.parent_id categoryId ");
-		sql.append("FROM category c1 left OUTER join category c2 on c1.parent_id = c2.id LEFT OUTER JOIN items i on c1.id = i.category_id ");
-		return sql;
-	}
-
 	/**
 	 * 検索処理をします.
 	 * 
 	 * @param id itemID
 	 * @return   itemオブジェクト
 	 */
-	public Item findById(Integer id) {
-		StringBuilder sql = new StringBuilder(getSQL());
+	public TestItem findById(Integer id) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT i.id itemId, i.name itemName, i.condition condition, i.category_id categoryId, i.brand brand, i.price price, i.shipping shipping, i.description description, ");
+		sql.append("c2.parent_id largeCategoryId, c.parent_id mediumCategoryId, c.id smallCategoryId, c.name_all nameAll ");
+		sql.append("FROM items i LEFT OUTER JOIN category c ON i.category_id = c.id ");
+		sql.append("LEFT OUTER JOIN category c2 ON c.parent_id = c2.id ");
 		sql.append("WHERE i.id = :id;");
 		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
-		List<Item> itemList = template.query(sql.toString(), param, ITEM_CATEGORY_ROW_MAPPER);
+		List<TestItem> itemList = template.query(sql.toString(), param, ITEM_ROW_MAPPER);
 		if (itemList.size() != 0) {
 			return itemList.get(0);
 		} else {
@@ -203,7 +178,8 @@ public class ItemRepository {
 	public void update(Item item) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("UPDATE items ");
-		sql.append("SET name=:name, condition=:condition, category_id=:categoryId, brand=:brand, price=:price, shipping=:shipping, description=:description WHERE id=:id;");
+		sql.append("SET name=:name, condition=:condition, category_id=:categoryId, brand=:brand, price=:price, shipping=:shipping, description=:description ");
+		sql.append("WHERE id=:id;");
 		SqlParameterSource param = new BeanPropertySqlParameterSource(item);
 		template.update(sql.toString(), param);
 	}
@@ -217,7 +193,9 @@ public class ItemRepository {
 	 */
 	public Integer findByCategoryAllName(Integer categoryId) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT id FROM category WHERE id = :categoryId;");
+		sql.append("SELECT id ");
+		sql.append("FROM category ");
+		sql.append("WHERE id = :categoryId;");
 		SqlParameterSource param = new MapSqlParameterSource().addValue("categoryId", categoryId);
 		return template.queryForObject(sql.toString(), param, Integer.class);
 	}
