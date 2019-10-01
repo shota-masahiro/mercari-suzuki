@@ -8,6 +8,18 @@ package com.example.domain;
  */
 public class CategoryName {
 
+	/** 商品ID */
+	private Integer id;
+
+	/** parentID */
+	private Integer parentId;
+
+	/** カテゴリ大中小ネーム */
+	private String categoryName;
+
+	/** カテゴリー名 */
+	private String nameAll;
+
 	/** カテゴリ大ネーム */
 	private String categoryLargeName;
 
@@ -17,28 +29,36 @@ public class CategoryName {
 	/** カテゴリ小ネーム */
 	private String categorySmallName;
 
-	/** カテゴリ大中小ネーム */
-	private String categoryName;
-
-	/** 商品ID */
-	private Integer id;
-
-	/** parentID */
-	private Integer parentId;
-
 
 	public CategoryName() {
 
 	}
 
 
-	public CategoryName(String categoryLargeName, String categoryMediumName, String categorySmallName,
-			String categoryName, Integer id, Integer parentId) {
+	public CategoryName(Integer id, Integer parentId, String categoryName, String nameAll, String categoryLargeName,
+			String categoryMediumName, String categorySmallName) {
+		this.id = id;
+		this.parentId = parentId;
+		this.categoryName = categoryName;
+		this.nameAll = nameAll;
 		this.categoryLargeName = categoryLargeName;
 		this.categoryMediumName = categoryMediumName;
 		this.categorySmallName = categorySmallName;
-		this.categoryName = categoryName;
+	}
+
+
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
 		this.id = id;
+	}
+
+
+	public Integer getParentId() {
+		return parentId;
+	}
+	public void setParentId(Integer parentId) {
 		this.parentId = parentId;
 	}
 
@@ -48,6 +68,14 @@ public class CategoryName {
 	}
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
+	}
+
+
+	public String getNameAll() {
+		return nameAll;
+	}
+	public void setNameAll(String nameAll) {
+		this.nameAll = nameAll;
 	}
 
 
@@ -75,27 +103,11 @@ public class CategoryName {
 	}
 
 
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-
-	public Integer getParentId() {
-		return parentId;
-	}
-	public void setParentId(Integer parentId) {
-		this.parentId = parentId;
-	}
-
-
 	@Override
 	public String toString() {
-		return "CategoryName [categoryLargeName=" + categoryLargeName + ", categoryMediumName=" + categoryMediumName
-				+ ", categorySmallName=" + categorySmallName + ", categoryName=" + categoryName + ", id=" + id
-				+ ", parentId=" + parentId + "]";
+		return "CategoryName [id=" + id + ", parentId=" + parentId + ", categoryName=" + categoryName + ", nameAll="
+				+ nameAll + ", categoryLargeName=" + categoryLargeName + ", categoryMediumName=" + categoryMediumName
+				+ ", categorySmallName=" + categorySmallName + "]";
 	}
 
 }

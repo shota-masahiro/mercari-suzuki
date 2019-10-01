@@ -28,9 +28,14 @@ public class ItemRepository {
 	@Autowired
 	private NamedParameterJdbcTemplate template;
 
+	/** itemオブジェクトを生成するローマッパー */
 	private static final RowMapper<TestItem> ITEM_ROW_MAPPER = new BeanPropertyRowMapper<>(TestItem.class);
 
+	/** NameAllオブジェクトを生成するローマッパー */
 	private static final RowMapper<TestNameAll> NAME_ALL_ROW_MAPPER = new BeanPropertyRowMapper<>(TestNameAll.class);
+
+	/** categoryNameオブジェクトを生成するローマッパー */
+	private static final RowMapper<CategoryName> CATEGORY_NAME_ROW_MAPPER = new BeanPropertyRowMapper<>(CategoryName.class);
 
 
 	//検索実行用のメソッド カテゴリー大中小の値を取得
@@ -122,7 +127,6 @@ public class ItemRepository {
 	}
 
 
-
 	/**
 	 * Itemオブジェクトを生成するローマッパー.
 	 */
@@ -143,14 +147,6 @@ public class ItemRepository {
 		item.setParentId(rs.getInt("c_parent_id"));
 		item.setSmallCategoryId(rs.getInt("c_id"));
 		return item;
-	};
-
-	private static final RowMapper<CategoryName> CATEGORY_NAME_ROW_MAPPER = (rs, i) -> {
-		CategoryName categoryName = new CategoryName();
-		categoryName.setId(rs.getInt("id"));
-		categoryName.setCategoryName(rs.getString("category_name"));
-		categoryName.setParentId(rs.getInt("parent_id"));
-		return categoryName;
 	};
 
 	public StringBuilder getSQL() {// 共通用のSQLを取得
@@ -180,29 +176,26 @@ public class ItemRepository {
 	}
 
 
-	public StringBuilder getSQL2() {
+
+	/** カテゴリーネームを取得するメソッド */
+	public List<CategoryName> getCategoryName(String checkKey) {
+		MapSqlParameterSource param = new MapSqlParameterSource();
+		String sql = createCategoryNameSQL(checkKey);
+		return template.query(sql, param, CATEGORY_NAME_ROW_MAPPER);
+	}
+	public String createCategoryNameSQL(String checkKey) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT id, parent_id, category_name, name_all FROM category ");
-		return sql;
+		sql.append("SELECT id, parent_id parentId, category_name categoryName, name_all nameAll FROM category ");
+		if ("large".equals(checkKey)) {
+			sql.append("WHERE parent_id IS NULL AND name_all IS NULL;");
+		} else if("medium".equals(checkKey)) {
+			sql.append("WHERE name_all IS NULL AND parent_id IS NOT NULL;");
+		} else if("small".equals(checkKey)) {
+			sql.append("WHERE parent_id IS NOT NULL AND name_all IS NOT NULL;");
+		}
+		return sql.toString();
 	}
-	public List<CategoryName> categoryLargeText() {// 大カテゴリネーム取得
-		StringBuilder sql = new StringBuilder(getSQL2());
-		sql.append("WHERE parent_id IS NULL AND name_all IS NULL;");
-		List<CategoryName> categoryLargeList = template.query(sql.toString(), CATEGORY_NAME_ROW_MAPPER);
-		return categoryLargeList;
-	}
-	public List<CategoryName> categoryMediumText() {// 中カテゴリネーム取得
-		StringBuilder sql = new StringBuilder(getSQL2());
-		sql.append("WHERE name_all IS NULL AND parent_id IS NOT NULL;");
-		List<CategoryName> categoryLargeList = template.query(sql.toString(), CATEGORY_NAME_ROW_MAPPER);
-		return categoryLargeList;
-	}
-	public List<CategoryName> categorySmallText() {// 小カテゴリネーム取得
-		StringBuilder sql = new StringBuilder(getSQL2());
-		sql.append("WHERE parent_id IS NOT NULL AND name_all IS NOT NULL;");
-		List<CategoryName> categoryLargeList = template.query(sql.toString(), CATEGORY_NAME_ROW_MAPPER);
-		return categoryLargeList;
-	}
+
 
 	/**
 	 * 更新処理をします.

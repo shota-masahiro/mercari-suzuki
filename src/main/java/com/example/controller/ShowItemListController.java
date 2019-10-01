@@ -99,7 +99,6 @@ public class ShowItemListController {
 		String countPage = "";
 		TestNameAll nameAll = showItemListService.searchName(categoryIds);
 		List<TestItem> itemList = showItemListService.search(arrow, itemName, nameAll, brand, countPage);
-		System.out.println("itemList:"+itemList);
 		model.addAttribute("itemList", itemList);
 		model.addAttribute("arrow", arrow);
 		model.addAttribute("brand", brand);
@@ -119,13 +118,13 @@ public class ShowItemListController {
 
 	/** プルダウンで使用する値をsetします. */
 	private void setCategory() {
-		List<CategoryName> categoryLargeNameList = showItemListService.categoryLargeText();
+		List<CategoryName> categoryLargeNameList = showItemListService.getCategoryName("large");
 		session.setAttribute("categoryLargeNameList", categoryLargeNameList);
 
-		List<CategoryName> categoryMediumNameList = showItemListService.categoryMediumText();
+		List<CategoryName> categoryMediumNameList = showItemListService.getCategoryName("medium");
 		session.setAttribute("categoryMediumNameList", categoryMediumNameList);
 
-		List<CategoryName> categorySmallNameList = showItemListService.categorySmallText();
+		List<CategoryName> categorySmallNameList = showItemListService.getCategoryName("small");
 		session.setAttribute("categorySmallNameList", categorySmallNameList);
 
 		session.setAttribute("checkCategory", -99);

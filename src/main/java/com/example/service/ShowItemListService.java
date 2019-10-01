@@ -23,29 +23,25 @@ public class ShowItemListService {
 	@Autowired
 	private ItemRepository itemRepository;
 
-
+	/** 商品検索をします. */
 	public List<TestItem> search(Integer arrow, String itemName, TestNameAll nameAll, String brand, String countPage) {
 		arrow = moveArrow(arrow);
 		return itemRepository.search(arrow, itemName, nameAll, brand, countPage);
 	}
-
+	
+	/** ページ数を取得します. */
 	public Integer searchCount(Integer arrow, String itemName, TestNameAll nameAll, String brand, String countPage) {
 		return itemRepository.searchCount(arrow, itemName, nameAll, brand, countPage);
 	}
-
+	
+	/** カテゴリー名を取得します. */
 	public TestNameAll searchName(Integer[] categoryIds) {
 		return itemRepository.searchName(categoryIds);
 	}
-
-
-	public List<CategoryName> categoryLargeText() {
-		return itemRepository.categoryLargeText();
-	}
-	public List<CategoryName> categoryMediumText() {
-		return itemRepository.categoryMediumText();
-	}
-	public List<CategoryName> categorySmallText() {
-		return itemRepository.categorySmallText();
+	
+	/** カテゴリー情報を取得します. */
+	public List<CategoryName> getCategoryName(String checkKey) {
+		return itemRepository.getCategoryName(checkKey);
 	}
 
 
