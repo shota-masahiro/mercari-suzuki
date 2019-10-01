@@ -127,9 +127,7 @@ public class ItemRepository {
 	}
 
 
-	/**
-	 * Itemオブジェクトを生成するローマッパー.
-	 */
+	/** Itemオブジェクトを生成するローマッパー. */
 	private static final RowMapper<Item> ITEM_CATEGORY_ROW_MAPPER = (rs, i) -> {
 		Item item = new Item();
 		item.setId(rs.getInt("i_id"));
