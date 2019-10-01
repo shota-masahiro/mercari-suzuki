@@ -12,19 +12,16 @@ import javax.validation.constraints.Pattern;
 public class AddEditItemForm {
 
 	/** 商品ID */
-	private String id;
+	private String itemId;
 
 	/** 商品名 */
 	@NotBlank(message = "商品名を入力してください")
-	private String name;
+	private String itemName;
 
 	/** 価格 */
 	@Pattern(regexp = "^[0-9]+$", message = "半角数字で入力してください")
 	@NotBlank(message = "価格を入力してください")
 	private String price;
-
-	/** カテゴリー */
-	private String category;
 
 	/** ブランド */
 	private String brand;
@@ -52,16 +49,22 @@ public class AddEditItemForm {
 	private String categoryId;
 
 
-	public void setJoinCategory() {
-		this.category = this.smallCategory;
+	public Integer getIntegerItemId() {
+		return Integer.parseInt(this.itemId);
+	}
+	public String getItemId() {
+		return itemId;
+	}
+	public void setItemId(String itemId) {
+		this.itemId = itemId;
 	}
 
 
-	public String getName() {
-		return name;
+	public String getItemName() {
+		return itemName;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
 	}
 
 
@@ -76,21 +79,12 @@ public class AddEditItemForm {
 	}
 
 
-	public String getCategory() {
-		return category;
-	}
-	public void setCategory(String category) {
-		this.category = category;
-	}
-
-
 	public String getBrand() {
 		return brand;
 	}
 	public void setBrand(String brand) {
 		this.brand = brand;
 	}
-
 
 	public Integer getIntegerCondition() {
 		return Integer.parseInt(this.condition);
@@ -126,6 +120,7 @@ public class AddEditItemForm {
 		this.mediumCategory = mediumCategory;
 	}
 
+
 	public Integer getIntegerSmallCategory() {
 		return Integer.parseInt(this.smallCategory);
 	}
@@ -134,17 +129,6 @@ public class AddEditItemForm {
 	}
 	public void setSmallCategory(String smallCategory) {
 		this.smallCategory = smallCategory;
-	}
-
-
-	public Integer getIntegerId() {
-		return Integer.parseInt(this.id);
-	}
-	public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
 	}
 
 
@@ -172,10 +156,10 @@ public class AddEditItemForm {
 
 	@Override
 	public String toString() {
-		return "AddEditItemForm [id=" + id + ", name=" + name + ", price=" + price + ", category=" + category
-				+ ", brand=" + brand + ", condition=" + condition + ", description=" + description + ", largeCategory="
-				+ largeCategory + ", mediumCategory=" + mediumCategory + ", smallCategory=" + smallCategory
-				+ ", shipping=" + shipping + ", categoryId=" + categoryId + "]";
+		return "AddEditItemForm [itemId=" + itemId + ", itemName=" + itemName + ", price=" + price + ", brand=" + brand
+				+ ", condition=" + condition + ", description=" + description + ", largeCategory=" + largeCategory
+				+ ", mediumCategory=" + mediumCategory + ", smallCategory=" + smallCategory + ", shipping=" + shipping
+				+ ", categoryId=" + categoryId + "]";
 	}
 
 }

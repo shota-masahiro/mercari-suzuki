@@ -1,53 +1,48 @@
 package com.example.domain;
 
 /**
- * Item情報を表すドメイン.
+ * 商品情報を表すドメイン.
  * 
  * @author shota.suzuki
  *
  */
 public class Item {
 
-	/** ID */
-	private Integer id;
+	/** itemID */
+	private Integer itemId;
 
 	/** 商品名 */
-	private String name;
-
-	/** 価格 */
-	private double price;
-
-	/** カテゴリー */
-	private String category;
-
-	/** ブランド */
-	private String brand;
+	private String itemName;
 
 	/** 商品状態 */
 	private Integer condition;
 
+	/** カテゴリー */
+	private Integer categoryId;
+
+	/** ブランド */
+	private String brand;
+
+	/** 料金 */
+	private double price;
+
+	/** 配送手段 */
+	private Integer shipping;
+
 	/** 商品説明 */
 	private String description;
 
-	/** 運送手段 */
-	private Integer shipping;
-
-	/** カテゴリーID */
-	private Integer categoryId;
-
-	/** 大カテゴリ */
-	private String largeCategory;
-
-	/** 中カテゴリ */
-	private String mediumCategory;
-
-	/** 小カテゴリ */
-	private String smallCategory;
-
 	/** 大カテゴリID */
-	private Integer parentId;
+	private Integer largeCategoryId;
 
+	/** 中カテゴリID */
+	private Integer mediumCategoryId;
+
+	/** 小カテゴリID */
 	private Integer smallCategoryId;
+
+	/** カテゴリー大中小 */
+	private String nameAll;
 
 
 	public Item() {
@@ -55,48 +50,48 @@ public class Item {
 	}
 
 
-	public Item(Integer id, String name, double price, String category, String brand, Integer condition,
-			String description, Integer shipping, Integer categoryId, String largeCategory, String mediumCategory,
-			String smallCategory, Integer parentId, Integer smallCategoryId) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.price = price;
-		this.category = category;
-		this.brand = brand;
+	public Item(Integer itemId, String itemName, Integer condition, Integer categoryId, String brand, double price,
+			Integer shipping, String description, Integer largeCategoryId, Integer mediumCategoryId,
+			Integer smallCategoryId, String nameAll) {
+		this.itemId = itemId;
+		this.itemName = itemName;
 		this.condition = condition;
-		this.description = description;
-		this.shipping = shipping;
 		this.categoryId = categoryId;
-		this.largeCategory = largeCategory;
-		this.mediumCategory = mediumCategory;
-		this.smallCategory = smallCategory;
-		this.parentId = parentId;
+		this.brand = brand;
+		this.price = price;
+		this.shipping = shipping;
+		this.description = description;
+		this.largeCategoryId = largeCategoryId;
+		this.mediumCategoryId = mediumCategoryId;
 		this.smallCategoryId = smallCategoryId;
+		this.nameAll = nameAll;
 	}
 
 
-	public void setCategorys() {
-		String[] categorys = this.category.split("/");
-		this.setLargeCategory(categorys[0]);
-		this.setMediumCategory(categorys[1]);
-		this.setSmallCategory(categorys[2]);
+	public String getLargeCategoryName() {
+		return this.nameAll.split("/")[0];
+	}
+	public String getMediumCategoryName() {
+		return this.nameAll.split("/")[1];
+	}
+	public String getSmallCategoryName() {
+		return this.nameAll.split("/")[2];
 	}
 
 
-	public Integer getId() {
-		return id;
+	public Integer getItemId() {
+		return itemId;
 	}
-	public void setId(Integer id) {
-		this.id = id;
+	public void setItemId(Integer itemId) {
+		this.itemId = itemId;
 	}
 
 
-	public String getName() {
-		return name;
+	public String getItemName() {
+		return itemName;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
 	}
 
 
@@ -113,14 +108,6 @@ public class Item {
 	}
 	public void setCategoryId(Integer categoryId) {
 		this.categoryId = categoryId;
-	}
-
-
-	public String getCategory() {
-		return category;
-	}
-	public void setCategory(String category) {
-		this.category = category;
 	}
 
 
@@ -158,35 +145,19 @@ public class Item {
 	}
 
 
-	public String getLargeCategory() {
-		return largeCategory;
+	public Integer getLargeCategoryId() {
+		return largeCategoryId;
 	}
-	public void setLargeCategory(String largeCategory) {
-		this.largeCategory = largeCategory;
-	}
-
-
-	public String getMediumCategory() {
-		return mediumCategory;
-	}
-	public void setMediumCategory(String mediumCategory) {
-		this.mediumCategory = mediumCategory;
+	public void setLargeCategoryId(Integer largeCategoryId) {
+		this.largeCategoryId = largeCategoryId;
 	}
 
 
-	public String getSmallCategory() {
-		return smallCategory;
+	public Integer getMediumCategoryId() {
+		return mediumCategoryId;
 	}
-	public void setSmallCategory(String smallCategory) {
-		this.smallCategory = smallCategory;
-	}
-
-
-	public Integer getParentId() {
-		return parentId;
-	}
-	public void setParentId(Integer parentId) {
-		this.parentId = parentId;
+	public void setMediumCategoryId(Integer mediumCategoryId) {
+		this.mediumCategoryId = mediumCategoryId;
 	}
 
 
@@ -198,13 +169,20 @@ public class Item {
 	}
 
 
+	public String getNameAll() {
+		return nameAll;
+	}
+	public void setNameAll(String nameAll) {
+		this.nameAll = nameAll;
+	}
+
+
 	@Override
 	public String toString() {
-		return "Item [id=" + id + ", name=" + name + ", price=" + price + ", category=" + category + ", brand=" + brand
-				+ ", condition=" + condition + ", description=" + description + ", shipping=" + shipping
-				+ ", categoryId=" + categoryId + ", largeCategory=" + largeCategory + ", mediumCategory="
-				+ mediumCategory + ", smallCategory=" + smallCategory + ", parentId=" + parentId + ", smallCategoryId="
-				+ smallCategoryId + "]";
+		return "TestItem [itemId=" + itemId + ", itemName=" + itemName + ", condition=" + condition + ", categoryId="
+				+ categoryId + ", brand=" + brand + ", price=" + price + ", shipping=" + shipping + ", description="
+				+ description + ", largeCategoryId=" + largeCategoryId + ", mediumCategoryId=" + mediumCategoryId
+				+ ", smallCategoryId=" + smallCategoryId + ", nameAll=" + nameAll + "]";
 	}
 
 }

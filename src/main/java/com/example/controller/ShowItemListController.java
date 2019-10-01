@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.domain.CategoryName;
 import com.example.domain.CategorySearchForm;
-import com.example.domain.TestItem;
-import com.example.domain.TestNameAll;
+import com.example.domain.Item;
+import com.example.domain.CategoryNameAll;
 import com.example.service.ShowItemListService;
 
 /**
@@ -97,8 +97,8 @@ public class ShowItemListController {
 		}
 
 		String countPage = "";
-		TestNameAll nameAll = showItemListService.searchName(categoryIds);
-		List<TestItem> itemList = showItemListService.search(arrow, itemName, nameAll, brand, countPage);
+		CategoryNameAll nameAll = showItemListService.searchName(categoryIds);
+		List<Item> itemList = showItemListService.search(arrow, itemName, nameAll, brand, countPage);
 		model.addAttribute("itemList", itemList);
 		model.addAttribute("arrow", arrow);
 		model.addAttribute("brand", brand);

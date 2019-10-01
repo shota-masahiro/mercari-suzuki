@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.domain.TestNameAll;
+import com.example.domain.CategoryNameAll;
 import com.example.repository.TestRepository;
 
 /**
@@ -33,7 +33,7 @@ public class TestController {
 
 		Integer[] categoryIds = {12, null, null};
 		System.out.println("categoryIds:"+categoryIds);
-		TestNameAll nameAll = testRepository.searchName(categoryIds);
+		CategoryNameAll nameAll = testRepository.searchName(categoryIds);
 		testRepository.search(arrow, itemName, nameAll, brand, countPage).forEach(System.out::println);
 
 		countPage = "count";

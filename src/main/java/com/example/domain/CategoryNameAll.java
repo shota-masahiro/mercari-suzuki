@@ -1,16 +1,16 @@
 package com.example.domain;
 
-public class TestNameAll {
+public class CategoryNameAll {
 
 	private String largeName;
 	private String midiumName;
 	private String smallName;
 
 
-	public TestNameAll() {
+	public CategoryNameAll() {
 
 	}
-	public TestNameAll(String largeName, String midiumName, String smallName) {
+	public CategoryNameAll(String largeName, String midiumName, String smallName) {
 		this.largeName = largeName;
 		this.midiumName = midiumName;
 		this.smallName = smallName;

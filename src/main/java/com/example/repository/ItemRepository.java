@@ -13,8 +13,8 @@ import org.springframework.stereotype.Repository;
 
 import com.example.domain.CategoryName;
 import com.example.domain.Item;
-import com.example.domain.TestItem;
-import com.example.domain.TestNameAll;
+import com.example.domain.Item;
+import com.example.domain.CategoryNameAll;
 
 /**
  * itemsテーブルを操作するリポジトリ.
@@ -29,17 +29,17 @@ public class ItemRepository {
 	private NamedParameterJdbcTemplate template;
 
 	/** itemオブジェクトを生成するローマッパー */
-	private static final RowMapper<TestItem> ITEM_ROW_MAPPER = new BeanPropertyRowMapper<>(TestItem.class);
+	private static final RowMapper<Item> ITEM_ROW_MAPPER = new BeanPropertyRowMapper<>(Item.class);
 
 	/** NameAllオブジェクトを生成するローマッパー */
-	private static final RowMapper<TestNameAll> NAME_ALL_ROW_MAPPER = new BeanPropertyRowMapper<>(TestNameAll.class);
+	private static final RowMapper<CategoryNameAll> NAME_ALL_ROW_MAPPER = new BeanPropertyRowMapper<>(CategoryNameAll.class);
 
 	/** categoryNameオブジェクトを生成するローマッパー */
 	private static final RowMapper<CategoryName> CATEGORY_NAME_ROW_MAPPER = new BeanPropertyRowMapper<>(CategoryName.class);
 
 
 	//検索実行用のメソッド カテゴリー大中小の値を取得
-	public TestNameAll searchName(Integer[] categoryIds) {
+	public CategoryNameAll searchName(Integer[] categoryIds) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		if (categoryIds[0] == null) {
 			return null;
@@ -67,17 +67,17 @@ public class ItemRepository {
 	}
 
 	/** 商品検索とページ数の値を取得します. */
-	public List<TestItem> search(Integer arrow, String itemName, TestNameAll nameAll, String brand, String countPage) {// 検索の実行メソッド 商品一覧を取得する
+	public List<Item> search(Integer arrow, String itemName, CategoryNameAll nameAll, String brand, String countPage) {// 検索の実行メソッド 商品一覧を取得する
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		String sql = createSQL(arrow, itemName, nameAll, brand, countPage, params);
 		return template.query(sql, params, ITEM_ROW_MAPPER);
 	}
-	public Integer searchCount(Integer arrow, String itemName, TestNameAll nameAll, String brand, String countPage) {// 検索の実行メソッド ページ数を取得する
+	public Integer searchCount(Integer arrow, String itemName, CategoryNameAll nameAll, String brand, String countPage) {// 検索の実行メソッド ページ数を取得する
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		String sql = createSQL(arrow, itemName, nameAll, brand, countPage, params);
 		return template.queryForObject(sql, params, Integer.class);
 	}
-	private String createSQL(Integer arrow, String itemName, TestNameAll nameAll, String brand, String countPage, MapSqlParameterSource params) {// SQLを整形する
+	private String createSQL(Integer arrow, String itemName, CategoryNameAll nameAll, String brand, String countPage, MapSqlParameterSource params) {// SQLを整形する
 		StringBuilder sql = new StringBuilder();
 
 		sql.append("SELECT i.id itemId, i.name itemName, i.condition condition, i.category_id categoryId, i.brand brand, i.price price, i.shipping shipping, i.description description, ");
@@ -132,7 +132,7 @@ public class ItemRepository {
 	 * @param id itemID
 	 * @return   itemオブジェクト
 	 */
-	public TestItem findById(Integer id) {
+	public Item findById(Integer id) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT i.id itemId, i.name itemName, i.condition condition, i.category_id categoryId, i.brand brand, i.price price, i.shipping shipping, i.description description, ");
 		sql.append("c2.parent_id largeCategoryId, c.parent_id mediumCategoryId, c.id smallCategoryId, c.name_all nameAll ");
@@ -140,7 +140,7 @@ public class ItemRepository {
 		sql.append("LEFT OUTER JOIN category c2 ON c.parent_id = c2.id ");
 		sql.append("WHERE i.id = :id;");
 		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
-		List<TestItem> itemList = template.query(sql.toString(), param, ITEM_ROW_MAPPER);
+		List<Item> itemList = template.query(sql.toString(), param, ITEM_ROW_MAPPER);
 		if (itemList.size() != 0) {
 			return itemList.get(0);
 		} else {
@@ -178,8 +178,8 @@ public class ItemRepository {
 	public void update(Item item) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("UPDATE items ");
-		sql.append("SET name=:name, condition=:condition, category_id=:categoryId, brand=:brand, price=:price, shipping=:shipping, description=:description ");
-		sql.append("WHERE id=:id;");
+		sql.append("SET name=:itemName, condition=:condition, category_id=:categoryId, brand=:brand, price=:price, shipping=:shipping, description=:description ");
+		sql.append("WHERE id=:itemId;");
 		SqlParameterSource param = new BeanPropertySqlParameterSource(item);
 		template.update(sql.toString(), param);
 	}
@@ -209,7 +209,7 @@ public class ItemRepository {
 	public void insert(Item item) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("INSERT INTO items(name, condition, category_id, brand, price, shipping, description) ");
-		sql.append("VALUES(:name, :condition, :categoryId, :brand, :price, :shipping, :description);");
+		sql.append("VALUES(:itemName, :condition, :categoryId, :brand, :price, :shipping, :description);");
 		SqlParameterSource param = new BeanPropertySqlParameterSource(item);
 		template.update(sql.toString(), param);
 	}

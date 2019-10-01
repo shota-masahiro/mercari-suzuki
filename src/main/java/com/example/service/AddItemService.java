@@ -29,8 +29,7 @@ public class AddItemService {
 		Item item = new Item();
 		BeanUtils.copyProperties(form, item);
 
-		int categoryId = itemRepository.findByCategoryAllName(form.getIntegerSmallCategory());
-		item.setCategoryId(categoryId);
+		item.setCategoryId(form.getIntegerSmallCategory());
 		item.setShipping(0);
 		item.setCondition(form.getIntegerCondition());
 		item.setPrice(form.getIntegerPrice());

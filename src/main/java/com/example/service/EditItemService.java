@@ -27,18 +27,18 @@ public class EditItemService {
 	 */
 	public void update(AddEditItemForm form) {
 		Item item = new Item();
-		form.setJoinCategory();
-		BeanUtils.copyProperties(form, item);
 
 		System.out.println("form:"+form);
 
-		int categoryId = itemRepository.findByCategoryAllName(form.getIntegerSmallCategory()); // kokoでエラーが起きている
-		item.setCategoryId(categoryId);
+		BeanUtils.copyProperties(form, item);
 
-		item.setId(form.getIntegerId());
+		item.setItemId(form.getIntegerItemId());
+		item.setCategoryId(form.getIntegerSmallCategory());
 		item.setCondition(form.getIntegerCondition());
 		item.setPrice(form.getIntegerPrice());
 		item.setShipping(form.getIntegerShipping());
+
+		System.out.println("item:"+item);
 
 		itemRepository.update(item);
 	}

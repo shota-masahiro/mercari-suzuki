@@ -78,7 +78,6 @@ public class AddItemController {
 			return toAdd(model, errorMessage);
 		}
 		
-		form.setJoinCategory();
 		addItemService.insert(form);
 		return "redirect:/";
 	}

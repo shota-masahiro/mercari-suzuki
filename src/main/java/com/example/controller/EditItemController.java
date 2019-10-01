@@ -11,7 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.domain.TestItem;
+import com.example.domain.Item;
 import com.example.form.AddEditItemForm;
 import com.example.service.EditItemService;
 import com.example.service.ShowItemDetailService;
@@ -51,7 +51,7 @@ public class EditItemController {
 			model.addAttribute("errorMessage", errorMessage);
 		}
 
-		TestItem item = showItemDetailService.findById(id);
+		Item item = showItemDetailService.findById(id);
 		model.addAttribute("item", item);
 		Map<String, Integer> conditionMap = new LinkedHashMap<>();
 		for (int i = 1; i <= 3; i++) {
@@ -83,10 +83,9 @@ public class EditItemController {
 		}
 
 		if (result.hasErrors()) {
-			return toEdit(form.getId(), model, errorMessage);
+			return toEdit(form.getItemId(), model, errorMessage);
 		}
 
-		form.setJoinCategory();
 		editItemService.update(form);
 		return "redirect:/";
 	}

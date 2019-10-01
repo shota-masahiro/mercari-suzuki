@@ -9,8 +9,8 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.example.domain.TestItem;
-import com.example.domain.TestNameAll;
+import com.example.domain.Item;
+import com.example.domain.CategoryNameAll;
 
 /**
  * 動作確認用
@@ -21,14 +21,14 @@ import com.example.domain.TestNameAll;
 @Repository
 public class TestRepository {
 
-	private static final RowMapper<TestItem> ITEM_ROW_MAPPER = new BeanPropertyRowMapper<>(TestItem.class);
-	private static final RowMapper<TestNameAll> NAME_ALL_ROW_MAPPE = new BeanPropertyRowMapper<>(TestNameAll.class);
+	private static final RowMapper<Item> ITEM_ROW_MAPPER = new BeanPropertyRowMapper<>(Item.class);
+	private static final RowMapper<CategoryNameAll> NAME_ALL_ROW_MAPPE = new BeanPropertyRowMapper<>(CategoryNameAll.class);
 
 	@Autowired
 	private NamedParameterJdbcTemplate template;
 
 	//検索実行用のメソッド カテゴリー大中小の値を取得
-	public TestNameAll searchName(Integer[] categoryIds) {
+	public CategoryNameAll searchName(Integer[] categoryIds) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		if (categoryIds[0] == null) {
 			return null;
@@ -59,21 +59,21 @@ public class TestRepository {
 
 
 	//検索の実行メソッド 商品一覧を取得する
-	public List<TestItem> search(Integer arrow, String itemName, TestNameAll nameAll, String brand, String countPage) {
+	public List<Item> search(Integer arrow, String itemName, CategoryNameAll nameAll, String brand, String countPage) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		String sql = createSQL(arrow, itemName, nameAll, brand, countPage, params);
 		return template.query(sql, params, ITEM_ROW_MAPPER);
 	}
 
 	//検索の実行メソッド 商品数を取得する
-	public Integer searchCount(Integer arrow, String itemName, TestNameAll nameAll, String brand, String countPage) {
+	public Integer searchCount(Integer arrow, String itemName, CategoryNameAll nameAll, String brand, String countPage) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		String sql = createSQL(arrow, itemName, nameAll, brand, countPage, params);
 		return template.queryForObject(sql, params, Integer.class);
 	}
 
 	//SQLを整形する
-	private String createSQL(Integer arrow, String itemName, TestNameAll nameAll, String brand, String countPage, MapSqlParameterSource params) {
+	private String createSQL(Integer arrow, String itemName, CategoryNameAll nameAll, String brand, String countPage, MapSqlParameterSource params) {
 		StringBuilder sql = new StringBuilder();
 
 		sql.append("SELECT i.id as id, i.name as name, condition, category_id, brand, price, shipping, description, name_all ");
